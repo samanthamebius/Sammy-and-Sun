@@ -2,15 +2,45 @@
     <!-- Base application theme. -->
     <style name="Theme.Se306_project1" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
+        % colors
         <item name="colorPrimary">@color/dark_brown</item>
-        <item name="colorPrimaryVariant">@color/dark_brown</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/medium_brown</item>
-        <item name="colorSecondaryVariant">@color/medium_brown</item>
-        <item name="colorOnSecondary">@color/black</item>
+
+        % text
+        <item name="android:textColorPrimary">@color/grey</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="LargeHeaderText">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="SmallHeaderText">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="SubHeaderText">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="MediumText">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="ButtonText">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">16dp</item>
     </style>
 </resources>

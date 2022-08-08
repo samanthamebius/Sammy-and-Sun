@@ -8,12 +8,37 @@
     tools:context=".MainActivity">
 
     <TextView
+        style="@style/LargeHeaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Popular"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Decadently adorned with a luxurious polished gold-toned Double J logo atop colour-blocked saffiano leather, The Marc Jacobs' Snapshot Small Camera Cross-Body Bag is ready for its closeup. The structured design boasts a cloudy cream, black and gold colour palette and is finished with a detachable seatbelt crossbody strap for a bold maximalist aesthetic."
+         />
+
+    <TextView
+        style="@style/SmallHeaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coach"
+        />
+
+    <TextView
+        style="@style/MediumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coach"
+        />
+
+    <TextView
+        style="@style/ButtonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coach"
+        />
 
 </LinearLayout>
