@@ -7,9 +7,7 @@ import java.util.ArrayList;
 abstract class Product implements IProduct {
 
     // instance fields
-    private static int numberOfProducts = 0;
     private int productID;
-    private int categoryID;
     private Double productPrice;
     private String productLongName;
     private String productShortName;
@@ -21,8 +19,8 @@ abstract class Product implements IProduct {
 
     private String brandName;
     private String productColourType;
-    private Boolean productIsFavourite;
-    private int productCountVisit;
+    private Boolean productIsFavourite = Boolean.FALSE;
+    private int productCountVisit = 0;
 
 
     // regular methods
@@ -30,6 +28,8 @@ abstract class Product implements IProduct {
     public int getProductID() {
         return productID;
     }
+    @Exclude
+    public void setProductID(int productID){ this.productID = productID;}
     @Exclude
     public Double getProductPrice(){
         return productPrice;
@@ -54,14 +54,31 @@ abstract class Product implements IProduct {
     public String getProductCare(){
         return productCare;
     }
+    @Exclude
+    public String getBrandName(){
+        return brandName;
+    }
+    @Exclude
+    public String getProductColourType(){
+        return productColourType;
+    }
+    @Exclude
+    public void setProductIsFavourite(Boolean isFavourite){
+        this.productIsFavourite = isFavourite;
+    }
+    @Exclude
+    public Boolean getIsFavourite(){
+        return productIsFavourite;
+    }
+    @Exclude
+    public  int getProductCountVisit(){
+        return productCountVisit;
+    }
+
 
     // abstract methods
     public abstract int getCategoryID();
-    public abstract String getBrandName();
-    public abstract String getProductColourType();
-    public abstract void setProductIsFavourite(Boolean isFavourite);
-    public abstract Boolean getIsFavourite();
-    public abstract int getProductCountVisit();
+
 
 
 
