@@ -1,8 +1,10 @@
 package com.example.se306_project1.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 
-abstract class Product {
+abstract class Product implements IProduct {
 
     // instance fields
     private static int numberOfProducts = 0;
@@ -17,45 +19,49 @@ abstract class Product {
     private String productDetails;
     private String productCare;
 
-    private Brand brandName;
+    private String brandName;
     private String productColourType;
     private Boolean productIsFavourite;
     private int productCountVisit;
 
 
     // regular methods
+    @Exclude
     public int getProductID() {
         return productID;
     }
-
+    @Exclude
     public Double getProductPrice(){
         return productPrice;
-    };
+    }
+    @Exclude
     public String getProductLongName(){
         return productLongName;
-    };
+    }
+    @Exclude
     public String getProductShortName(){
         return productShortName;
-    };
+    }
+    @Exclude
     public String getProductDescription(){
         return productDescription;
-    };
+    }
+    @Exclude
     public String getProductDetails(){
         return productDetails;
-    };
+    }
+    @Exclude
     public String getProductCare(){
         return productCare;
-    };
-
+    }
 
     // abstract methods
-    abstract int getCategoryID();
-    abstract Brand getBrandName();
-    abstract String getProductColourType();
-    abstract void setProductIsFavourite(Boolean setFavourites);
-    abstract int getProductCountVisit();
-
-
+    public abstract int getCategoryID();
+    public abstract String getBrandName();
+    public abstract String getProductColourType();
+    public abstract void setProductIsFavourite(Boolean isFavourite);
+    public abstract Boolean getIsFavourite();
+    public abstract int getProductCountVisit();
 
 
 
