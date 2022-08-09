@@ -4,10 +4,11 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 
-abstract class Product implements IProduct {
+    class Product implements IProduct {
 
     // instance fields
     private int productID;
+    private int categoryID;
     private Double productPrice;
     private String productLongName;
     private String productShortName;
@@ -23,13 +24,26 @@ abstract class Product implements IProduct {
     private int productCountVisit = 0;
 
 
-    // regular methods
+    public Product(int productID, int categoryID, Double productPrice, String productLongName, String productShortName, ArrayList<String> productImages, String productDescription, String productDetails, String productCare){
+        this.productID = productID;
+        this.categoryID = categoryID;
+        this.productPrice = productPrice;
+        this.productLongName = productLongName;
+        this.productShortName = productShortName;
+        this.productImages = productImages;
+        this.productDescription = productDescription;
+        this.productDetails = productDetails;
+        this.productCare = productCare;
+        this.brandName = getBrandName();
+        this.productColourType = getProductColourType();
+    }
+
+
+
     @Exclude
     public int getProductID() {
         return productID;
     }
-    @Exclude
-    public void setProductID(int productID){ this.productID = productID;}
     @Exclude
     public Double getProductPrice(){
         return productPrice;
@@ -62,10 +76,7 @@ abstract class Product implements IProduct {
     public String getProductColourType(){
         return productColourType;
     }
-    @Exclude
-    public void setProductIsFavourite(Boolean isFavourite){
-        this.productIsFavourite = isFavourite;
-    }
+
     @Exclude
     public Boolean getIsFavourite(){
         return productIsFavourite;
@@ -75,11 +86,23 @@ abstract class Product implements IProduct {
         return productCountVisit;
     }
 
+    @Exclude
+    public int getCategoryID(){
+        return categoryID;
+    }
 
-    // abstract methods
-    public abstract int getCategoryID();
+    @Exclude
+    public void setProductIsFavourite(Boolean isFavourite){
+        this.productIsFavourite = isFavourite;
+    }
+
+    @Exclude
+    public void setVisitCount(){}
 
 
 
 
-}
+
+
+
+    }
