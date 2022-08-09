@@ -4,7 +4,7 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 
-    class Product implements IProduct {
+    public class Product implements IProduct {
 
     // instance fields
     private int productID;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
     private int productCountVisit = 0;
 
 
-    public Product(int productID, int categoryID, Double productPrice, String productLongName, String productShortName, ArrayList<String> productImages, String productDescription, String productDetails, String productCare){
+    public Product(int productID, int categoryID, Double productPrice, String productLongName, String productShortName, ArrayList<String> productImages, String productDescription, String productDetails, String productCare, String brandName, String productColourType){
         this.productID = productID;
         this.categoryID = categoryID;
         this.productPrice = productPrice;
@@ -34,8 +34,8 @@ import java.util.ArrayList;
         this.productDescription = productDescription;
         this.productDetails = productDetails;
         this.productCare = productCare;
-        this.brandName = getBrandName();
-        this.productColourType = getProductColourType();
+        this.brandName = brandName;
+        this.productColourType = productColourType;
     }
 
 
@@ -85,6 +85,11 @@ import java.util.ArrayList;
     public  int getProductCountVisit(){
         return productCountVisit;
     }
+
+    @Exclude
+    public  ArrayList<String> getProductImages(){
+            return productImages;
+        }
 
     @Exclude
     public int getCategoryID(){

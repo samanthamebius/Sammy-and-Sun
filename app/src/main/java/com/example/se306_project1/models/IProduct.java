@@ -1,5 +1,7 @@
 package com.example.se306_project1.models;
 
+import java.util.ArrayList;
+
 public interface IProduct {
     public int getProductID();
     public Double getProductPrice();
@@ -14,4 +16,5 @@ public interface IProduct {
     public Boolean getIsFavourite();
     public void setProductIsFavourite(Boolean isFavourite);
     public int getProductCountVisit();
+    public ArrayList<String> getProductImages();
 }
