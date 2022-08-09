@@ -9,11 +9,18 @@
         % text
         <item name="android:textColorPrimary">@color/grey</item>
         <item name="android:textSize">14dp</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:fontFamily">@font/abrilfatface_regular</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="NormalText">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
     </style>
 
     <style name="LargeHeaderText">
@@ -24,6 +31,7 @@
 
     <style name="SmallHeaderText">
         <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">14dp</item>
         <item name="android:fontFamily">@font/poppins_bold</item>
     </style>
 
@@ -42,5 +50,7 @@
     <style name="ButtonText">
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
     </style>
+
 </resources>
