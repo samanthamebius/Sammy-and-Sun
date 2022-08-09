@@ -4,7 +4,7 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 
-    class Product implements IProduct {
+    public class Product implements IProduct {
 
     // instance fields
     private int productID;
@@ -98,11 +98,5 @@ import java.util.ArrayList;
 
     @Exclude
     public void setVisitCount(){}
-
-
-
-
-
-
-
+        
     }
