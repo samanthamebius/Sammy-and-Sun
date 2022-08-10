@@ -4,6 +4,8 @@ package com.example.se306_project1.repository;
 import android.util.Log;
 import androidx.annotation.NonNull;
 
+import com.example.se306_project1.models.Brand;
+import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,9 +22,10 @@ public class ProductRepository {
 
     // singleton pattern
     private static ProductRepository instance;
-    private List<Product> productsDataSet = new ArrayList<>();
+    // dataset of all products
+    public List<Product> productsDataSet = new ArrayList<>();
 
-    private DatabaseReference dref;
+    private DatabaseReference databaseReference;
 
     public static ProductRepository getInstance(){
         if(instance == null){
@@ -41,23 +44,36 @@ public class ProductRepository {
 //    }
 
     public void getAllProducts(){
-        CollectionReference colref = FirebaseFirestore.getInstance().collection("clutches");
-        colref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        CollectionReference collectionRef = FirebaseFirestore.getInstance().collection("products");
+        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                // unsuccessful load
-                if(!task.isSuccessful()){
-                    Log.d("firebase", "Error getting data!", task.getException());
-                }
-                else{
-                    // successful load
+                if(task.isSuccessful()){
                     Log.d("firebase", String.valueOf(task.getResult()));
-                    List<DocumentSnapshot> snap = task.getResult().getDocuments();
-                    for(DocumentSnapshot singleBag : snap){
+                    // getting snapshot of all the documents in the collection
+                    List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    // looping through the documents
+                    for(DocumentSnapshot singleBag : snapshots){
+                        int productID = (int) singleBag.get("productID");
+                        int categoryID = (int) singleBag.get("categoryID");
+                        double productPrice = (double) singleBag.get("productPrice");
                         String productLongName = singleBag.get("productLongName").toString();
                         String productShortName = singleBag.get("productShortName").toString();
-                        System.out.println(productLongName);
+                        Brand brandName = Brand.valueOf(singleBag.get("brandName").toString().replaceAll(" ","_"));
+                        String productDescription = singleBag.get("productDescription").toString();
+                        String productDetails = singleBag.get("productDetails").toString();
+                        String productCare = singleBag.get("productCare").toString();
+                        ColourType productColourType = ColourType.valueOf(singleBag.get("productColourType").toString());
+                        int productCountVisit = (int) singleBag.get("productCountVisit");
+                        boolean isFavourite = (boolean) singleBag.get("isFavourite");
+                        ArrayList<String> productImages = (ArrayList<String>) singleBag.get("productImages");
+                        productsDataSet.add(new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                                productDescription, productDetails, productCare,
+                                productColourType, productCountVisit, isFavourite, productImages));
                     }
+                }
+                else{
+                    Log.d("firebase", "Error getting data!", task.getException());
                 }
             }
         });
