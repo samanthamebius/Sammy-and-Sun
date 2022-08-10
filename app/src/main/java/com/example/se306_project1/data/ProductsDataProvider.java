@@ -22,6 +22,7 @@ public class ProductsDataProvider {
         List<IProduct> productsList = getProducts();
         for (IProduct aProduct : productsList) {
             db.collection("products").document("" + aProduct.getProductID()).set(aProduct).addOnSuccessListener(new OnSuccessListener<Void>() {
+
                 @Override
                 public void onSuccess(Void unused) {
                     Log.d("Products Collection Add", "product " + aProduct.getProductID() + " added.");
@@ -32,6 +33,23 @@ public class ProductsDataProvider {
                     Log.w("Products Collection Add", "product " + aProduct.getProductID() + " NOT added.");
                 }
             });
+
+        }
+
+        for (IProduct aProduct : productsList) {
+            db.collection("category"+aProduct.getCategoryID()).document("" + aProduct.getProductID()).set(aProduct).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                @Override
+                public void onSuccess(Void unused) {
+                    Log.d("Products Collection Add", "product " + aProduct.getProductID() + " added.");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull @NotNull Exception e) {
+                    Log.w("Products Collection Add", "product " + aProduct.getProductID() + " NOT added.");
+                }
+            });
+
         }
     }
 
