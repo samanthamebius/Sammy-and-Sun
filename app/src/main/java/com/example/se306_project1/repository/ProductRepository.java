@@ -54,8 +54,8 @@ public class ProductRepository {
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
                     for(DocumentSnapshot singleBag : snapshots){
-                        int productID = (int) singleBag.get("productID");
-                        int categoryID = (int) singleBag.get("categoryID");
+                        long productID = (long) singleBag.get("productID");
+                        long categoryID = (long) singleBag.get("categoryID");
                         double productPrice = (double) singleBag.get("productPrice");
                         String productLongName = singleBag.get("productLongName").toString();
                         String productShortName = singleBag.get("productShortName").toString();
@@ -64,7 +64,7 @@ public class ProductRepository {
                         String productDetails = singleBag.get("productDetails").toString();
                         String productCare = singleBag.get("productCare").toString();
                         ColourType productColourType = ColourType.valueOf(singleBag.get("productColourType").toString());
-                        int productCountVisit = (int) singleBag.get("productCountVisit");
+                        long productCountVisit = (long) singleBag.get("productCountVisit");
                         boolean isFavourite = (boolean) singleBag.get("isFavourite");
                         ArrayList<String> productImages = (ArrayList<String>) singleBag.get("productImages");
                         productsDataSet.add(new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,

@@ -7,8 +7,8 @@ import java.util.ArrayList;
     public class Product implements IProduct {
 
     // instance fields
-    private final int productID;
-    private final int categoryID;
+    private final long productID;
+    private final long categoryID;
     private final Double productPrice;
 
     private final String productLongName;
@@ -22,15 +22,15 @@ import java.util.ArrayList;
 
 
     private final ColourType productColourType;
-    private int productCountVisit;
+    private long productCountVisit;
     private Boolean productIsFavourite;
     private final ArrayList<String> productImages;
 
 
-    public Product(int productID, int categoryID, Double productPrice,
+    public Product(long productID, long categoryID, Double productPrice,
                    String productLongName, String productShortName, Brand brandName,
                    String productDescription, String productDetails, String productCare,
-                   ColourType productColourType, int productCountVisit, boolean isFavourite, ArrayList<String> productImages){
+                   ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
         this.productID = productID;
         this.categoryID = categoryID;
         this.productPrice = productPrice;
@@ -52,7 +52,7 @@ import java.util.ArrayList;
 
 
     @Exclude
-    public int getProductID() {
+    public long getProductID() {
         return productID;
     }
     @Exclude
@@ -93,12 +93,12 @@ import java.util.ArrayList;
         return productIsFavourite;
     }
     @Exclude
-    public  int getProductCountVisit(){
+    public long getProductCountVisit(){
         return productCountVisit;
     }
 
     @Exclude
-    public int getCategoryID(){
+    public long getCategoryID(){
         return categoryID;
     }
 
