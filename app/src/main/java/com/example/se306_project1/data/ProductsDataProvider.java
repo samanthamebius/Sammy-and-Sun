@@ -24,12 +24,12 @@ public class ProductsDataProvider {
             db.collection("products").document("" + aProduct.getProductID()).set(aProduct).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    Log.d("Products Collection Add", "product " + aProduct.getBrandName() + " added.");
+                    Log.d("Products Collection Add", "product " + aProduct.getProductID() + " added.");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull @NotNull Exception e) {
-                    Log.w("Products Collection Add", "product " + aProduct.getBrandName() + " NOT added.");
+                    Log.w("Products Collection Add", "product " + aProduct.getProductID() + " NOT added.");
                 }
             });
         }
