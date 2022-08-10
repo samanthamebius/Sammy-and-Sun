@@ -1,7 +1,6 @@
 package com.example.se306_project1.data;
 
 import android.util.Log;
-import android.webkit.WebHistoryItem;
 
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
@@ -39,6 +38,7 @@ public class ProductsDataProvider {
     public static List<IProduct> getProducts() {
         List<IProduct> bagsList = new ArrayList<>();
 
+        Map<Integer, Integer> categories = generateCategory();
         Map<Integer, String> brands = generateBrand();
         Map<Integer, String> longNames = generateLongName();
         Map<Integer, String> shortNames = generateShortName();
@@ -51,7 +51,7 @@ public class ProductsDataProvider {
         for (Integer key : brands.keySet()) {
 
             int productID = key;
-            int categoryID = 1;
+            int categoryID = categories.get(key);
 
             Double productPrice = prices.get(key);
             String productLongName = longNames.get(key);
@@ -74,6 +74,42 @@ public class ProductsDataProvider {
         }
 
         return bagsList;
+    }
+
+    public static Map<Integer, Integer> generateCategory() {
+        Map<Integer, Integer> categories =
+                new LinkedHashMap<Integer, Integer>();
+        categories.put(0, 0);
+        categories.put(1, 0);
+        categories.put(2, 0);
+        categories.put(3, 0);
+        categories.put(4, 0);
+        categories.put(5, 0);
+        categories.put(6, 0);
+        categories.put(7, 0);
+        categories.put(8, 0);
+        categories.put(9, 0);
+        categories.put(10, 1);
+        categories.put(11, 1);
+        categories.put(12, 1);
+        categories.put(13, 1);
+        categories.put(14, 1);
+        categories.put(15, 1);
+        categories.put(16, 1);
+        categories.put(17, 1);
+        categories.put(18, 1);
+        categories.put(19, 1);
+        categories.put(20, 2);
+        categories.put(21, 2);
+        categories.put(22, 2);
+        categories.put(23, 2);
+        categories.put(24, 2);
+        categories.put(25, 2);
+        categories.put(26, 2);
+        categories.put(27, 2);
+        categories.put(28, 2);
+        categories.put(29, 2);
+        return categories;
     }
 
     public static Map<Integer, String> generateBrand() {
