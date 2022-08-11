@@ -3,7 +3,9 @@ package com.example.se306_project1.repository;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
+import com.example.se306_project1.models.Category;
 import com.example.se306_project1.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,6 +21,7 @@ import java.util.List;
 
 public class CategoryRepository {
 
+    private List<Category> categoryGroups = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private DatabaseReference dref = FirebaseDatabase.getInstance().getReference();
 
@@ -29,6 +32,14 @@ public class CategoryRepository {
             instance = new ProductRepository();
         }
         return instance;
+    }
+
+    public MutableLiveData<List<Category>> getCategories() {
+        categoryGroups.clear();
+        fetchCategories();
+        MutableLiveData<List<Category>> data = new MutableLiveData<>();
+        data.setValue(categoryGroups);
+        return data;
     }
 
     public void fetchCategories (){
@@ -43,8 +54,8 @@ public class CategoryRepository {
                         long categoryID = (long) snap.get("categoryID");
                         String categoryImage = snap.get("categoryImage").toString();
                         String categoryName = snap.get("categoryName").toString();
+                        categoryGroups.add(new Category(categoryID, categoryImage, categoryName));
                     }
-
                 }
                 else {
                     Log.d("Firebase", "error getting data!", task.getException());
