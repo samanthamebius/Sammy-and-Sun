@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PopularRepository {
+public class PopularRepository implements IPopularRepository{
 
     public List<Product> popularDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -36,7 +36,7 @@ public class PopularRepository {
         return instance;
     }
 
-    public LiveData<List<Product>> getProducts() {
+    public LiveData<List<Product>> getPopular() {
         popularDataSet.clear();
         fetchAllProducts();
         MutableLiveData<List<Product>> data = new MutableLiveData<>();
