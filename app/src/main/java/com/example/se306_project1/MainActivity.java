@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ProductRepository productRepo = new ProductRepository();
-        productRepo.getAllProducts();
+        productRepo.fetchAllProducts();
         for(Product bag: productRepo.productsDataSet){
             System.out.println(bag.getProductLongName());
         }
