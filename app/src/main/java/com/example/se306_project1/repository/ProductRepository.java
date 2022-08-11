@@ -22,7 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRepository {
+public class ProductRepository implements IProductRepository{
 
     public List<Product> productsDataSet = new ArrayList<>();
     public Product productSingle;
@@ -56,9 +56,9 @@ public class ProductRepository {
         return data;
     }
 
-    public LiveData<List<Product>> getProductByCategoryID(long productID) {
+    public LiveData<List<Product>> getProductByCategoryID(long categoryID) {
         productsDataSet.clear();
-        fetchProductsByCategory(productID);
+        fetchProductsByCategory(categoryID);
         MutableLiveData<List<Product>> data = new MutableLiveData<>();
         data.setValue(productsDataSet);
         return data;
