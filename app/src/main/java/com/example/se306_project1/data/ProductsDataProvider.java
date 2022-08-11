@@ -71,8 +71,8 @@ public class ProductsDataProvider {
 
         for (Integer key : brands.keySet()) {
 
-            int productID = key;
-            int categoryID = categories.get(key);
+            long productID = key;
+            long categoryID = categories.get(key);
 
             Double productPrice = prices.get(key);
             String productLongName = longNames.get(key);
