@@ -19,7 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryRepository {
+public class CategoryRepository implements ICategoryRepository{
 
     private List<Category> categoryGroups = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();

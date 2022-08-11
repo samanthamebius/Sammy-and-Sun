@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavouritesRepository {
+public class FavouritesRepository implements IFavouritesRepository{
 
     public List<Product> favouritesDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -36,7 +36,7 @@ public class FavouritesRepository {
         return instance;
     }
 
-    public LiveData<List<Product>> getProducts() {
+    public LiveData<List<Product>> getFavourites() {
         favouritesDataSet.clear();
         fetchAllProducts();
         MutableLiveData<List<Product>> data = new MutableLiveData<>();
