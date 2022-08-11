@@ -7,6 +7,6 @@ public enum Brand {
     Coach,
     Dior,
     Fendi,
-    Saint_Laurant,
+    Saint_Laurent,
     Balenciaga,
 }
