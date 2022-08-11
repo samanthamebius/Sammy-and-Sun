@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -20,13 +21,11 @@ import java.util.List;
 
 public class ProductRepository {
 
+    public List<Product> productsDataSet = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     // singleton pattern
     private static ProductRepository instance;
-    // dataset of all products
-    public List<Product> productsDataSet = new ArrayList<>();
-
-    private DatabaseReference databaseReference;
-
     public static ProductRepository getInstance(){
         if(instance == null){
             instance = new ProductRepository();
@@ -43,8 +42,45 @@ public class ProductRepository {
 //        return data;
 //    }
 
+    public Product getProductByID(long productID){
+        String idString = Long.toString(productID);
+        final Product[] productByID = new Product[1];
+
+        DocumentReference documentReference = db.collection("product").document(idString);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot snap = task.getResult();
+                    Log.d("firebase", String.valueOf(task.getResult()));
+                    long productID = (long) snap.get("productID");
+                    long categoryID = (long) snap.get("categoryID");
+                    double productPrice = (double) snap.get("productPrice");
+                    String productLongName = snap.get("productLongName").toString();
+                    String productShortName = snap.get("productShortName").toString();
+                    Brand brandName = Brand.valueOf(snap.get("brandName").toString());
+                    String productDescription = snap.get("productDescription").toString();
+                    String productDetails = snap.get("productDetails").toString();
+                    String productCare = snap.get("productCare").toString();
+                    ColourType productColourType = ColourType.valueOf(snap.get("productColourType").toString());
+                    long productCountVisit = (long) snap.get("productCountVisit");
+                    boolean isFavourite = (boolean) snap.get("isFavourite");
+                    ArrayList<String> productImages = (ArrayList<String>) snap.get("productImages");
+                    productByID[0] = new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                            productDescription, productDetails, productCare,
+                            productColourType, productCountVisit, isFavourite, productImages);
+                }
+                else{
+                    Log.d("firebase", "error getting data!", task.getException());
+                }
+            }
+        });
+
+        return productByID[0];
+    }
+
     public void getAllProducts(){
-        CollectionReference collectionRef = FirebaseFirestore.getInstance().collection("products");
+        CollectionReference collectionRef = db.collection("products");
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -59,7 +95,7 @@ public class ProductRepository {
                         double productPrice = (double) singleBag.get("productPrice");
                         String productLongName = singleBag.get("productLongName").toString();
                         String productShortName = singleBag.get("productShortName").toString();
-                        Brand brandName = Brand.valueOf(singleBag.get("brandName").toString().replaceAll(" ","_"));
+                        Brand brandName = Brand.valueOf(singleBag.get("brandName").toString());
                         String productDescription = singleBag.get("productDescription").toString();
                         String productDetails = singleBag.get("productDetails").toString();
                         String productCare = singleBag.get("productCare").toString();
