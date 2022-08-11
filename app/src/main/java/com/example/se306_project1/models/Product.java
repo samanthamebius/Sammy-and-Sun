@@ -4,44 +4,55 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 
-    class Product implements IProduct {
+    public class Product implements IProduct {
 
     // instance fields
-    private int productID;
-    private int categoryID;
-    private Double productPrice;
-    private String productLongName;
-    private String productShortName;
+    private final long productID;
+    private final long categoryID;
+    private final Double productPrice;
 
-    private ArrayList<String> productImages;
-    private String productDescription;
-    private String productDetails;
-    private String productCare;
-
-    private String brandName;
-    private String productColourType;
-    private Boolean productIsFavourite = Boolean.FALSE;
-    private int productCountVisit = 0;
+    private final String productLongName;
+    private final String productShortName;
+    private final Brand brandName;
 
 
-    public Product(int productID, int categoryID, Double productPrice, String productLongName, String productShortName, ArrayList<String> productImages, String productDescription, String productDetails, String productCare){
+    private final String productDescription;
+    private final String productDetails;
+    private final String productCare;
+
+
+    private final ColourType productColourType;
+    private long productCountVisit;
+    private Boolean productIsFavourite;
+    private final ArrayList<String> productImages;
+
+
+    public Product(long productID, long categoryID, Double productPrice,
+                   String productLongName, String productShortName, Brand brandName,
+                   String productDescription, String productDetails, String productCare,
+                   ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
         this.productID = productID;
         this.categoryID = categoryID;
         this.productPrice = productPrice;
+
         this.productLongName = productLongName;
         this.productShortName = productShortName;
-        this.productImages = productImages;
+        this.brandName = brandName;
+
         this.productDescription = productDescription;
         this.productDetails = productDetails;
         this.productCare = productCare;
-        this.brandName = getBrandName();
-        this.productColourType = getProductColourType();
+
+        this.productColourType = productColourType;
+        this.productCountVisit = productCountVisit;
+        this.productIsFavourite = isFavourite;
+        this.productImages = productImages;
     }
 
 
 
     @Exclude
-    public int getProductID() {
+    public long getProductID() {
         return productID;
     }
     @Exclude
@@ -69,11 +80,11 @@ import java.util.ArrayList;
         return productCare;
     }
     @Exclude
-    public String getBrandName(){
+    public Brand getBrandName(){
         return brandName;
     }
     @Exclude
-    public String getProductColourType(){
+    public ColourType getProductColourType(){
         return productColourType;
     }
 
@@ -82,12 +93,12 @@ import java.util.ArrayList;
         return productIsFavourite;
     }
     @Exclude
-    public  int getProductCountVisit(){
+    public long getProductCountVisit(){
         return productCountVisit;
     }
 
     @Exclude
-    public int getCategoryID(){
+    public long getCategoryID(){
         return categoryID;
     }
 
@@ -98,11 +109,5 @@ import java.util.ArrayList;
 
     @Exclude
     public void setVisitCount(){}
-
-
-
-
-
-
-
+        
     }
