@@ -4,6 +4,6 @@ public interface ICategory {
     public String getCategoryName();
     public String getCategoryImage();
 
-    int getCategoryID();
+    long getCategoryID();
 
 }

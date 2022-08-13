@@ -58,11 +58,11 @@ public class PopularRepository implements IPopularRepository{
                         double productPrice = (double) popularBag.get("productPrice");
                         String productLongName = popularBag.get("productLongName").toString();
                         String productShortName = popularBag.get("productShortName").toString();
-                        Brand brandName = Brand.valueOf(popularBag.get("brandName").toString());
+                        String brandName = popularBag.get("brandName").toString();
                         String productDescription = popularBag.get("productDescription").toString();
                         String productDetails = popularBag.get("productDetails").toString();
                         String productCare = popularBag.get("productCare").toString();
-                        ColourType productColourType = ColourType.valueOf(popularBag.get("productColourType").toString());
+                        String productColourType = popularBag.get("productColourType").toString();
                         long productCountVisit = (long) popularBag.get("productCountVisit");
                         boolean isFavourite = (boolean) popularBag.get("isFavourite");
                         ArrayList<String> productImages = (ArrayList<String>) popularBag.get("productImages");

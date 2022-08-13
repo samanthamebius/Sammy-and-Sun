@@ -78,6 +78,9 @@ public class ProductsDataProvider {
             String productLongName = longNames.get(key);
             String productShortName= shortNames.get(key);
 
+            long productCountVisit = 0;
+            boolean isFavourite = false;
+
             ArrayList<String> productImages = new ArrayList<>();
             productImages.add("b"+key+"_01.png");
             productImages.add("b"+key+"_02.png");
@@ -90,7 +93,7 @@ public class ProductsDataProvider {
             String productColourType = colourTypes.get(key);
 
 
-            Product c = new Product(productID, categoryID, productPrice, productLongName, productShortName, productImages, productDescription, productDetails, productCare, brandName, productColourType);
+            Product c = new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName, productDescription, productDetails, productCare, productColourType, productCountVisit, isFavourite,productImages);
             bagsList.add(c);
         }
 

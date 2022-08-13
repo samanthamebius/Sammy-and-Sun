@@ -11,8 +11,8 @@ public interface IProduct {
     public String getProductDetails();
     public String getProductCare();
     public long getCategoryID();
-    public Brand getBrandName();
-    public ColourType getProductColourType();
+    public String getBrandName();
+    public String getProductColourType();
     public Boolean getIsFavourite();
     public void setProductIsFavourite(Boolean isFavourite);
     public long getProductCountVisit();

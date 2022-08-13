@@ -13,7 +13,7 @@ import java.util.ArrayList;
     private final Double productPrice;
     private String productLongName;
     private String productShortName;
-    private final Brand brandName;
+    private final String brandName;
 
 
     private final String productDescription;
@@ -21,15 +21,15 @@ import java.util.ArrayList;
     private final String productCare;
 
 
-    private final ColourType productColourType;
+    private final String productColourType;
     private long productCountVisit;
     private Boolean productIsFavourite;
     private final ArrayList<String> productImages;
 
     public Product(long productID, long categoryID, Double productPrice,
-                   String productLongName, String productShortName, Brand brandName,
+                   String productLongName, String productShortName, String brandName,
                    String productDescription, String productDetails, String productCare,
-                   ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
+                   String productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
 
         this.productID = productID;
         this.categoryID = categoryID;
@@ -80,11 +80,11 @@ import java.util.ArrayList;
         return productCare;
     }
     @Exclude
-    public Brand getBrandName(){
+    public String getBrandName(){
         return brandName;
     }
     @Exclude
-    public ColourType getProductColourType(){
+    public String getProductColourType(){
         return productColourType;
     }
 
