@@ -13,6 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/src/main/res/layout/activity_main.xml
-app/src/main/res/layout/activity_main.xml
 .idea/misc.xml
+.idea/deploymentTargetDropDown.xml
