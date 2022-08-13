@@ -1,44 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:fillViewport="true">
 
-    <TextView
-        style="@style/LargeHeaderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Popular"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Decadently adorned with a luxurious polished gold-toned Double J logo atop colour-blocked saffiano leather, The Marc Jacobs' Snapshot Small Camera Cross-Body Bag is ready for its closeup. The structured design boasts a cloudy cream, black and gold colour palette and is finished with a detachable seatbelt crossbody strap for a bold maximalist aesthetic."
-         />
+        <!-- Search -->
 
-    <TextView
-        style="@style/SmallHeaderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Coach"
-        />
+        <LinearLayout
+            android:id="@+id/search_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:background="@drawable/rectangle">
 
-    <TextView
-        style="@style/MediumText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Coach"
-        />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/search" />
 
-    <TextView
-        style="@style/ButtonText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Coach"
-        />
+            <TextView
+                style="@style/MediumText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="What are you looking for?" />
 
-</LinearLayout>
+        </LinearLayout>
+
+        <!-- Popular -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/LargeHeaderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Popular" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/popular_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <!-- Favourites -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/LargeHeaderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favourites" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favourites_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <!-- Categories -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/LargeHeaderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Browse By Style" />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </ListView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
