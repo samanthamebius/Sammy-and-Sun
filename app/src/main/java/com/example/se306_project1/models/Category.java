@@ -5,15 +5,15 @@ import com.google.firebase.database.Exclude;
 public class Category implements ICategory{
 
     // private instance fields
-    private int categoryID;
+    private long categoryID;
     private String categoryName;
     private String categoryImage;
 
-    public Category(int categoryID, String categoryName, String categoryImage){
 
+    public Category(long categoryID, String categoryImage, String categoryName){
         this.categoryID = categoryID;
-        this.categoryName = categoryName;
         this.categoryImage = categoryImage;
+        this.categoryName = categoryName;
     }
 
     @Exclude

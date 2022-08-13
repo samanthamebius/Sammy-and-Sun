@@ -11,10 +11,11 @@ public interface IProduct {
     public String getProductDetails();
     public String getProductCare();
     public long getCategoryID();
-    public String getBrandName();
-    public String getProductColourType();
+    public Brand getBrandName();
+    public ColourType getProductColourType();
     public Boolean getIsFavourite();
     public void setProductIsFavourite(Boolean isFavourite);
     public long getProductCountVisit();
     public ArrayList<String> getProductImages();
+
 }
