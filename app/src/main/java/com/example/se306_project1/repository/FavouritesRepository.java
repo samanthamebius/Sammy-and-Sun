@@ -59,11 +59,11 @@ public class FavouritesRepository implements IFavouritesRepository{
                         double productPrice = (double) favouriteBag.get("productPrice");
                         String productLongName = favouriteBag.get("productLongName").toString();
                         String productShortName = favouriteBag.get("productShortName").toString();
-                        Brand brandName = Brand.valueOf(favouriteBag.get("brandName").toString());
+                        String brandName = favouriteBag.get("brandName").toString();
                         String productDescription = favouriteBag.get("productDescription").toString();
                         String productDetails = favouriteBag.get("productDetails").toString();
                         String productCare = favouriteBag.get("productCare").toString();
-                        ColourType productColourType = ColourType.valueOf(favouriteBag.get("productColourType").toString());
+                        String productColourType = favouriteBag.get("productColourType").toString();
                         long productCountVisit = (long) favouriteBag.get("productCountVisit");
                         boolean isFavourite = (boolean) favouriteBag.get("isFavourite");
                         ArrayList<String> productImages = (ArrayList<String>) favouriteBag.get("productImages");

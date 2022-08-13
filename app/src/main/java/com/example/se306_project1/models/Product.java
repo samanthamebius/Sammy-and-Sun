@@ -9,11 +9,11 @@ import java.util.ArrayList;
         // instance fields
         private final long productID;
         private final long categoryID;
-        private final Double productPrice;
+        private final double productPrice;
+        
         private final String productLongName;
         private final String productShortName;
         private final Brand brandName;
-
 
         private final String productDescription;
         private final String productDetails;
@@ -25,7 +25,8 @@ import java.util.ArrayList;
         private Boolean productIsFavourite;
         private final ArrayList<String> productImages;
 
-        public Product(long productID, long categoryID, Double productPrice,
+
+        public Product(long productID, long categoryID, double productPrice,
                        String productLongName, String productShortName, Brand brandName,
                        String productDescription, String productDetails, String productCare,
                        ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages) {
@@ -50,79 +51,75 @@ import java.util.ArrayList;
         }
 
 
-        @Exclude
-        public long getProductID() {
-            return productID;
-        }
 
-        @Exclude
-        public Double getProductPrice() {
-            return productPrice;
-        }
-
-        @Exclude
-        public String getProductLongName() {
-            return productLongName;
-        }
-
-        @Exclude
-        public String getProductShortName() {
-            return productShortName;
-        }
-
-        @Exclude
-        public String getProductDescription() {
-            return productDescription;
-        }
-
-        @Exclude
-        public String getProductDetails() {
-            return productDetails;
-        }
-
-        @Exclude
-        public String getProductCare() {
-            return productCare;
-        }
-
-        @Exclude
-        public Brand getBrandName() {
-            return brandName;
-        }
-
-        @Exclude
-        public ColourType getProductColourType() {
-            return productColourType;
-        }
-
-        @Exclude
-        public Boolean getIsFavourite() {
-            return productIsFavourite;
-        }
-
-        @Exclude
-        public long getProductCountVisit() {
-            return productCountVisit;
-        }
-
-        @Exclude
-        public ArrayList<String> getProductImages() {
-            return productImages;
-        }
-
-        @Exclude
-        public long getCategoryID() {
-            return categoryID;
-        }
-
-        @Exclude
-        public void setProductIsFavourite(Boolean isFavourite) {
-            this.productIsFavourite = isFavourite;
-        }
-
-        @Exclude
-        public void addVisitCount() {
-            this.productCountVisit++;
-        }
+    @Exclude
+    public long getProductID() {
+        return productID;
     }
+    @Exclude
+    public long getCategoryID() {
+        return categoryID;
+    }
+    @Exclude
+    public double getProductPrice(){
+        return productPrice;
+    }
+    
+    
+    @Exclude
+    public String getProductLongName(){
+        return productLongName;
+    }
+    @Exclude
+    public String getProductShortName(){
+        return productShortName;
+    }
+    @Exclude
+    public Brand getBrandName() {
+        return brandName;
+    }
+    
+    
+    @Exclude
+    public String getProductDescription(){
+        return productDescription;
+    }
+    @Exclude
+    public String getProductDetails(){
+        return productDetails;
+    }
+    @Exclude
+    public String getProductCare(){
+        return productCare;
+    }
+    
+
+
+    @Exclude
+    public ColourType getProductColourType() {
+        return productColourType;
+    }
+    @Exclude
+    public void addVisitCount() {
+        this.productCountVisit++;
+    }
+    @Exclude
+    public long getProductCountVisit() {
+        return this.productCountVisit;
+    }
+
+    @Exclude
+    public Boolean getIsFavourite() {
+        return productIsFavourite;
+    }
+    @Exclude
+    public void setProductIsFavourite(Boolean isFavourite) {
+        this.productIsFavourite = isFavourite;
+    }
+   @Exclude
+    public ArrayList<String> getProductImages() {
+        return productImages;
+    }
+
+}
 
