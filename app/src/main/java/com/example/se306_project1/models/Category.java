@@ -17,7 +17,7 @@ public class Category implements ICategory{
     }
 
     @Exclude
-    public int getCategoryID() {
+    public long getCategoryID() {
         return categoryID;
     }
     @Exclude
