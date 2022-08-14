@@ -89,8 +89,8 @@ public class ProductsDataProvider {
             String productDescription = descriptions.get(key);
             String productDetails = details.get(key);
             String productCare = productCares.get(key);
-            String brandName = brands.get(key);
-            String productColourType = colourTypes.get(key);
+            Brand brandName = Brand.valueOf(brands.get(key));
+            ColourType productColourType = ColourType.valueOf(colourTypes.get(key)) ;
 
 
             Product c = new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName, productDescription, productDetails, productCare, productColourType, productCountVisit, isFavourite,productImages);
