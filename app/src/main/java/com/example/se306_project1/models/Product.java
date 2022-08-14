@@ -4,7 +4,7 @@ import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 
-    public abstract class Product implements IProduct {
+    public class Product implements IProduct {
 
         // instance fields
         private final long productID;
