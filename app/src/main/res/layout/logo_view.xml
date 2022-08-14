@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        style="@style/TitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Sammy"/>
+
+    <TextView
+        style="@style/TitleText"
+        android:textColor="@color/medium_brown"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="&amp;"/>
+
+    <TextView
+        style="@style/TitleText"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Sun"/>
+
+</LinearLayout>

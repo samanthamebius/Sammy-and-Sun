@@ -15,7 +15,6 @@ public interface IProduct {
     public String getProductDetails();
     public String getProductCare();
 
-
     public ColourType getProductColourType();
     public long getProductCountVisit();
     public Boolean getIsFavourite();

@@ -20,6 +20,7 @@ public class Category implements ICategory{
     public long getCategoryID() {
         return categoryID;
     }
+
     @Exclude
     public String getCategoryName(){
         return categoryName;
