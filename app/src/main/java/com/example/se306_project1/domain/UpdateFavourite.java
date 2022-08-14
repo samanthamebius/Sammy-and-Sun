@@ -2,10 +2,8 @@ package com.example.se306_project1.domain;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-
 import com.example.se306_project1.models.Product;
-import com.example.se306_project1.repository.IProductRepository;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -13,25 +11,48 @@ import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Source;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class UpdateFavourite {
+    static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    static boolean favouriteStatus;
 
-    // Need a method to find current boolean status and then call the functions in this class accordingly
+    public static void updateFavourite(Product p){
+        favouriteStatus = getFavouriteStatus(p);
+        System.out.println("favourite status"+favouriteStatus);
 
-//    public void updateFavourite(Product p){
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentSnapshot snapshot = db.collection("products").document(""+p.getProductID()).get();
-//        boolean isFavourite = (boolean) snapshot.getBoolean("isFavourite");
-//    }
+        if(favouriteStatus == false) {
+            System.out.println("detected false");
+            updateFavouriteBoolean(p, true);
+            addToFavouriteCollection(p);
+        } else {
+            updateFavouriteBoolean(p, false);
+            removeFromFavouriteCollection(p);
+        }
+    }
 
+    public static boolean getFavouriteStatus(Product p){
+        DocumentReference productRef = db.collection("products").document(""+p.getProductID());
 
-    public void updateFavouriteBoolean(Product p, Boolean newStatus){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        productRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot snap = task.getResult();
+                    Log.d("firebase", String.valueOf(task.getResult()));
+                    boolean isFavourite = (boolean) snap.get("isFavourite");
+                    favouriteStatus = isFavourite;
+                }
+                else{
+                    Log.d("firebase", "error getting data!", task.getException());
+                }
+            }
+        });
+        return favouriteStatus;
+    }
+
+    public static void updateFavouriteBoolean(Product p, Boolean newStatus){
         DocumentReference productRef = db.collection("products").document(""+p.getProductID());
 
         productRef
@@ -39,19 +60,18 @@ public class UpdateFavourite {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("Favourites Boolean ", "product " + p.getProductID() + " updated to true.");
+                        Log.d("Favourites Boolean ", "product " + p.getProductID() + " updated.");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("Favourites Boolean ", "product " + p.getProductID() + " NOT updated to true.");
+                        Log.w("Favourites Boolean ", "product " + p.getProductID() + " NOT updated.");
                     }
                 });
     }
 
-    public void removeFromFavouriteCollection(Product p) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static void removeFromFavouriteCollection(Product p) {
         db.collection("favourites").document("" + p.getProductID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -66,9 +86,7 @@ public class UpdateFavourite {
                 });
     }
 
-    public void addToFavouriteCollection(Product p) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    public static void addToFavouriteCollection(Product p) {
         DocumentReference productRef = db.document("products/"+p.getProductID());
 
         Map<String, DocumentReference> favourite = new LinkedHashMap<String, DocumentReference>();
