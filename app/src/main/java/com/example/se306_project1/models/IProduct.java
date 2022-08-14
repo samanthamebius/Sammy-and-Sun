@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public interface IProduct {
     public long getProductID();
     public long getCategoryID();
-    public Double getProductPrice();
+    public double getProductPrice();
 
     public String getProductLongName();
     public String getProductShortName();
