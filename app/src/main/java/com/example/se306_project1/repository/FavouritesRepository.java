@@ -23,9 +23,9 @@ import java.util.List;
 
 public class FavouritesRepository implements IFavouritesRepository{
 
-    public List<Product> favouritesDataSet = new ArrayList<>();
+    public List<Long> favouritesDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private DatabaseReference dref = FirebaseDatabase.getInstance().getReference();
+
 
     // singleton pattern
     private static ProductRepository instance;
@@ -36,15 +36,15 @@ public class FavouritesRepository implements IFavouritesRepository{
         return instance;
     }
 
-    public LiveData<List<Product>> getFavourites() {
+    public LiveData<List<Long>> getFavourites() {
         favouritesDataSet.clear();
-        fetchAllProducts();
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        fetchAllFavourites();
+        MutableLiveData<List<Long>> data = new MutableLiveData<>();
         data.setValue(favouritesDataSet);
         return data;
     }
 
-    public void fetchAllProducts(){
+    public void fetchAllFavourites(){
         CollectionReference collectionRef = db.collection("favourites");
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -55,25 +55,11 @@ public class FavouritesRepository implements IFavouritesRepository{
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     for(DocumentSnapshot favouriteBag : snapshots){
                         long productID = (long) favouriteBag.get("productID");
-                        long categoryID = (long) favouriteBag.get("categoryID");
-                        double productPrice = (double) favouriteBag.get("productPrice");
-                        String productLongName = favouriteBag.get("productLongName").toString();
-                        String productShortName = favouriteBag.get("productShortName").toString();
-                        String brandName = favouriteBag.get("brandName").toString();
-                        String productDescription = favouriteBag.get("productDescription").toString();
-                        String productDetails = favouriteBag.get("productDetails").toString();
-                        String productCare = favouriteBag.get("productCare").toString();
-                        String productColourType = favouriteBag.get("productColourType").toString();
-                        long productCountVisit = (long) favouriteBag.get("productCountVisit");
-                        boolean isFavourite = (boolean) favouriteBag.get("isFavourite");
-                        ArrayList<String> productImages = (ArrayList<String>) favouriteBag.get("productImages");
-                        favouritesDataSet.add(new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,
-                                productDescription, productDetails, productCare,
-                                productColourType, productCountVisit, isFavourite, productImages));
+                        favouritesDataSet.add(productID);
                     }
                 }
                 else{
-                    Log.d("firebase", "Error getting data!", task.getException());
+                    Log.d("firebase", "Error getting favourites data!", task.getException());
                 }
             }
         });

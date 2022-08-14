@@ -23,28 +23,27 @@ import java.util.List;
 
 public class PopularRepository implements IPopularRepository{
 
-    public List<Product> popularDataSet = new ArrayList<>();
+    public List<Long> popularDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private DatabaseReference dref = FirebaseDatabase.getInstance().getReference();
 
     // singleton pattern
-    private static ProductRepository instance;
-    public static ProductRepository getInstance(){
+    private static PopularRepository instance;
+    public static PopularRepository getInstance(){
         if(instance == null){
-            instance = new ProductRepository();
+            instance = new PopularRepository();
         }
         return instance;
     }
 
-    public LiveData<List<Product>> getPopular() {
+    public LiveData<List<Long>> getPopular() {
         popularDataSet.clear();
-        fetchAllProducts();
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        fetchAllPopular();
+        MutableLiveData<List<Long>> data = new MutableLiveData<>();
         data.setValue(popularDataSet);
         return data;
     }
 
-    public void fetchAllProducts(){
+    public void fetchAllPopular(){
         CollectionReference collectionRef = db.collection("popular");
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -52,27 +51,14 @@ public class PopularRepository implements IPopularRepository{
                 if(task.isSuccessful()){
                     Log.d("firebase", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    // only getting the foreign keys of the data
                     for(DocumentSnapshot popularBag : snapshots){
                         long productID = (long) popularBag.get("productID");
-                        long categoryID = (long) popularBag.get("categoryID");
-                        double productPrice = (double) popularBag.get("productPrice");
-                        String productLongName = popularBag.get("productLongName").toString();
-                        String productShortName = popularBag.get("productShortName").toString();
-                        String brandName = popularBag.get("brandName").toString();
-                        String productDescription = popularBag.get("productDescription").toString();
-                        String productDetails = popularBag.get("productDetails").toString();
-                        String productCare = popularBag.get("productCare").toString();
-                        String productColourType = popularBag.get("productColourType").toString();
-                        long productCountVisit = (long) popularBag.get("productCountVisit");
-                        boolean isFavourite = (boolean) popularBag.get("isFavourite");
-                        ArrayList<String> productImages = (ArrayList<String>) popularBag.get("productImages");
-                        popularDataSet.add(new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,
-                                productDescription, productDetails, productCare,
-                                productColourType, productCountVisit, isFavourite, productImages));
+                        popularDataSet.add(productID);
                     }
                 }
                 else{
-                    Log.d("firebase", "Error getting data!", task.getException());
+                    Log.d("firebase", "Error getting popular data!", task.getException());
                 }
             }
         });
