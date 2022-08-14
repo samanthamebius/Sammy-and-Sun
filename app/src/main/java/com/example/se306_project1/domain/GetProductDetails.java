@@ -2,6 +2,7 @@ package com.example.se306_project1.domain;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
@@ -13,7 +14,6 @@ public class GetProductDetails {
 
     public LiveData<Product> getProductDetails(long productID) {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         ProductRepository productRepository = new ProductRepository();
         LiveData<Product> product = productRepository.getProductByID(productID);
 
