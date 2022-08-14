@@ -94,7 +94,7 @@ public class ProductRepository implements IProductRepository{
                             productColourType, productCountVisit, isFavourite, productImages);
                 }
                 else{
-                    Log.d("firebase", "error getting data!", task.getException());
+                    Log.d("firebase", "error getting product by ID data!", task.getException());
                 }
             }
         });
@@ -133,7 +133,7 @@ public class ProductRepository implements IProductRepository{
                     }
                 }
                 else{
-                    Log.d("firebase", "Error getting data!", task.getException());
+                    Log.d("firebase", "Error getting all products data!", task.getException());
                 }
             }
         });
@@ -169,7 +169,7 @@ public class ProductRepository implements IProductRepository{
                     }
                 }
                 else {
-                    Log.d("firebase", "error getting data!", task.getException());
+                    Log.d("firebase", "error getting data by category!", task.getException());
                 }
             }
         });

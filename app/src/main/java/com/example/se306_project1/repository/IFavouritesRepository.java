@@ -7,5 +7,5 @@ import com.example.se306_project1.models.Product;
 import java.util.List;
 
 public interface IFavouritesRepository {
-    public LiveData<List<Product>> getFavourites();
+    public LiveData<List<Long>> getFavourites();
 }
