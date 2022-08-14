@@ -4,18 +4,21 @@ import java.util.ArrayList;
 
 public interface IProduct {
     public long getProductID();
-    public Double getProductPrice();
+    public long getCategoryID();
+    public double getProductPrice();
+
     public String getProductLongName();
     public String getProductShortName();
+    public Brand getBrandName();
+
     public String getProductDescription();
     public String getProductDetails();
     public String getProductCare();
-    public long getCategoryID();
-    public String getBrandName();
-    public String getProductColourType();
+
+    public ColourType getProductColourType();
+    public long getProductCountVisit();
     public Boolean getIsFavourite();
     public void setProductIsFavourite(Boolean isFavourite);
-    public long getProductCountVisit();
     public ArrayList<String> getProductImages();
 
 }
