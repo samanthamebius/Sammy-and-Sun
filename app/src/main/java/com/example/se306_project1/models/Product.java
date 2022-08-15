@@ -6,49 +6,50 @@ import java.util.ArrayList;
 
     public class Product implements IProduct {
 
-    // instance fields
+        // instance fields
+        private final long productID;
+        private final long categoryID;
+        private final double productPrice;
+        
+        private final String productLongName;
+        private final String productShortName;
+        private final Brand brandName;
 
-    private final long productID;
-    private final long categoryID;
-    private final Double productPrice;
-    private String productLongName;
-    private String productShortName;
-    private final Brand brandName;
+        private final String productDescription;
+        private final String productDetails;
+        private final String productCare;
 
 
-    private final String productDescription;
-    private final String productDetails;
-    private final String productCare;
+        private final ColourType productColourType;
+        private long productCountVisit = 0;
+        private Boolean productIsFavourite;
+        private final ArrayList<String> productImages;
 
 
-    private final ColourType productColourType;
-    private long productCountVisit;
-    private Boolean productIsFavourite;
-    private final ArrayList<String> productImages;
+        public Product(long productID, long categoryID, double productPrice,
+                       String productLongName, String productShortName, Brand brandName,
+                       String productDescription, String productDetails, String productCare,
+                       ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages) {
 
-    public Product(long productID, long categoryID, Double productPrice,
-                   String productLongName, String productShortName, Brand brandName,
-                   String productDescription, String productDetails, String productCare,
-                   ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
+            this.productID = productID;
+            this.categoryID = categoryID;
+            this.productPrice = productPrice;
 
-        this.productID = productID;
-        this.categoryID = categoryID;
-        this.productPrice = productPrice;
+            this.productLongName = productLongName;
+            this.productShortName = productShortName;
+            this.brandName = brandName;
 
-        this.productLongName = productLongName;
-        this.productShortName = productShortName;
-        this.brandName = brandName;
+            this.productDescription = productDescription;
+            this.productDetails = productDetails;
+            this.productCare = productCare;
 
-        this.productDescription = productDescription;
-        this.productDetails = productDetails;
-        this.productCare = productCare;
+            this.productColourType = productColourType;
+            this.productCountVisit = productCountVisit;
+            this.productIsFavourite = isFavourite;
+            this.productImages = productImages;
 
-        this.productColourType = productColourType;
-        this.productCountVisit = productCountVisit;
-        this.productIsFavourite = isFavourite;
-        this.productImages = productImages;
+        }
 
-    }
 
 
     @Exclude
@@ -56,9 +57,15 @@ import java.util.ArrayList;
         return productID;
     }
     @Exclude
-    public Double getProductPrice(){
+    public long getCategoryID() {
+        return categoryID;
+    }
+    @Exclude
+    public double getProductPrice(){
         return productPrice;
     }
+    
+    
     @Exclude
     public String getProductLongName(){
         return productLongName;
@@ -67,6 +74,12 @@ import java.util.ArrayList;
     public String getProductShortName(){
         return productShortName;
     }
+    @Exclude
+    public Brand getBrandName() {
+        return brandName;
+    }
+    
+    
     @Exclude
     public String getProductDescription(){
         return productDescription;
@@ -79,40 +92,34 @@ import java.util.ArrayList;
     public String getProductCare(){
         return productCare;
     }
+    
+
+
     @Exclude
-    public Brand getBrandName(){
-        return brandName;
+    public ColourType getProductColourType() {
+        return productColourType;
     }
     @Exclude
-    public ColourType getProductColourType(){
-        return productColourType;
+    public void addVisitCount() {
+        this.productCountVisit++;
+    }
+    @Exclude
+    public long getProductCountVisit() {
+        return this.productCountVisit;
     }
 
     @Exclude
-    public Boolean getIsFavourite(){
+    public Boolean getIsFavourite() {
         return productIsFavourite;
     }
     @Exclude
-    public  long getProductCountVisit(){
-        return productCountVisit;
-    }
-
-    @Exclude
-    public  ArrayList<String> getProductImages(){
-            return productImages;
-        }
-
-    @Exclude
-    public long getCategoryID(){
-        return categoryID;
-    }
-
-    @Exclude
-    public void setProductIsFavourite(Boolean isFavourite){
+    public void setProductIsFavourite(Boolean isFavourite) {
         this.productIsFavourite = isFavourite;
     }
-
-    @Exclude
-    public void setVisitCount(){}
-        
+   @Exclude
+    public ArrayList<String> getProductImages() {
+        return productImages;
     }
+
+}
+

@@ -7,8 +7,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.se306_project1.models.Brand;
+import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
+import com.example.se306_project1.models.CrossBody;
 import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +30,6 @@ public class ProductRepository implements IProductRepository{
     public List<Product> productsDataSet = new ArrayList<>();
     public Product productSingle;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private DatabaseReference dref = FirebaseDatabase.getInstance().getReference();
 
     // singleton pattern
     private static ProductRepository instance;
@@ -87,12 +89,12 @@ public class ProductRepository implements IProductRepository{
                     long productCountVisit = (long) snap.get("productCountVisit");
                     boolean isFavourite = (boolean) snap.get("isFavourite");
                     ArrayList<String> productImages = (ArrayList<String>) snap.get("productImages");
-                    productSingle = new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                    productSingle = determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                             productDescription, productDetails, productCare,
                             productColourType, productCountVisit, isFavourite, productImages);
                 }
                 else{
-                    Log.d("firebase", "error getting data!", task.getException());
+                    Log.d("firebase", "error getting product by ID data!", task.getException());
                 }
             }
         });
@@ -124,13 +126,14 @@ public class ProductRepository implements IProductRepository{
                         long productCountVisit = (long) singleBag.get("productCountVisit");
                         boolean isFavourite = (boolean) singleBag.get("isFavourite");
                         ArrayList<String> productImages = (ArrayList<String>) singleBag.get("productImages");
-                        productsDataSet.add(new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+
+                        productsDataSet.add(determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                                 productDescription, productDetails, productCare,
                                 productColourType, productCountVisit, isFavourite, productImages));
                     }
                 }
                 else{
-                    Log.d("firebase", "Error getting data!", task.getException());
+                    Log.d("firebase", "Error getting all products data!", task.getException());
                 }
             }
         });
@@ -159,16 +162,47 @@ public class ProductRepository implements IProductRepository{
                         long productCountVisit = (long) singleBag.get("productCountVisit");
                         boolean isFavourite = (boolean) singleBag.get("isFavourite");
                         ArrayList<String> productImages = (ArrayList<String>) singleBag.get("productImages");
-                        productsDataSet.add(new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+
+                        productsDataSet.add(determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                                 productDescription, productDetails, productCare,
                                 productColourType, productCountVisit, isFavourite, productImages));
                     }
                 }
                 else {
-                    Log.d("firebase", "error getting data!", task.getException());
+                    Log.d("firebase", "error getting data by category!", task.getException());
                 }
             }
         });
+    }
+
+
+    public Product determineCategory (long productID, long categoryID, double productPrice,
+                                      String productLongName, String productShortName, Brand brandName,
+                                      String productDescription, String productDetails, String productCare,
+                                      ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
+        Product bag;
+        if(categoryID == 0){
+            // type is clutch
+            bag = new Clutch(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                    productDescription, productDetails, productCare,
+                    productColourType, productCountVisit, isFavourite, productImages);
+
+        }
+        else if (categoryID == 1){
+            // type is crossBody
+            bag = new CrossBody(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                    productDescription, productDetails, productCare,
+                    productColourType, productCountVisit, isFavourite, productImages);
+        }
+        else{
+            // type is tote
+            bag = new Tote(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                    productDescription, productDetails, productCare,
+                    productColourType, productCountVisit, isFavourite, productImages);
+
+        }
+
+        return bag;
     }
 
 
