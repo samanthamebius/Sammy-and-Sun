@@ -7,5 +7,7 @@ import com.example.se306_project1.models.Category;
 import java.util.List;
 
 public interface ICategoryRepository {
-    public MutableLiveData<List<Category>> getCategories();
+
+    MutableLiveData<List<Category>> getCategories();
+
 }

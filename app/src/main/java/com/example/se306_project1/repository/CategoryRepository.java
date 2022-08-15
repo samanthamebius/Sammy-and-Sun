@@ -26,10 +26,10 @@ public class CategoryRepository implements ICategoryRepository{
     private DatabaseReference dref = FirebaseDatabase.getInstance().getReference();
 
     // singleton pattern
-    private static ProductRepository instance;
-    public static ProductRepository getInstance(){
+    private CategoryRepository instance;
+    public CategoryRepository getInstance(){
         if(instance == null){
-            instance = new ProductRepository();
+            instance = new CategoryRepository();
         }
         return instance;
     }
@@ -42,7 +42,7 @@ public class CategoryRepository implements ICategoryRepository{
         return data;
     }
 
-    public void fetchCategories (){
+    public void fetchCategories(){
         CollectionReference colRef = db.collection("categories");
         colRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
