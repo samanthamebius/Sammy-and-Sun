@@ -23,11 +23,12 @@ public class CategoryRepository implements ICategoryRepository{
 
     private List<Category> categoryGroups = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private DatabaseReference dref = FirebaseDatabase.getInstance().getReference();
 
     // singleton pattern
+
     private CategoryRepository instance;
     public CategoryRepository getInstance(){
+
         if(instance == null){
             instance = new CategoryRepository();
         }
