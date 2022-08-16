@@ -212,7 +212,7 @@ public class ProductsDataProvider {
         Map<Integer, String> shortNames =
                 new LinkedHashMap<Integer, String>();
         shortNames.put(0, "Horsebit 1955");
-        shortNames.put(1, "Blondie");
+        shortNames.put(1, "Blondie Shoulder");
         shortNames.put(2, "Triangle Pouch");
         shortNames.put(3, "Felicie Pochette");
         shortNames.put(4, "Easy Pouch");
