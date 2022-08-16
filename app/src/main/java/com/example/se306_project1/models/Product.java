@@ -7,24 +7,27 @@ import java.util.ArrayList;
     public class Product implements IProduct {
 
         // instance fields
-        private final long productID;
-        private final long categoryID;
-        private final double productPrice;
+        private long productID;
+        private long categoryID;
+        private double productPrice;
         
-        private final String productLongName;
-        private final String productShortName;
-        private final Brand brandName;
+        private String productLongName;
+        private String productShortName;
+        private Brand brandName;
 
-        private final String productDescription;
-        private final String productDetails;
-        private final String productCare;
+        private String productDescription;
+        private String productDetails;
+        private String productCare;
 
 
-        private final ColourType productColourType;
+        private ColourType productColourType;
         private long productCountVisit = 0;
         private Boolean productIsFavourite;
-        private final ArrayList<String> productImages;
+        private ArrayList<String> productImages;
 
+       public Product(){
+
+       }
 
         public Product(long productID, long categoryID, double productPrice,
                        String productLongName, String productShortName, Brand brandName,

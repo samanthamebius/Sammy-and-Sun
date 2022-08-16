@@ -10,4 +10,7 @@ public interface IProductRepository {
     public LiveData<List<Product>> getProducts();
     public LiveData<Product> getProductByID(long productID);
     public LiveData<List<Product>> getProductByCategoryID(long categoryID);
+    public static ProductRepository getInstance() {
+        return null;
+    }
 }
