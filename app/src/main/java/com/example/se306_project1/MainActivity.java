@@ -4,12 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-
-import com.example.se306_project1.models.Product;
-import com.example.se306_project1.repository.ProductRepository;
-import com.example.se306_project1.data.CategoriesDataProvider;
-import com.example.se306_project1.data.ProductsDataProvider;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
