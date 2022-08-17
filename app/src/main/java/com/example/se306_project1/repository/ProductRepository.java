@@ -3,8 +3,10 @@ package com.example.se306_project1.repository;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.Clutch;
@@ -28,12 +30,15 @@ import java.util.List;
 public class ProductRepository implements IProductRepository{
 
     public List<Product> productsDataSet = new ArrayList<>();
-    public Product productSingle;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference productColRef = db.collection("products");
+    private long productID;
+    private long categoryID;
 
     // singleton pattern
+
     private static ProductRepository instance;
-    public static ProductRepository getInstance(){
+    public static IProductRepository getInstance(){
         if(instance == null){
             instance = new ProductRepository();
         }
@@ -45,37 +50,36 @@ public class ProductRepository implements IProductRepository{
     // mutableLiveData exposes SetValue and PostValue that can modify LiveData, so expose mutableLIveData in viewModels
     public LiveData<List<Product>> getProducts() {
         productsDataSet.clear();
-        fetchAllProducts();
         MutableLiveData<List<Product>> data = new MutableLiveData<>();
-        data.setValue(productsDataSet);
+        fetchAllProducts(data);
         return data;
     }
 
     public LiveData<Product> getProductByID(long productID) {
-        fetchProductByID(productID);
-        MutableLiveData<Product> data = new MutableLiveData<>();
-        data.setValue(productSingle);
-        return data;
-    }
-
-    public LiveData<List<Product>> getProductByCategoryID(long categoryID) {
         productsDataSet.clear();
-        fetchProductsByCategory(categoryID);
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
-        data.setValue(productsDataSet);
+        this.productID = productID;
+        MutableLiveData<Product> data = new MutableLiveData<>();
+        fetchProductByID(data);
         return data;
     }
 
-    public void fetchProductByID(long productID){
-        String idString = Long.toString(productID);
+    public LiveData<List<Product>> getProductsByCategoryID(long categoryID) {
+        productsDataSet.clear();
+        this.categoryID = categoryID;
+        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        fetchProductsByCategory(data);
+        return data;
+    }
 
-        DocumentReference documentReference = db.collection("product").document(idString);
+    public void fetchProductByID(MutableLiveData<Product> data){
+        String idString = Long.toString(productID);
+        DocumentReference documentReference = productColRef.document(idString);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot snap = task.getResult();
-                    Log.d("firebase", String.valueOf(task.getResult()));
+                    Log.d("firebase fetchProductID", String.valueOf(task.getResult()));
                     long productID = (long) snap.get("productID");
                     long categoryID = (long) snap.get("categoryID");
                     double productPrice = (double) snap.get("productPrice");
@@ -89,22 +93,24 @@ public class ProductRepository implements IProductRepository{
                     long productCountVisit = (long) snap.get("productCountVisit");
                     boolean isFavourite = (boolean) snap.get("isFavourite");
                     ArrayList<String> productImages = (ArrayList<String>) snap.get("productImages");
-                    productSingle = determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                    productsDataSet.add(determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                             productDescription, productDetails, productCare,
-                            productColourType, productCountVisit, isFavourite, productImages);
+                            productColourType, productCountVisit, isFavourite, productImages));
                 }
                 else{
                     Log.d("firebase", "error getting product by ID data!", task.getException());
                 }
+
+                data.setValue(productsDataSet.get(0));
             }
         });
 
 
     }
 
-    public void fetchAllProducts(){
-        CollectionReference collectionRef = db.collection("products");
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void fetchAllProducts(MutableLiveData<List<Product>> data){
+
+        productColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
@@ -135,11 +141,12 @@ public class ProductRepository implements IProductRepository{
                 else{
                     Log.d("firebase", "Error getting all products data!", task.getException());
                 }
+                data.setValue(productsDataSet);
             }
         });
     }
 
-    public void fetchProductsByCategory(long categoryID){
+    public void fetchProductsByCategory(MutableLiveData<List<Product>> data){
         String stringID = "category"+ Long.toString(categoryID);
         CollectionReference collectionRef = db.collection(stringID);
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -171,6 +178,7 @@ public class ProductRepository implements IProductRepository{
                 else {
                     Log.d("firebase", "error getting data by category!", task.getException());
                 }
+                data.setValue(productsDataSet);
             }
         });
     }
