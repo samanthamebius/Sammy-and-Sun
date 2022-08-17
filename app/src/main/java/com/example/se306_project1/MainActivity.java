@@ -1,6 +1,8 @@
 package com.example.se306_project1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
@@ -22,9 +24,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ViewPager2 viewPager;
-
-    SliderImagesAdapter sliderImagesAdapter;
+    RecyclerView recyclerView;
 
     int detailsCounter = 0;
     int productCareCounter = 0;
@@ -50,11 +50,13 @@ public class MainActivity extends AppCompatActivity {
         vh.details_icon = (ImageView) findViewById(R.id.details_icon);
         vh.product_care = (TextView) findViewById(R.id.product_care);
         vh.product_care_icon = (ImageView) findViewById(R.id.product_care_icon);
-        viewPager = findViewById(R.id.viewPager);
+        recyclerView = findViewById(R.id.recyclerView);
 
+
+        int[] intImages = {R.drawable.b0_01, R.drawable.b0_02, R.drawable.b0_03};
 
         ArrayList<String> images = new ArrayList<String>();
-        images.add("b0_01");
+        images.add("@drawable/b0_01");
         images.add("@drawable/b0_02");
         images.add("@drawable/b0_03");
 
@@ -68,8 +70,11 @@ public class MainActivity extends AppCompatActivity {
         vh.product_details.setText(p.getProductDetails());
         vh.product_care.setText(p.getProductCare());
 
-        sliderImagesAdapter = new SliderImagesAdapter(this, p);
-        viewPager.setAdapter(sliderImagesAdapter);
+
+        SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(this, intImages);
+        recyclerView.setAdapter(sliderImagesAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
     }
 
     public void expandDetails(View v){
@@ -93,4 +98,8 @@ public class MainActivity extends AppCompatActivity {
             vh.product_care_icon.setImageResource(R.drawable.drop_down_opposite);
         }
     }
+
+
+
+
 }
