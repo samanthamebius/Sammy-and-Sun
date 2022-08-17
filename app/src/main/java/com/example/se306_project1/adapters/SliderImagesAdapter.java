@@ -12,13 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.MainActivity;
 import com.example.se306_project1.R;
 
+import java.util.ArrayList;
+
 public class SliderImagesAdapter extends RecyclerView.Adapter<SliderImagesAdapter.ViewHolder> {
 
     private Context context;
-    private int[] intImages;
+    private ArrayList<Integer> intImages;
     ViewHolder vh;
 
-    public SliderImagesAdapter(Context context, int[] intImages) {
+    public SliderImagesAdapter(Context context, ArrayList<Integer> intImages) {
         this.context = context;
         this.intImages = intImages;
     }
@@ -33,7 +35,7 @@ public class SliderImagesAdapter extends RecyclerView.Adapter<SliderImagesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull SliderImagesAdapter.ViewHolder holder, int position) {
-        holder.imageView.setImageResource(intImages[position]);
+        holder.imageView.setImageResource(intImages.get(position));
 
         holder.itemView.setOnClickListener(view -> {
             System.out.println(position);
@@ -43,7 +45,7 @@ public class SliderImagesAdapter extends RecyclerView.Adapter<SliderImagesAdapte
 
     @Override
     public int getItemCount() {
-        return intImages.length;
+        return intImages.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
