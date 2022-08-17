@@ -40,10 +40,30 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
+                android:onClick="updateFavourite"
                 android:src="@drawable/unselected_heart" />
 
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="15dp"
+            android:background="@color/light_brown">
+
+            <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+                android:id="@+id/indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:spi_dotColor="#B4B4B4"
+                app:spi_dotSelectedColor="#545454"
+                app:spi_dotSelectedSize="10dp"
+                app:spi_dotSpacing="15dp"/>
+
+        </LinearLayout>
 
 <!--        <LinearLayout-->
 <!--            android:layout_width="match_parent"-->

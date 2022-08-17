@@ -32,6 +32,29 @@ public class UpdateFavourite {
         }
     }
 
+//    public static boolean getFavouriteStatus(Product p){
+//        DocumentReference productRef = db.collection("favourites").document(""+p.getProductID());
+//        System.out.println(productRef);
+//        productRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        favouriteStatus = true;
+//                    } else {
+//                        favouriteStatus = false;
+//                    }
+//                } else {
+//                    Log.d("firebase", "error getting data!", task.getException());
+//                }
+//            }
+//        });
+//
+//        return favouriteStatus;
+//    }
+//
+
     public static boolean getFavouriteStatus(Product p){
         DocumentReference productRef = db.collection("products").document(""+p.getProductID());
 
