@@ -2,7 +2,11 @@ package com.example.se306_project1.domain;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
+
 import com.example.se306_project1.models.Product;
+import com.example.se306_project1.repository.IProductRepository;
+import com.example.se306_project1.repository.ProductRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,12 +20,8 @@ import java.util.Map;
 
 public class UpdateFavourite {
     static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    static boolean favouriteStatus;
 
-    public static void updateFavourite(Product p){
-        favouriteStatus = getFavouriteStatus(p);
-        System.out.println("favourite status"+favouriteStatus);
-
+    public static void updateFavourite(Product p, Boolean favouriteStatus){
         if(favouriteStatus == false) {
             System.out.println("detected false");
             updateFavouriteBoolean(p, true);
@@ -30,49 +30,6 @@ public class UpdateFavourite {
             updateFavouriteBoolean(p, false);
             removeFromFavouriteCollection(p);
         }
-    }
-
-//    public static boolean getFavouriteStatus(Product p){
-//        DocumentReference productRef = db.collection("favourites").document(""+p.getProductID());
-//        System.out.println(productRef);
-//        productRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        favouriteStatus = true;
-//                    } else {
-//                        favouriteStatus = false;
-//                    }
-//                } else {
-//                    Log.d("firebase", "error getting data!", task.getException());
-//                }
-//            }
-//        });
-//
-//        return favouriteStatus;
-//    }
-//
-
-    public static boolean getFavouriteStatus(Product p){
-        DocumentReference productRef = db.collection("products").document(""+p.getProductID());
-
-        productRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot snap = task.getResult();
-                    Log.d("firebase", String.valueOf(task.getResult()));
-                    boolean isFavourite = (boolean) snap.get("isFavourite");
-                    favouriteStatus = isFavourite;
-                }
-                else{
-                    Log.d("firebase", "error getting data!", task.getException());
-                }
-            }
-        });
-        return favouriteStatus;
     }
 
     public static void updateFavouriteBoolean(Product p, Boolean newStatus){

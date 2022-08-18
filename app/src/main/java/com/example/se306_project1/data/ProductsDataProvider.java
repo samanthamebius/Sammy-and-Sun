@@ -283,7 +283,7 @@ public class ProductsDataProvider {
     public static Map<Integer, String> generateDetails() {
         Map<Integer, String> details =
                 new LinkedHashMap<Integer, String>();
-        details.put(0, "White leather\nGold-toned hardware\nHorsebit\nInside open pocket\nDetachable Chain Shoulder Strain: 21 cm\n Detachable Web shoulder strap: 40cm\nApproximate Weight: 600g\nDimensions: W26cm x H16cm x D4cm\nMade in Italy");
+        details.put(0, "White leather\nGold-toned hardware\nHorsebit\nInside open pocket\nDetachable Chain Shoulder Strain: 21 cm\nDetachable Web shoulder strap: 40cm\nApproximate Weight: 600g\nDimensions: W26cm x H16cm x D4 cm\nMade in Italy");
         details.put(1, "Beige and ebony GG Supreme canvas\nBrown leather trim\nGold-toned hardware\nLeather lining\nRound Interlocking G\nShoulder strap with 39cm drop\nDimensions: W28cm x H16cm x D4cm\nMade in Italy");
         details.put(2, "Embossed Monogram Empreinte cowhide leather\nCotton and Polyester lining\nCowhide-leather trim\nGold-color hardware\nZipped Closure\nDimensions: 19 x 11.5 x 3cm");
         details.put(3, "Monogram Empreinte embossed supple grained cowhide leather\nSupple grained cowhide-leather trim\nTextile lining\nGold-color hardware\nPress-stud closure\nDimensions: 21 x 12 x 3 cm");

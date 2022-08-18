@@ -1,6 +1,7 @@
 package com.example.se306_project1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
@@ -16,6 +17,8 @@ import com.example.se306_project1.domain.UpdateFavourite;
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.Product;
+import com.example.se306_project1.repository.IProductRepository;
+import com.example.se306_project1.repository.ProductRepository;
 
 import java.util.ArrayList;
 
@@ -23,6 +26,9 @@ import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    Product p;
+    ArrayList<Integer> intImages;
+    private static Boolean favouriteStatus;
     RecyclerView recyclerView;
     int detailsCounter = 0;
     int productCareCounter = 0;
@@ -49,55 +55,53 @@ public class DetailsActivity extends AppCompatActivity {
         vh.details_icon = (ImageView) findViewById(R.id.details_icon);
         vh.product_care = (TextView) findViewById(R.id.product_care);
         vh.product_care_icon = (ImageView) findViewById(R.id.product_care_icon);
-//        vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
+        vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
         recyclerView = findViewById(R.id.recyclerView);
 
-        ArrayList<String> images = new ArrayList<String>();
-        images.add("b0_01");
-        images.add("b0_02");
-        images.add("b0_03");
+        IProductRepository prodRepo = ProductRepository.getInstance();
+        prodRepo.getProductByID(0).observe(this, new Observer<Product>() {
+            @Override
+            public void onChanged(Product p) {
 
-        Product p = new Product(0, 0, 100.00, "long", "short", Brand.Balenciaga, "description", "details 1\ndetails 2\ndetails 3", "Product care 1\nProduct care 2\nProduct care 3\nProduct care 4",ColourType.Pink, 0, false, images);
+                intImages = GetIntImageArray(p.getProductImages());
+                vh.product_price.setText("$"+Double.toString(p.getProductPrice())+"0");
+                vh.product_brand.setText(p.getBrandName().name());
+                vh.product_long_name.setText(p.getProductLongName());
+                vh.product_description.setText(p.getProductDescription());
+                vh.product_details.setText(p.getProductDetails());
+                vh.product_care.setText(p.getProductCare());
+
+                UpdateCountVisit.updateCountVisit(p);
+
+                favouriteStatus = p.getIsFavourite();
+
+                if(favouriteStatus){
+                    vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
+                } else {
+                    vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
+                }
 
 
-        ArrayList<Integer> intImages = GetIntImageArray(images);
 
-        vh.product_price.setText("$"+Double.toString(p.getProductPrice())+"0");
-        vh.product_brand.setText(p.getBrandName().name());
-        vh.product_long_name.setText(p.getProductLongName());
-        vh.product_description.setText(p.getProductDescription());
-        vh.product_details.setText(p.getProductDetails());
-        vh.product_care.setText(p.getProductCare());
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),
+                        LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(layoutManager);
 
-        UpdateCountVisit.updateCountVisit(p);
+                SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(getBaseContext(), intImages);
+                recyclerView.setAdapter(sliderImagesAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
 
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-
-        SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(this, intImages);
-        recyclerView.setAdapter(sliderImagesAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.indicator);
-        recyclerIndicator.attachToRecyclerView(recyclerView);
-
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//        recyclerView.addItemDecoration(new CircleSliderIndicatorDecoration());
-
-//        boolean favouriteStatus = UpdateFavourite.getFavouriteStatus(p);
-//        System.out.println(favouriteStatus);
-//        if (favouriteStatus) {
-//            vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
-//        } else {
-//            vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
-//        }
+                ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.indicator);
+                recyclerIndicator.attachToRecyclerView(recyclerView);
+            }
+        });
     }
 
+    public void UpdateFavourite(View v) {
+        UpdateFavourite.updateFavourite(p, favouriteStatus);
+    }
 
-    public ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
+    private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
         ArrayList<Integer> intImages = new ArrayList<Integer>();
 
         for(int i = 0; i<images.size(); i++) {
@@ -107,7 +111,7 @@ public class DetailsActivity extends AppCompatActivity {
         return intImages;
     }
 
-    public static int GetImageResource(Context c, String imageName) {
+    private static int GetImageResource(Context c, String imageName) {
         int ResourceID = c.getResources().getIdentifier(imageName, "drawable", c.getPackageName());
         if (ResourceID == 0) {
             throw new IllegalArgumentException("No resource string found with name " + imageName);
@@ -117,7 +121,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void expandDetails(View v){
+    public void ExpandDetails(View v){
         detailsCounter++;
         if(detailsCounter%2 == 0){
             vh.product_details.setVisibility(View.GONE);
@@ -128,7 +132,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void expandProductCare(View v){
+    public void ExpandProductCare(View v){
         productCareCounter++;
         if(productCareCounter%2 == 0){
             vh.product_care.setVisibility(View.GONE);
