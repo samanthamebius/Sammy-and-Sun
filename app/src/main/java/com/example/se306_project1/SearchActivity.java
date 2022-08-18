@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -219,6 +220,16 @@ public class SearchActivity extends AppCompatActivity{
 
                     ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, bagsResults);
                     searchResults.setAdapter(adapter);
+                    searchResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                            System.out.println("Using values in the adapter to pass: " + adapterView.getAdapter().getItem(i));
+                            intent.putExtra("productID", adapterView.getAdapter().getItem(i).toString());
+
+                            startActivity(intent);
+                        }
+                    });
                 }
 
             }
@@ -239,6 +250,16 @@ public class SearchActivity extends AppCompatActivity{
 
                 ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, bagsResults);
                 searchResults.setAdapter(adapter);
+                searchResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                        System.out.println("Using values in the adapter to pass: " + adapterView.getAdapter().getItem(i));
+                        intent.putExtra("productID", adapterView.getAdapter().getItem(i).toString());
+
+                        startActivity(intent);
+                    }
+                });
             }
         });
 
