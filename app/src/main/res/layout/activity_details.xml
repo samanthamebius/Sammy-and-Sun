@@ -172,7 +172,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="Product Details Information"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:paddingLeft="10dp"
+                android:lineSpacingExtra="6dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -205,11 +207,13 @@
             <TextView
                 style="@style/NormalText"
                 android:id="@+id/product_care"
+                android:lineSpacingExtra="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="Product Care Information"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:paddingLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -4,16 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.se306_project1.adapters.CircleSliderIndicatorDecoration;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
+import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.domain.UpdateCountVisit;
-import com.example.se306_project1.domain.UpdateFavourite;
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.Product;
@@ -37,6 +34,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ProductsDataProvider.addProductsToFirestore();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
@@ -57,7 +56,8 @@ public class DetailsActivity extends AppCompatActivity {
         images.add("b0_02");
         images.add("b0_03");
 
-        Product p = new Product(0, 0, 100.00, "long", "short", Brand.Balenciaga, "description", "details", "product care",ColourType.Pink, 0, false, images);
+        Product p = new Product(0, 0, 100.00, "long", "short", Brand.Balenciaga, "description", "details 1\ndetails 2\ndetails 3", "Product care 1\nProduct care 2\nProduct care 3\nProduct care 4",ColourType.Pink, 0, false, images);
+
 
         ArrayList<Integer> intImages = GetIntImageArray(images);
 
