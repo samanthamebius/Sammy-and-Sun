@@ -15,6 +15,7 @@ tools:context=".SearchActivity">
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
+        android:inputType="text"
         android:textSize="30dp"
         android:completionThreshold="1"
         android:drawableLeft="@drawable/ic_baseline_search_24"

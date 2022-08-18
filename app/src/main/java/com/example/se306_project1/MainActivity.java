@@ -25,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        PopularRepository repo = PopularRepository.getInstance();
-
-
         IProductRepository productRepository= ProductRepository.getInstance();
         productRepository.getProducts().observe(this, new Observer<List<Product>>() {
             @Override

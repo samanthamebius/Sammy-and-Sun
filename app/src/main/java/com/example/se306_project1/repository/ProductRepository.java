@@ -82,7 +82,7 @@ public class ProductRepository implements IProductRepository{
                 if(task.isSuccessful()){
                     DocumentSnapshot snap = task.getResult();
 
-                    Log.d("firebase fetchProductByID", String.valueOf(task.getResult()));
+                    Log.d("firebase fetchProductByID", String.valueOf(task.getResult().get("productLongName")));
 
                     long productID = (long) snap.get("productID");
                     long categoryID = (long) snap.get("categoryID");
