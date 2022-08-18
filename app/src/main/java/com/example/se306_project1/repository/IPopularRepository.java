@@ -7,5 +7,5 @@ import com.example.se306_project1.models.Product;
 import java.util.List;
 
 public interface IPopularRepository {
-    public LiveData<List<Long>> getPopular();
+    public LiveData<List<Product>> getPopular();
 }

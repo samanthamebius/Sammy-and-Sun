@@ -29,6 +29,7 @@ import java.util.List;
 
 public class ProductRepository implements IProductRepository{
 
+
     public List<Product> productsDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference productColRef = db.collection("products");
@@ -71,6 +72,7 @@ public class ProductRepository implements IProductRepository{
         return data;
     }
 
+
     public void fetchProductByID(MutableLiveData<Product> data){
         String idString = Long.toString(productID);
         DocumentReference documentReference = productColRef.document(idString);
@@ -79,7 +81,9 @@ public class ProductRepository implements IProductRepository{
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot snap = task.getResult();
-                    Log.d("firebase fetchProductID", String.valueOf(task.getResult()));
+
+                    Log.d("firebase fetchProductByID", String.valueOf(task.getResult()));
+
                     long productID = (long) snap.get("productID");
                     long categoryID = (long) snap.get("categoryID");
                     double productPrice = (double) snap.get("productPrice");
@@ -98,7 +102,7 @@ public class ProductRepository implements IProductRepository{
                             productColourType, productCountVisit, isFavourite, productImages));
                 }
                 else{
-                    Log.d("firebase", "error getting product by ID data!", task.getException());
+                    Log.d("firebase fetch product", "error getting product by ID data!", task.getException());
                 }
 
                 data.setValue(productsDataSet.get(0));
@@ -114,7 +118,7 @@ public class ProductRepository implements IProductRepository{
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase", String.valueOf(task.getResult()));
+                    Log.d("firebase fetch all products", String.valueOf(task.getResult()));
                     // getting snapshot of all the documents in the collection
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
@@ -153,7 +157,7 @@ public class ProductRepository implements IProductRepository{
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase", String.valueOf(task.getResult()));
+                    Log.d("firebase fetch product by category", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     for(DocumentSnapshot singleBag: snapshots){
                         long productID = (long) singleBag.get("productID");
@@ -209,10 +213,8 @@ public class ProductRepository implements IProductRepository{
                     productColourType, productCountVisit, isFavourite, productImages);
 
         }
-
         return bag;
     }
-
 
 
 }
