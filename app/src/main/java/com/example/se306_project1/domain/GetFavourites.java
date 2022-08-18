@@ -10,10 +10,10 @@ import java.util.List;
 
 public class GetFavourites {
 
-    public LiveData<List<Long>> getFavourites() {
+    public LiveData<List<Product>> getFavourites() {
 
         IFavouritesRepository repo = new FavouritesRepository();
-        LiveData<List<Long>> favourites = repo.getFavourites();
+        LiveData<List<Product>> favourites = repo.getFavourites();
 
         return favourites;
     }

@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface IFavouritesRepository {
 
-    LiveData<List<Long>> getFavourites();
+    public LiveData<List<Product>> getFavourites();
 
 }

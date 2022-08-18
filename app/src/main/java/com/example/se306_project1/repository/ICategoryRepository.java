@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ICategoryRepository {
 
-    MutableLiveData<List<Category>> getCategories();
+    public MutableLiveData<List<Category>> getCategories();
 
 }

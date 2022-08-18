@@ -27,9 +27,13 @@ import java.util.List;
 
 public class ProductRepository implements IProductRepository{
 
+
     public List<Product> productsDataSet = new ArrayList<>();
-    public Product productSingle;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference productColRef = db.collection("products");
+    private long productID;
+    private long categoryID;
+
 
     // singleton pattern
     private static ProductRepository instance;
@@ -45,37 +49,36 @@ public class ProductRepository implements IProductRepository{
     // mutableLiveData exposes SetValue and PostValue that can modify LiveData, so expose mutableLIveData in viewModels
     public LiveData<List<Product>> getProducts() {
         productsDataSet.clear();
-        fetchAllProducts();
         MutableLiveData<List<Product>> data = new MutableLiveData<>();
-        data.setValue(productsDataSet);
+        fetchAllProducts(data);
         return data;
     }
 
     public LiveData<Product> getProductByID(long productID) {
-        fetchProductByID(productID);
+        productsDataSet.clear();
+        this.productID = productID;
         MutableLiveData<Product> data = new MutableLiveData<>();
-        data.setValue(productSingle);
+        fetchProductByID(data);
         return data;
     }
 
     public LiveData<List<Product>> getProductByCategoryID(long categoryID) {
         productsDataSet.clear();
-        fetchProductsByCategory(categoryID);
+        this.categoryID = categoryID;
         MutableLiveData<List<Product>> data = new MutableLiveData<>();
-        data.setValue(productsDataSet);
+        fetchProductsByCategory(data);
         return data;
     }
 
-    public void fetchProductByID(long productID){
+    public void fetchProductByID(MutableLiveData<Product> data){
         String idString = Long.toString(productID);
-
-        DocumentReference documentReference = db.collection("product").document(idString);
+        DocumentReference documentReference = productColRef.document(idString);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot snap = task.getResult();
-                    Log.d("firebase", String.valueOf(task.getResult()));
+                    Log.d("firebase fetchProductByID", String.valueOf(task.getResult()));
                     long productID = (long) snap.get("productID");
                     long categoryID = (long) snap.get("categoryID");
                     double productPrice = (double) snap.get("productPrice");
@@ -89,26 +92,28 @@ public class ProductRepository implements IProductRepository{
                     long productCountVisit = (long) snap.get("productCountVisit");
                     boolean isFavourite = (boolean) snap.get("isFavourite");
                     ArrayList<String> productImages = (ArrayList<String>) snap.get("productImages");
-                    productSingle = determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
+                    productsDataSet.add(determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                             productDescription, productDetails, productCare,
-                            productColourType, productCountVisit, isFavourite, productImages);
+                            productColourType, productCountVisit, isFavourite, productImages));
                 }
                 else{
-                    Log.d("firebase", "error getting product by ID data!", task.getException());
+                    Log.d("firebase fetch product", "error getting product by ID data!", task.getException());
                 }
+
+                data.setValue(productsDataSet.get(0));
             }
         });
 
 
     }
 
-    public void fetchAllProducts(){
-        CollectionReference collectionRef = db.collection("products");
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void fetchAllProducts(MutableLiveData<List<Product>> data){
+
+        productColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase", String.valueOf(task.getResult()));
+                    Log.d("firebase fetch all products", String.valueOf(task.getResult()));
                     // getting snapshot of all the documents in the collection
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
@@ -135,18 +140,19 @@ public class ProductRepository implements IProductRepository{
                 else{
                     Log.d("firebase", "Error getting all products data!", task.getException());
                 }
+                data.setValue(productsDataSet);
             }
         });
     }
 
-    public void fetchProductsByCategory(long categoryID){
+    public void fetchProductsByCategory(MutableLiveData<List<Product>> data){
         String stringID = "category"+ Long.toString(categoryID);
         CollectionReference collectionRef = db.collection(stringID);
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase", String.valueOf(task.getResult()));
+                    Log.d("firebase fetch product by category", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     for(DocumentSnapshot singleBag: snapshots){
                         long productID = (long) singleBag.get("productID");
@@ -171,6 +177,7 @@ public class ProductRepository implements IProductRepository{
                 else {
                     Log.d("firebase", "error getting data by category!", task.getException());
                 }
+                data.setValue(productsDataSet);
             }
         });
     }

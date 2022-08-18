@@ -23,12 +23,11 @@ public class CategoryRepository implements ICategoryRepository{
 
     private List<Category> categoryGroups = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference colRef = db.collection("categories");
 
     // singleton pattern
-
-    private CategoryRepository instance;
-    public CategoryRepository getInstance(){
-
+    private static CategoryRepository instance;
+    public static CategoryRepository getInstance(){
         if(instance == null){
             instance = new CategoryRepository();
         }
@@ -37,19 +36,17 @@ public class CategoryRepository implements ICategoryRepository{
 
     public MutableLiveData<List<Category>> getCategories() {
         categoryGroups.clear();
-        fetchCategories();
         MutableLiveData<List<Category>> data = new MutableLiveData<>();
-        data.setValue(categoryGroups);
+        fetchCategories(data);
         return data;
     }
 
-    public void fetchCategories(){
-        CollectionReference colRef = db.collection("categories");
+    public void fetchCategories(MutableLiveData<List<Category>> data){
         colRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase", String.valueOf(task.getResult()));
+                    Log.d("firebase fetch categories", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     for(DocumentSnapshot snap: snapshots){
                         long categoryID = (long) snap.get("categoryID");
@@ -59,8 +56,10 @@ public class CategoryRepository implements ICategoryRepository{
                     }
                 }
                 else {
-                    Log.d("Firebase", "error getting data!", task.getException());
+                    Log.d("Firebase", "error getting categories!", task.getException());
                 }
+
+                data.setValue(categoryGroups);
             }
         });
     }

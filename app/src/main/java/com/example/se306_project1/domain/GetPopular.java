@@ -9,10 +9,10 @@ import java.util.List;
 
 public class GetPopular {
 
-    public LiveData<List<Long>> getPopular() {
+    public LiveData<List<Product>> getPopular() {
 
         IPopularRepository repo = new PopularRepository();
-        LiveData<List<Long>> populars = repo.getPopular();
+        LiveData<List<Product>> populars = repo.getPopular();
 
         return populars;
     }
