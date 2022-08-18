@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -49,8 +50,6 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity{
 
-    //private RecyclerView recview;
-    //private searchAdapter adapter;
     private AutoCompleteTextView searchField;
     private CollectionReference cref;
     private ListView searchResults;
@@ -61,31 +60,21 @@ public class SearchActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        setTitle("remember to set this section as logo");
-
+        setTitle("remember to set this section as logo and add back button");
 
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
         cref = FirebaseFirestore.getInstance().collection("products");
         searchResults = (ListView) findViewById(R.id.search_results);
 
-
-
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-
-
-
 
         cref.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 populateSearch(value);
 
-
-
             }
         });
-
-
 
     }
 
@@ -118,8 +107,6 @@ public class SearchActivity extends AppCompatActivity{
                             // populate results adapter
                             String searchText = searchField.getText().toString();
                             incompleteSearch(searchText);
-//                        incompleteSearch(searchField.getText().toString());
-
 
                         }
                         return false;
@@ -130,6 +117,7 @@ public class SearchActivity extends AppCompatActivity{
         });
 
     }
+
 
     // this method should be moved out of activity into search view model
     private void populateSearch(QuerySnapshot snapshot) {
@@ -149,9 +137,6 @@ public class SearchActivity extends AppCompatActivity{
                 productDetails.put(name, productID);
                 products.add(name);
             }
-
-
-
 
 
 
@@ -176,7 +161,7 @@ public class SearchActivity extends AppCompatActivity{
 
     }
 
-    // this should be called on the start
+    // use this method if we want to have filled screen to begin with
     private void displayAllProducts(){
         ArrayList<String> bagsResults = new ArrayList<>();
 
@@ -201,13 +186,12 @@ public class SearchActivity extends AppCompatActivity{
     private void incompleteSearch(String searchWord){
         ArrayList<String> bagsResults = new ArrayList<>();
 
-        CollectionReference productColRef = FirebaseFirestore.getInstance().collection("products");
-        Query query = productColRef.orderBy("productShortName").startAt(searchWord).endAt(searchWord + "\uf8ff");
+        Query query = cref.orderBy("productShortName").startAt(searchWord).endAt(searchWord + "\uf8ff");
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
                 if(error != null){
+                    Log.d("Tag incomplete search", "not null");
                 }
                 else {
                     for(DocumentChange doc: value.getDocumentChanges()){
@@ -237,6 +221,8 @@ public class SearchActivity extends AppCompatActivity{
     }
 
 
+
+    // from the search suggestions
     private void searchBag(long productID) {
         ArrayList<String> bagsResults = new ArrayList<>();
 
