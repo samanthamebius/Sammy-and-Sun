@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
+import com.example.se306_project1.data.CategoriesDataProvider;
 import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.domain.UpdateCountVisit;
 import com.example.se306_project1.models.Brand;
@@ -34,7 +35,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ProductsDataProvider.addProductsToFirestore();
+        CategoriesDataProvider.addCategoriesToFirestore();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);

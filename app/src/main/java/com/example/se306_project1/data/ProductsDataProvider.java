@@ -82,9 +82,9 @@ public class ProductsDataProvider {
             boolean isFavourite = false;
 
             ArrayList<String> productImages = new ArrayList<>();
-            productImages.add("b"+key+"_01.png");
-            productImages.add("b"+key+"_02.png");
-            productImages.add("b"+key+"_03.png");
+            productImages.add("b"+key+"_01");
+            productImages.add("b"+key+"_02");
+            productImages.add("b"+key+"_03");
 
             String productDescription = descriptions.get(key);
             String productDetails = details.get(key);
