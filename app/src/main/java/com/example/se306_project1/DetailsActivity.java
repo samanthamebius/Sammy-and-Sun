@@ -12,6 +12,7 @@ import com.example.se306_project1.adapters.SliderImagesAdapter;
 import com.example.se306_project1.data.CategoriesDataProvider;
 import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.domain.UpdateCountVisit;
+import com.example.se306_project1.domain.UpdateFavourite;
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.Product;
