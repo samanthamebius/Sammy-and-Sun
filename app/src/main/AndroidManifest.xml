@@ -13,10 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Se306_project1">
         <activity
-            android:name=".SearchActivity"
-
-         
-
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

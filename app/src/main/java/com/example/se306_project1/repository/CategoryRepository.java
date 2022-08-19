@@ -3,6 +3,7 @@ package com.example.se306_project1.repository;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.se306_project1.models.Category;
@@ -34,7 +35,7 @@ public class CategoryRepository implements ICategoryRepository{
         return instance;
     }
 
-    public MutableLiveData<List<Category>> getCategories() {
+    public LiveData<List<Category>> getCategories() {
         categoryGroups.clear();
         MutableLiveData<List<Category>> data = new MutableLiveData<>();
         fetchCategories(data);
