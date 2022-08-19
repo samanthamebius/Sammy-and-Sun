@@ -110,5 +110,6 @@ public class MainActivity extends AppCompatActivity {
     public void showSearchActivity(View view) {
         Intent searchIntent = new Intent(this,SearchActivity.class);
         startActivity(searchIntent);
+        overridePendingTransition(0, 0);
     }
 }

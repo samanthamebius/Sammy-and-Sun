@@ -60,11 +60,13 @@ public class SearchActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        setTitle("remember to set this section as logo and add back button");
+//        setTitle("remember to set this section as logo and add back button");
 
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
         cref = FirebaseFirestore.getInstance().collection("products");
         searchResults = (ListView) findViewById(R.id.search_results);
+
+        findViewById(R.id.search_field).requestFocus();
 
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
 
