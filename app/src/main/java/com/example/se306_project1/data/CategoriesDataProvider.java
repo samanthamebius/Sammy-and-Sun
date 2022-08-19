@@ -49,9 +49,9 @@ public class CategoriesDataProvider {
             int categoryID = key;
 
             String categoryName = names.get(key);
-            String categoryImage = "c"+key+".png";
+            String categoryImage = "c"+key;
 
-            Category c = new Category(categoryID, categoryName, categoryImage);
+            Category c = new Category(categoryID, categoryImage, categoryName);
             categoriesList.add(c);
         }
 

@@ -2,7 +2,6 @@ package com.example.se306_project1;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-
 import android.os.Bundle;
 import android.widget.TextView;
 
