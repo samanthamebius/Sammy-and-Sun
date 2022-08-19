@@ -12,47 +12,55 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.se306_project1.R;
 import com.example.se306_project1.models.Category;
+import com.example.se306_project1.models.Product;
 
 import java.util.ArrayList;
 
-public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.MyViewHolder> {
+public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<Category> categoryList;
-    private ArrayList<Integer> imageList;
+    private ArrayList<Product> productList;
     private static Context context;
 
     // create instance of adapter for list of categories
-    public CategoryRecyclerAdapter(ArrayList<Category> categoryList, Context context){
-        this.categoryList = categoryList;
+    public PanelRecyclerAdapter(ArrayList<Product> productList, Context context){
+        this.productList = productList;
         this.context = context;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView nameText;
+        private TextView brandText;
+        private TextView priceText;
         private ImageView iconImage;
         public MyViewHolder(final View view) {
             super(view);
-            nameText = view.findViewById(R.id.category_text_view);
-            iconImage = (ImageView) view.findViewById(R.id.category_image_view);
+            nameText = view.findViewById(R.id.main_name_text_view);
+            brandText = view.findViewById(R.id.main_brand_text_view);
+            priceText = view.findViewById(R.id.main_price_text_view);
+            iconImage = (ImageView) view.findViewById(R.id.main_image_view);
         }
     }
 
     @NonNull
     @Override
-    public CategoryRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_list_view_item,parent,false);
+    public PanelRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_list_view_item,parent,false);
         return new MyViewHolder(itemView);
     }
 
     // change contents of text and image views
     @Override
-    public void onBindViewHolder(@NonNull CategoryRecyclerAdapter.MyViewHolder holder, int position) {
-        String rawName = categoryList.get(position).getCategoryName();
-        String formattedName = rawName.substring(0, 1).toUpperCase() + rawName.substring(1);
-        String iconString = categoryList.get(position).getCategoryImage();
+    public void onBindViewHolder(@NonNull PanelRecyclerAdapter.MyViewHolder holder, int position) {
+        String name = productList.get(position).getProductShortName();
+        String brand = productList.get(position).getBrandName().toString();
+        String price = String.valueOf(productList.get(position).getProductPrice());
+        String iconString = productList.get(position).getProductImages().get(0);
+
         int imageID = getImageResource(iconString);
         holder.iconImage.setImageResource(imageID);
-        holder.nameText.setText(formattedName);
+        holder.nameText.setText(name);
+        holder.brandText.setText(brand);
+        holder.priceText.setText(price);
     }
 
     public static int getImageResource(String imageString) {
@@ -66,7 +74,7 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
     @Override
     public int getItemCount() {
-        return categoryList.size();
+        return productList.size();
     }
 
 }
