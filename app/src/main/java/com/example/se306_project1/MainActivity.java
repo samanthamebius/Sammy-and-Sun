@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
@@ -99,9 +101,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void setCategoryAdapter(RecyclerView view, ArrayList<Category> list) {
         CategoryRecyclerAdapter adapter = new CategoryRecyclerAdapter(list, getApplicationContext());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         view.setLayoutManager((layoutManager));
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);
+    }
+
+    public void showSearchActivity(View view) {
+        Intent searchIntent = new Intent(this,SearchActivity.class);
+        startActivity(searchIntent);
     }
 }
