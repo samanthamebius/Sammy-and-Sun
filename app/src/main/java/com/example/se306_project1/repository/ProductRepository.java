@@ -3,8 +3,10 @@ package com.example.se306_project1.repository;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.Clutch;
@@ -34,10 +36,10 @@ public class ProductRepository implements IProductRepository{
     private long productID;
     private long categoryID;
 
-
     // singleton pattern
+
     private static ProductRepository instance;
-    public static ProductRepository getInstance(){
+    public static IProductRepository getInstance(){
         if(instance == null){
             instance = new ProductRepository();
         }
@@ -62,13 +64,14 @@ public class ProductRepository implements IProductRepository{
         return data;
     }
 
-    public LiveData<List<Product>> getProductByCategoryID(long categoryID) {
+    public LiveData<List<Product>> getProductsByCategoryID(long categoryID) {
         productsDataSet.clear();
         this.categoryID = categoryID;
         MutableLiveData<List<Product>> data = new MutableLiveData<>();
         fetchProductsByCategory(data);
         return data;
     }
+
 
     public void fetchProductByID(MutableLiveData<Product> data){
         String idString = Long.toString(productID);
@@ -78,7 +81,9 @@ public class ProductRepository implements IProductRepository{
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot snap = task.getResult();
-                    Log.d("firebase fetchProductByID", String.valueOf(task.getResult()));
+
+                    Log.d("firebase fetchProductByID", String.valueOf(task.getResult().get("productLongName")));
+
                     long productID = (long) snap.get("productID");
                     long categoryID = (long) snap.get("categoryID");
                     double productPrice = (double) snap.get("productPrice");
@@ -208,10 +213,8 @@ public class ProductRepository implements IProductRepository{
                     productColourType, productCountVisit, isFavourite, productImages);
 
         }
-
         return bag;
     }
-
 
 
 }

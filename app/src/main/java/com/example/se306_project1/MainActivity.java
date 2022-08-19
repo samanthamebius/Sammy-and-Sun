@@ -7,9 +7,8 @@ import android.widget.TextView;
 
 import com.example.se306_project1.models.Category;
 import com.example.se306_project1.models.Product;
-import com.example.se306_project1.repository.CategoryRepository;
+
 import com.example.se306_project1.repository.FavouritesRepository;
-import com.example.se306_project1.repository.ICategoryRepository;
 import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 // use favouritesCache to set the view here
             }
         });
+
 
     }
 }
