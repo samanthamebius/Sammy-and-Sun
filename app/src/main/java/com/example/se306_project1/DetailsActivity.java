@@ -42,6 +42,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ProductsDataProvider.addProductsToFirestore();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
@@ -59,13 +60,13 @@ public class DetailsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         IProductRepository prodRepo = ProductRepository.getInstance();
-        prodRepo.getProductByID(0).observe(this, new Observer<Product>() {
+        prodRepo.getProductByID(4).observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product p) {
 
                 intImages = GetIntImageArray(p.getProductImages());
                 vh.product_price.setText("$"+Double.toString(p.getProductPrice())+"0");
-                vh.product_brand.setText(p.getBrandName().name());
+                vh.product_brand.setText(p.getBrandName().name().replaceAll("_"," "));
                 vh.product_long_name.setText(p.getProductLongName());
                 vh.product_description.setText(p.getProductDescription());
                 vh.product_details.setText(p.getProductDetails());
@@ -81,8 +82,6 @@ public class DetailsActivity extends AppCompatActivity {
                     vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
                 }
 
-
-
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),
                         LinearLayoutManager.HORIZONTAL, false);
                 recyclerView.setLayoutManager(layoutManager);
@@ -93,12 +92,31 @@ public class DetailsActivity extends AppCompatActivity {
 
                 ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.indicator);
                 recyclerIndicator.attachToRecyclerView(recyclerView);
+
+
             }
         });
     }
 
+
     public void UpdateFavourite(View v) {
-        UpdateFavourite.updateFavourite(p, favouriteStatus);
+        vh = new ViewHolder();
+        vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
+
+        IProductRepository prodRepo = ProductRepository.getInstance();
+        prodRepo.getProductByID(11).observe(this, new Observer<Product>() {
+            @Override
+            public void onChanged(Product p) {
+                favouriteStatus = p.getIsFavourite();
+                UpdateFavourite.updateFavourite(p, favouriteStatus);
+
+                if(favouriteStatus){
+                    vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
+                } else {
+                    vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
+                }
+            }
+        });
     }
 
     private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
