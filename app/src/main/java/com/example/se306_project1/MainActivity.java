@@ -29,7 +29,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Product> popularList;
-    private ArrayList<Product> favouritesList;
+    public ArrayList<Product> favouritesList;
     private ArrayList<Category> categoryList;
 
     private RecyclerView popularRecyclerView;
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         popularRepository.getPopular().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
+                popularList.clear();
                 popularList.addAll(products);
 
                 setPanelAdapter(popularRecyclerView,popularList, listener);
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         favouritesRepository.getFavourites().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
+                favouritesList.clear();
                 favouritesList.addAll(products);
 
                 setPanelAdapter(favouritesRecyclerView,favouritesList, listener);

@@ -47,7 +47,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ProductsDataProvider.addProductsToFirestore();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);

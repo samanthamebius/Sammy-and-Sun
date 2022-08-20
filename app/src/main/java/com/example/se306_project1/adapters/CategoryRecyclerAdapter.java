@@ -17,8 +17,7 @@ import java.util.ArrayList;
 
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<Category> categoryList;
-    private ArrayList<Integer> imageList;
+    public ArrayList<Category> categoryList;
     private static Context context;
 
     // create instance of adapter for list of categories
