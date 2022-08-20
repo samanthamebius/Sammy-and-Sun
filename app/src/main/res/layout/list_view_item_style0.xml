@@ -3,7 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:elevation="4dp">
+    android:elevation="0dp"
+    app:cardElevation="0dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -13,7 +14,7 @@
         android:background="@drawable/rectangle">
 
         <ImageView
-            android:id="@+id/list3_image_view"
+            android:id="@+id/list0_image_view"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
@@ -27,25 +28,24 @@
             android:layout_gravity="center"
             android:background="@drawable/rectangle_bottom_rounded"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
-                android:id="@+id/list3_brand_text_view"
+                android:id="@+id/list0_brand_text_view"
                 style="@style/SmallHeaderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Michael Kors" />
 
             <TextView
-                android:id="@+id/list3_name_text_view"
+                android:id="@+id/list0_name_text_view"
                 style="@style/NormalText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hamilton Legacy"
-                android:layout_marginBottom="15dp"/>
+                android:text="Hamilton Legacy" />
 
             <TextView
-                android:id="@+id/list3_price_text_view"
+                android:id="@+id/list0_price_text_view"
                 style="@style/NormalText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

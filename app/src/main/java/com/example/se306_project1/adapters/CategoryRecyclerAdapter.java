@@ -21,20 +21,28 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     private ArrayList<Category> categoryList;
     private ArrayList<Integer> imageList;
     private static Context context;
+    private CategoryRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public CategoryRecyclerAdapter(ArrayList<Category> categoryList, Context context){
+    public CategoryRecyclerAdapter(ArrayList<Category> categoryList, Context context, CategoryRecyclerViewClickListener listener){
         this.categoryList = categoryList;
         this.context = context;
+        this.listener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView nameText;
         private ImageView iconImage;
         public MyViewHolder(final View view) {
             super(view);
             nameText = view.findViewById(R.id.category_text_view);
             iconImage = (ImageView) view.findViewById(R.id.category_image_view);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            listener.onClick(view, getAdapterPosition());
         }
     }
 
@@ -68,6 +76,10 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     @Override
     public int getItemCount() {
         return categoryList.size();
+    }
+
+    public interface CategoryRecyclerViewClickListener{
+        void onClick(View v, int position);
     }
 
 }
