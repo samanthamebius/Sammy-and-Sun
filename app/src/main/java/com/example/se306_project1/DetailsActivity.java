@@ -47,6 +47,14 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        int productID = 0;
+        System.out.println("0");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            productID = extras.getInt("id");
+            System.out.println(productID);
+        }
+
         vh = new ViewHolder();
         vh.product_price = (TextView) findViewById(R.id.product_price);
         vh.product_brand = (TextView) findViewById(R.id.product_brand);
@@ -60,7 +68,7 @@ public class DetailsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         IProductRepository prodRepo = ProductRepository.getInstance();
-        prodRepo.getProductByID(4).observe(this, new Observer<Product>() {
+        prodRepo.getProductByID(productID).observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product p) {
 
