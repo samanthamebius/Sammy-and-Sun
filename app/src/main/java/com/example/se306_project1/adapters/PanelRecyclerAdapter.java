@@ -21,24 +21,38 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     private ArrayList<Product> productList;
     private static Context context;
 
+    private PanelRecyclerViewClickListener listener;
+
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<Product> productList, Context context){
+    public PanelRecyclerAdapter(ArrayList<Product> productList, Context context, PanelRecyclerViewClickListener listener){
         this.productList = productList;
         this.context = context;
+        this.listener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView nameText;
         private TextView brandText;
         private TextView priceText;
         private ImageView iconImage;
+
         public MyViewHolder(final View view) {
             super(view);
             nameText = view.findViewById(R.id.main_name_text_view);
             brandText = view.findViewById(R.id.main_brand_text_view);
             priceText = view.findViewById(R.id.main_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.main_image_view);
+
+            view.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            listener.onClick(view,getAdapterPosition());
+        }
+
+
+
     }
 
     @NonNull
@@ -52,8 +66,10 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull PanelRecyclerAdapter.MyViewHolder holder, int position) {
         String name = productList.get(position).getProductShortName();
-        String brand = productList.get(position).getBrandName().toString();
-        String price = String.valueOf(productList.get(position).getProductPrice());
+
+        String brand = productList.get(position).getBrandName().toString().replaceAll("_"," ");
+        String price = ("$" + String.valueOf((int)productList.get(position).getProductPrice()) + ".00");
+
         String iconString = productList.get(position).getProductImages().get(0);
 
         int imageID = getImageResource(iconString);
@@ -76,5 +92,11 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     public int getItemCount() {
         return productList.size();
     }
+
+
+    public interface PanelRecyclerViewClickListener {
+        void onClick(View v, int position);
+    }
+
 
 }
