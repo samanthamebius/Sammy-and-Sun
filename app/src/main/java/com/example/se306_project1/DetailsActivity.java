@@ -37,6 +37,7 @@ public class DetailsActivity extends AppCompatActivity {
     int productCareCounter = 0;
     ViewHolder vh;
     Toolbar toolbar;
+    long productID;
 
     class ViewHolder {
         TextView product_details, product_price, product_brand, product_long_name, product_description,
@@ -51,12 +52,10 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        int productID = 0;
-        System.out.println("0");
+        productID = 0;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            productID = extras.getInt("id");
-            System.out.println(productID);
+            productID = extras.getLong("id");
         }
 
         vh = new ViewHolder();
@@ -118,7 +117,7 @@ public class DetailsActivity extends AppCompatActivity {
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
 
         IProductRepository prodRepo = ProductRepository.getInstance();
-        prodRepo.getProductByID(11).observe(this, new Observer<Product>() {
+        prodRepo.getProductByID(productID).observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product p) {
                 favouriteStatus = p.getIsFavourite();
