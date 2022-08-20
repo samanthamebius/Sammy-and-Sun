@@ -123,6 +123,11 @@ import java.util.ArrayList;
     public ArrayList<String> getProductImages() {
         return productImages;
     }
+//
+//    @Override
+//    public int compareTo(Product p) {
+//        return getProductCountVisit().compareTo(p.getProductCountVisit());
+//    }
 
 }
 

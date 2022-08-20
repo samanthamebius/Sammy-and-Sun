@@ -17,7 +17,9 @@ import java.util.ArrayList;
 
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.MyViewHolder> {
 
-    public ArrayList<Category> categoryList;
+
+    private ArrayList<Category> categoryList;
+    private ArrayList<Integer> imageList;
     private static Context context;
     private CategoryRecyclerViewClickListener listener;
 

@@ -31,7 +31,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Product> popularList;
-    public ArrayList<Product> favouritesList;
+    private ArrayList<Product> favouritesList;
     private ArrayList<Category> categoryList;
 
     private RecyclerView popularRecyclerView;
@@ -63,7 +63,9 @@ public class MainActivity extends AppCompatActivity {
         popularRepository.getPopular().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
+
                 popularList.clear();
+
                 popularList.addAll(products);
 
                 setPanelAdapter(popularRecyclerView,popularList, panelListener);
@@ -75,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
         favouritesRepository.getFavourites().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
+
                 favouritesList.clear();
+
                 favouritesList.addAll(products);
 
                 setPanelAdapter(favouritesRecyclerView,favouritesList, panelListener);
@@ -122,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("id",popularList.get(position).getProductID());
+                intent.putExtra("id",favouritesList.get(position).getProductID());
                 startActivity(intent);
             }
         };
