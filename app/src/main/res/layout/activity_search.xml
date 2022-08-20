@@ -23,6 +23,7 @@
         android:padding="25dp">
 
         <AutoCompleteTextView
+            style="@style/NormalText"
             android:background="@drawable/rectangle"
             android:id="@+id/search_field"
             android:layout_width="match_parent"

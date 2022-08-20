@@ -13,6 +13,8 @@ import android.view.View;
 
 import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
+import com.example.se306_project1.data.CategoriesDataProvider;
+import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.models.Category;
 
 import com.example.se306_project1.models.Product;
@@ -37,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView categoryRecyclerView;
 
     Toolbar toolbar;
-    private PanelRecyclerAdapter.PanelRecyclerViewClickListener listener;
-
+    private PanelRecyclerAdapter.PanelRecyclerViewClickListener panelListener;
+    private CategoryRecyclerAdapter.CategoryRecyclerViewClickListener categoryListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 popularList.clear();
                 popularList.addAll(products);
 
-                setPanelAdapter(popularRecyclerView,popularList, listener);
+                setPanelAdapter(popularRecyclerView,popularList, panelListener);
 
             }
         });
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 favouritesList.clear();
                 favouritesList.addAll(products);
 
-                setPanelAdapter(favouritesRecyclerView,favouritesList, listener);
+                setPanelAdapter(favouritesRecyclerView,favouritesList, panelListener);
             }
         });
 
@@ -88,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 setCategoryAdapter(categoryRecyclerView,categoryList);
             }
         });
-
-
+        
 //        // will want to cache a local copy of products eventually so made favouritesProducts
 //        List<Product> favouritesCache = new ArrayList<>();
 //        IFavouritesRepository favouritesRepository = FavouritesRepository.getInstance();
@@ -106,9 +107,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setPanelAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener) {
+        setPanelOnClickListener();
+        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener);
 
-    private void setOnClickListener() {
-        listener = new PanelRecyclerAdapter.PanelRecyclerViewClickListener(){
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
+        view.setLayoutManager((layoutManager));
+        view.setItemAnimator(new DefaultItemAnimator());
+        view.setAdapter(adapter);
+    }
+
+    private void setPanelOnClickListener() {
+        panelListener = new PanelRecyclerAdapter.PanelRecyclerViewClickListener(){
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
@@ -119,22 +129,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setPanelAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener) {
-        setOnClickListener();
-        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
+    private void setCategoryAdapter(RecyclerView view, ArrayList<Category> list) {
+        setCategoryOnClickListener();
+        CategoryRecyclerAdapter adapter = new CategoryRecyclerAdapter(list, getApplicationContext(), categoryListener);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         view.setLayoutManager((layoutManager));
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);
     }
 
-    private void setCategoryAdapter(RecyclerView view, ArrayList<Category> list) {
-        CategoryRecyclerAdapter adapter = new CategoryRecyclerAdapter(list, getApplicationContext());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        view.setLayoutManager((layoutManager));
-        view.setItemAnimator(new DefaultItemAnimator());
-        view.setAdapter(adapter);
+    private void setCategoryOnClickListener() {
+        categoryListener = new CategoryRecyclerAdapter.CategoryRecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                String rawName = categoryList.get(position).getCategoryName();
+                String formattedName = rawName.substring(0, 1).toUpperCase() + rawName.substring(1);
+                long categoryID = categoryList.get(position).getCategoryID();
+                intent.putExtra("header", formattedName);
+                intent.putExtra("id", categoryID);
+                startActivity(intent);
+            }
+        };
     }
 
     public void showSearchActivity(View view) {
