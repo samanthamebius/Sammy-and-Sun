@@ -1,6 +1,7 @@
 package com.example.se306_project1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView popularRecyclerView;
     private RecyclerView favouritesRecyclerView;
     private RecyclerView categoryRecyclerView;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
         popularRecyclerView = findViewById(R.id.popular_recyclerView);
         favouritesRecyclerView = findViewById(R.id.favourites_recyclerView);
         categoryRecyclerView = findViewById(R.id.categories_recyclerView);
+
+        toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
 
         IPopularRepository popularRepository = PopularRepository.getInstance();
         popularRepository.getPopular().observe(this, new Observer<List<Product>>() {

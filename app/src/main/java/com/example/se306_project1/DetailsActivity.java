@@ -5,10 +5,13 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.se306_project1.adapters.SliderImagesAdapter;
 import com.example.se306_project1.data.CategoriesDataProvider;
 import com.example.se306_project1.data.ProductsDataProvider;
@@ -33,6 +36,7 @@ public class DetailsActivity extends AppCompatActivity {
     int detailsCounter = 0;
     int productCareCounter = 0;
     ViewHolder vh;
+    Toolbar toolbar;
 
     class ViewHolder {
         TextView product_details, product_price, product_brand, product_long_name, product_description,
@@ -58,6 +62,9 @@ public class DetailsActivity extends AppCompatActivity {
         vh.product_care_icon = (ImageView) findViewById(R.id.product_care_icon);
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
         recyclerView = findViewById(R.id.recyclerView);
+
+        toolbar = findViewById(R.id.toolBarBack);
+        setSupportActionBar(toolbar);
 
         IProductRepository prodRepo = ProductRepository.getInstance();
         prodRepo.getProductByID(4).observe(this, new Observer<Product>() {
@@ -97,7 +104,6 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public void UpdateFavourite(View v) {
         vh = new ViewHolder();
@@ -159,5 +165,11 @@ public class DetailsActivity extends AppCompatActivity {
             vh.product_care.setVisibility(View.VISIBLE);
             vh.product_care_icon.setImageResource(R.drawable.drop_down_opposite);
         }
+    }
+
+    public void Back(View v){
+        Intent searchIntent = new Intent(this,MainActivity.class);
+        startActivity(searchIntent);
+        overridePendingTransition(0, 0);
     }
 }
