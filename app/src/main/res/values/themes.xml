@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Se306_project1" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Se306_project1" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         % colors
         <item name="colorPrimary">@color/dark_brown</item>
@@ -12,7 +12,7 @@
         <item name="android:fontFamily">@font/abrilfatface_regular</item>
 
         <!-- Status bar color. -->
-<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>-->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <!-- Customize you r theme here. -->
 
     </style>

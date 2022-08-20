@@ -1,110 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <include
+        android:id="@+id/activityToolBar"
+        layout="@layout/appbar_noback" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
 
-        <!-- Search -->
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/search_bar_layout"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="15dp"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:background="@drawable/rectangle">
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="25dp">
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/search" />
+            <!-- Search -->
 
-            <TextView
-                style="@style/MediumText"
+            <LinearLayout
+                android:id="@+id/search_bar_layout"
+                android:onClick="showSearchActivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="What are you looking for?" />
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:background="@drawable/rectangle">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_baseline_search_24" />
 
-        <!-- Popular -->
+                <TextView
+                    style="@style/MediumText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="What are you looking for?" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:visibility="visible"
-            android:orientation="vertical">
+            </LinearLayout>
 
-            <TextView
-                style="@style/LargeHeaderText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Popular" />
+            <!-- Popular -->
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/popular_recyclerView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-        <!-- Favourites -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:visibility="gone"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/LargeHeaderText"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Favourites" />
+                android:layout_marginBottom="10dp"
+                android:visibility="visible"
+                android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/favourites_recyclerView"
+                <TextView
+                    style="@style/LargeHeaderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Popular" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popular_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <!-- Favourites -->
+
+            <LinearLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-        <!-- Categories -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:visibility="visible"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/LargeHeaderText"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Browse By Style" />
+                android:layout_marginBottom="10dp"
+                android:visibility="visible"
+                android:orientation="vertical">
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </ListView>
+                <TextView
+                    style="@style/LargeHeaderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favourites" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/favourites_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <!-- Categories -->
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="visible"
+                    android:orientation="vertical">
+
+                <TextView
+                    style="@style/LargeHeaderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Browse By Style" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categories_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

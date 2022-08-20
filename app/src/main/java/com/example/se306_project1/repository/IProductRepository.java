@@ -9,5 +9,6 @@ import java.util.List;
 public interface IProductRepository {
     public LiveData<List<Product>> getProducts();
     public LiveData<Product> getProductByID(long productID);
-    public LiveData<List<Product>> getProductByCategoryID(long categoryID);
+    public LiveData<List<Product>> getProductsByCategoryID(long categoryID);
+
 }
