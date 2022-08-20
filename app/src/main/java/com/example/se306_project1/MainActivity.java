@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("id",popularList.get(position).getProductID());
+                intent.putExtra("id",favouritesList.get(position).getProductID());
                 startActivity(intent);
             }
         };
