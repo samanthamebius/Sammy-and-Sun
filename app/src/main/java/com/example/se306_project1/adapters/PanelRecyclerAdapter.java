@@ -20,6 +20,7 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
 
     private ArrayList<Product> productList;
     private static Context context;
+
     private PanelRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
@@ -41,6 +42,7 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
             brandText = view.findViewById(R.id.main_brand_text_view);
             priceText = view.findViewById(R.id.main_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.main_image_view);
+
             view.setOnClickListener(this);
         }
 
@@ -48,6 +50,7 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         public void onClick(View view) {
             listener.onClick(view,getAdapterPosition());
         }
+
 
 
     }
@@ -63,8 +66,10 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull PanelRecyclerAdapter.MyViewHolder holder, int position) {
         String name = productList.get(position).getProductShortName();
+
         String brand = productList.get(position).getBrandName().toString().replaceAll("_"," ");
         String price = ("$" + String.valueOf((int)productList.get(position).getProductPrice()) + ".00");
+
         String iconString = productList.get(position).getProductImages().get(0);
 
         int imageID = getImageResource(iconString);
@@ -88,8 +93,10 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         return productList.size();
     }
 
+
     public interface PanelRecyclerViewClickListener {
         void onClick(View v, int position);
     }
+
 
 }

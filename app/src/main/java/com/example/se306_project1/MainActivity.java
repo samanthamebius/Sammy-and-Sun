@@ -1,6 +1,7 @@
 package com.example.se306_project1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView favouritesRecyclerView;
     private RecyclerView categoryRecyclerView;
 
+    Toolbar toolbar;
     private PanelRecyclerAdapter.PanelRecyclerViewClickListener listener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +53,18 @@ public class MainActivity extends AppCompatActivity {
         favouritesRecyclerView = findViewById(R.id.favourites_recyclerView);
         categoryRecyclerView = findViewById(R.id.categories_recyclerView);
 
+
+        toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+
         IPopularRepository popularRepository = PopularRepository.getInstance();
         popularRepository.getPopular().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
                 popularList.addAll(products);
+
                 setPanelAdapter(popularRecyclerView,popularList, listener);
+
             }
         });
 
@@ -64,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Product> products) {
                 favouritesList.addAll(products);
+
                 setPanelAdapter(favouritesRecyclerView,favouritesList, listener);
             }
         });
@@ -76,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 setCategoryAdapter(categoryRecyclerView,categoryList);
             }
         });
+
 
 //        // will want to cache a local copy of products eventually so made favouritesProducts
 //        List<Product> favouritesCache = new ArrayList<>();
@@ -93,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setPanelAdapter(RecyclerView view, ArrayList<Product> list) {
+        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext());
+
     private void setOnClickListener() {
         listener = new PanelRecyclerAdapter.PanelRecyclerViewClickListener(){
             @Override
@@ -108,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPanelAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener) {
         setOnClickListener();
         PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
         view.setLayoutManager((layoutManager));
         view.setItemAnimator(new DefaultItemAnimator());
@@ -125,5 +140,6 @@ public class MainActivity extends AppCompatActivity {
     public void showSearchActivity(View view) {
         Intent searchIntent = new Intent(this,SearchActivity.class);
         startActivity(searchIntent);
+        overridePendingTransition(0, 0);
     }
 }

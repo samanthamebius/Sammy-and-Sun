@@ -3,6 +3,7 @@ package com.example.se306_project1;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -54,17 +55,23 @@ public class SearchActivity extends AppCompatActivity{
     private CollectionReference cref;
     private ListView searchResults;
     SearchViewModel searchViewModel;
+    Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        setTitle("remember to set this section as logo and add back button");
+//        setTitle("remember to set this section as logo and add back button");
 
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
         cref = FirebaseFirestore.getInstance().collection("products");
         searchResults = (ListView) findViewById(R.id.search_results);
+
+        toolbar = findViewById(R.id.toolBarBack);
+        setSupportActionBar(toolbar);
+
+        findViewById(R.id.search_field).requestFocus();
 
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
 
@@ -249,6 +256,12 @@ public class SearchActivity extends AppCompatActivity{
             }
         });
 
+    }
+
+    public void Back(View v){
+        Intent searchIntent = new Intent(this,MainActivity.class);
+        startActivity(searchIntent);
+        overridePendingTransition(0, 0);
     }
 
 
