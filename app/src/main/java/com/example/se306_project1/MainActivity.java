@@ -104,8 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setPanelAdapter(RecyclerView view, ArrayList<Product> list) {
-        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext());
 
     private void setOnClickListener() {
         listener = new PanelRecyclerAdapter.PanelRecyclerViewClickListener(){
