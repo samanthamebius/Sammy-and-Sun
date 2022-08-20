@@ -4,6 +4,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
+import com.example.se306_project1.MainActivity;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
