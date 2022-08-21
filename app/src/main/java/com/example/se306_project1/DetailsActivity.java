@@ -1,5 +1,6 @@
 package com.example.se306_project1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,31 +14,39 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.se306_project1.adapters.SliderImagesAdapter;
-import com.example.se306_project1.data.CategoriesDataProvider;
 import com.example.se306_project1.data.ProductsDataProvider;
-import com.example.se306_project1.domain.UpdateCountVisit;
+import com.example.se306_project1.domain.PopularCountVisit;
 import com.example.se306_project1.domain.UpdateFavourite;
-import com.example.se306_project1.models.Brand;
-import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.Product;
+import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.IProductRepository;
+import com.example.se306_project1.repository.PopularRepository;
 import com.example.se306_project1.repository.ProductRepository;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    Product p;
+    Product product;
     ArrayList<Integer> intImages;
     private static Boolean favouriteStatus;
     RecyclerView recyclerView;
     int detailsCounter = 0;
     int productCareCounter = 0;
+    int maxPopularSize = 10;
     ViewHolder vh;
     Toolbar toolbar;
     long productID;
+    int sizeOfCurrentPopular;
+    Product lowestCountProduct;
+
 
     class ViewHolder {
         TextView product_details, product_price, product_brand, product_long_name, product_description,
@@ -50,6 +59,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
 
         productID = 0;
         Bundle extras = getIntent().getExtras();
@@ -76,6 +86,7 @@ public class DetailsActivity extends AppCompatActivity {
         prodRepo.getProductByID(productID).observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product p) {
+                product = p;
 
                 intImages = GetIntImageArray(p.getProductImages());
                 vh.product_price.setText("$"+Double.toString(p.getProductPrice())+"0");
@@ -85,7 +96,8 @@ public class DetailsActivity extends AppCompatActivity {
                 vh.product_details.setText(p.getProductDetails());
                 vh.product_care.setText(p.getProductCare());
 
-                UpdateCountVisit.updateCountVisit(p);
+                PopularCountVisit.updateCountVisit(p);
+                UpdatePopular(p);
 
                 favouriteStatus = p.getIsFavourite();
 
@@ -110,6 +122,41 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // only need to update when we leave activity
+        PopularLogic(sizeOfCurrentPopular, product, lowestCountProduct);
+    }
+
+    public void UpdatePopular(Product p){
+        IPopularRepository popRepo = PopularRepository.getInstance();
+        popRepo.getPopular().observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+
+                sizeOfCurrentPopular = products.size();
+                products.sort(Comparator.comparing(Product::getProductCountVisit));
+                lowestCountProduct = products.get(0);
+            }
+        });
+
+    }
+
+    public void PopularLogic(int sizeOfCurrentPopular, Product currentProduct, Product productToSwap){
+
+        if(sizeOfCurrentPopular < maxPopularSize){
+            PopularCountVisit.addToPopularCollection(currentProduct);
+        }else{
+            if(productToSwap.getProductCountVisit() < currentProduct.getProductCountVisit()){
+                PopularCountVisit.removeFromPopularCollection(productToSwap);
+                PopularCountVisit.addToPopularCollection(currentProduct);
+            }
+        }
+    }
+
 
     public void UpdateFavourite(View v) {
         vh = new ViewHolder();

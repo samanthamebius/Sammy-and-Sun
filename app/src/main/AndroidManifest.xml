@@ -24,6 +24,7 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".DetailsActivity"/>
         <activity android:name=".SearchActivity"/>
+        <activity android:name=".ListActivity"/>
     </application>
 
 </manifest>

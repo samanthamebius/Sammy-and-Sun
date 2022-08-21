@@ -87,6 +87,7 @@
                 android:paddingRight="25dp"
                 android:paddingTop="15dp">
 
+
                 <TextView
                     android:id="@+id/product_price"
                     style="@style/MediumText"

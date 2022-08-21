@@ -64,7 +64,8 @@
                     style="@style/LargeHeaderText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Popular" />
+                    android:text="Popular"
+                    android:paddingVertical="10dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/popular_recyclerView"
@@ -87,7 +88,8 @@
                     style="@style/LargeHeaderText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Favourites" />
+                    android:text="Favourites"
+                    android:paddingVertical="10dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/favourites_recyclerView"
