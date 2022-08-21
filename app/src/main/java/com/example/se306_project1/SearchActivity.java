@@ -208,11 +208,13 @@ public class SearchActivity extends AppCompatActivity{
 
     // for item selected from suggestions
     private void searchBag(long productID) {
-
+        TextView noResultsText = findViewById(R.id.no_results_text);
         IProductRepository testRepo = ProductRepository.getInstance();
         testRepo.getProductByID(productID).observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product product) {
+
+                noResultsText.setVisibility(View.GONE);
                 resultsList.clear();
                 resultsList.add(product);
                 setAdapter();

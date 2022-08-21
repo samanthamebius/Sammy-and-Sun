@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         popularList = new ArrayList();
         favouritesList = new ArrayList();
         categoryList = new ArrayList();
