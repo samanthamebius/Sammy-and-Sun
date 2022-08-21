@@ -12,15 +12,31 @@
         android:orientation="vertical"
         android:paddingRight="10dp">
 
-        <ImageView
-            android:id="@+id/main_image_view"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/rectangle"
-            android:src="@drawable/clutch" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/main_image_view"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rectangle"
+                android:padding="10dp"
+                android:src="@drawable/clutch" />
+
+            <ImageView
+                android:id="@+id/favourite_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="85dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:src="@drawable/selected_heart" />
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/main_brand_text_view"

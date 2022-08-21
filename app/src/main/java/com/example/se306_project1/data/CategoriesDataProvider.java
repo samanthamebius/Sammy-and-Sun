@@ -61,9 +61,9 @@ public class CategoriesDataProvider {
     public static Map<Integer, String> generateCategoryName() {
         Map<Integer, String> names =
                 new LinkedHashMap<Integer, String>();
-        names.put(0, "clutches");
-        names.put(1, "totes");
-        names.put(2, "crossbody");
+        names.put(0, "Clutches");
+        names.put(1, "Tote Bags");
+        names.put(2, "Cross-body Bags");
         return names;
     }
 

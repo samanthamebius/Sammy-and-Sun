@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Product> favouritesList;
     private ArrayList<Category> categoryList;
 
+    private ArrayList<Boolean> popularFavouriteStatusList;
+    private ArrayList<Boolean> favouriteStatusList;
+
     private RecyclerView popularRecyclerView;
     private RecyclerView favouritesRecyclerView;
     private RecyclerView categoryRecyclerView;
@@ -51,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         popularList = new ArrayList();
         favouritesList = new ArrayList();
         categoryList = new ArrayList();
+        popularFavouriteStatusList = new ArrayList();
+        favouriteStatusList = new ArrayList();
+
 
         popularRecyclerView = findViewById(R.id.popular_recyclerView);
         favouritesRecyclerView = findViewById(R.id.favourites_recyclerView);
@@ -66,9 +72,20 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Product> products) {
 
                 popularList.clear();
+
+                popularFavouriteStatusList.clear();
+
                 popularList.addAll(products);
 
-                setPopularAdapter(popularRecyclerView,popularList, popularListener);
+                for (Product item : popularList) {
+                    if(item.getIsFavourite()){
+                        popularFavouriteStatusList.add(true);
+                    } else {
+                        popularFavouriteStatusList.add(false);
+                    }
+                }
+
+                setPopularAdapter(popularRecyclerView,popularList, panelListener, popularFavouriteStatusList);
 
             }
         });
@@ -79,9 +96,17 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Product> products) {
 
                 favouritesList.clear();
+
+                favouriteStatusList.clear();
+
                 favouritesList.addAll(products);
 
-                setFavouritesAdapter(favouritesRecyclerView,favouritesList, favouritesListener);
+                for (Product item : favouritesList) {
+                    favouriteStatusList.add(true);
+                }
+
+                setFavouritesAdapter(favouritesRecyclerView,favouritesList, panelListener, favouriteStatusList);
+
             }
         });
 
@@ -93,26 +118,13 @@ public class MainActivity extends AppCompatActivity {
                 setCategoryAdapter(categoryRecyclerView,categoryList);
             }
         });
-        
-//        // will want to cache a local copy of products eventually so made favouritesProducts
-//        List<Product> favouritesCache = new ArrayList<>();
-//        IFavouritesRepository favouritesRepository = FavouritesRepository.getInstance();
-//        favouritesRepository.getFavourites().observe(this, new Observer<List<Product>>() {
-//            @Override
-//            public void onChanged(List<Product> products) {
-//                favouritesCache.clear();
-//                for(Product singleItem: products){
-//                    favouritesCache.add(singleItem);
-//                }
-//                // use favouritesCache to set the view here
-//            }
-//        });
+       
 
     }
 
-    private void setPopularAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener) {
+    private void setPopularAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> popularFavouriteStatusList) {
         setPopularOnClickListener();
-        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener);
+        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, popularFavouriteStatusList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
         view.setLayoutManager((layoutManager));
@@ -132,9 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setFavouritesAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener) {
+    private void setFavouritesAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> favStatusList) {
+  
         setFavouritesOnClickListener();
-        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener);
+        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, favStatusList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
         view.setLayoutManager((layoutManager));
@@ -149,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
                 intent.putExtra("id",favouritesList.get(position).getProductID());
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         };
 
@@ -174,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("header", formattedName);
                 intent.putExtra("id", categoryID);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         };
     }
