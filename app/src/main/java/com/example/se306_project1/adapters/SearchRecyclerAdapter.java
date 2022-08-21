@@ -32,6 +32,8 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
         private TextView brandText;
         private TextView priceText;
         private ImageView iconImage;
+        private ImageView favIcon;
+
 
         public MyViewHolder(final View view) {
             super(view);
@@ -39,6 +41,7 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
             brandText = view.findViewById(R.id.list1_brand_text_view);
             priceText = view.findViewById(R.id.list1_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.list1_image_view);
+            favIcon = (ImageView) view.findViewById(R.id.list1_favourite_icon);
             view.setOnClickListener(this);
         }
 
@@ -70,6 +73,7 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
         holder.nameText.setText(name);
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
+        holder.favIcon.setVisibility(View.GONE);
     }
 
     public static int getImageResource(String imageString) {

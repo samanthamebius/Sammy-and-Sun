@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
@@ -100,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
                 favouriteStatusList.clear();
 
                 favouritesList.addAll(products);
+
+                LinearLayout favouritesView = findViewById(R.id.favourites_view);
+                if (favouritesList.isEmpty()) {
+                    favouritesView.setVisibility(View.GONE);
+                } else {
+                    favouritesView.setVisibility(View.VISIBLE);
+                }
 
                 for (Product item : favouritesList) {
                     favouriteStatusList.add(true);
