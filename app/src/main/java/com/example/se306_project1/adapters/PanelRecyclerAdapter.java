@@ -20,14 +20,16 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
 
     private ArrayList<Product> productList;
     private static Context context;
+    private ArrayList<Boolean> favouriteStatusList;
 
     private PanelRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<Product> productList, Context context, PanelRecyclerViewClickListener listener){
+    public PanelRecyclerAdapter(ArrayList<Product> productList, Context context, PanelRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
         this.productList = productList;
         this.context = context;
         this.listener = listener;
+        this.favouriteStatusList = favouriteStatusList;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -35,6 +37,7 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         private TextView brandText;
         private TextView priceText;
         private ImageView iconImage;
+        private ImageView favIcon;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -42,13 +45,14 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
             brandText = view.findViewById(R.id.main_brand_text_view);
             priceText = view.findViewById(R.id.main_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.main_image_view);
+            favIcon = (ImageView) view.findViewById(R.id.favourite_icon);
 
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            listener.onClick(view,getAdapterPosition());
+            listener.onClick(view,getBindingAdapterPosition());
         }
 
 
@@ -77,6 +81,10 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         holder.nameText.setText(name);
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
+
+        if (!favouriteStatusList.get(position)){
+            holder.favIcon.setVisibility(View.GONE);
+        }
     }
 
     public static int getImageResource(String imageString) {

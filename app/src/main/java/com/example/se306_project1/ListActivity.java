@@ -30,6 +30,7 @@ public class ListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private long categoryID;
     private ListRecyclerAdapter.ListRecyclerViewClickListener listener;
+    private ArrayList<Boolean> favouriteStatusList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,9 @@ public class ListActivity extends AppCompatActivity {
 
         TextView headerText = findViewById(R.id.list_header);
 
-        productsList = new ArrayList<>();
+        productsList = new ArrayList();
+        favouriteStatusList = new ArrayList();
+
         recyclerView = findViewById(R.id.list_recyclerView);
 
         String header = "Header";
@@ -58,7 +61,17 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Product> products) {
                 productsList.clear();
+                favouriteStatusList.clear();
                 productsList.addAll(products);
+
+                for (Product item : productsList) {
+                    if(item.getIsFavourite()){
+                        favouriteStatusList.add(true);
+                    } else {
+                        favouriteStatusList.add(false);
+                    }
+                }
+
                 setAdapter();
             }
         });
@@ -68,7 +81,7 @@ public class ListActivity extends AppCompatActivity {
 
     private void setAdapter() {
         setOnClickListener();
-        ListRecyclerAdapter adapter = new ListRecyclerAdapter(productsList, getApplicationContext(), categoryID, listener);
+        ListRecyclerAdapter adapter = new ListRecyclerAdapter(productsList, getApplicationContext(), categoryID, listener, favouriteStatusList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -88,8 +101,8 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void Back(View v){
-        Intent searchIntent = new Intent(this,MainActivity.class);
-        startActivity(searchIntent);
+        Intent mainIntent = new Intent(this,MainActivity.class);
+        startActivity(mainIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
