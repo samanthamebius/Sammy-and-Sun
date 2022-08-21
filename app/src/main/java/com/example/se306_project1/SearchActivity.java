@@ -114,9 +114,8 @@ public class SearchActivity extends AppCompatActivity{
                             //close search suggestions dropdown
                             searchField.dismissDropDown();
 
-                            // populate results adapter
                             String searchText = searchField.getText().toString();
-                            incompleteSearch(searchText); // incomplete search is when not picking from suggestions
+                            incompleteSearch(searchText);
 
                         }
                         return false;
@@ -160,7 +159,6 @@ public class SearchActivity extends AppCompatActivity{
                 }
             });
 
-
             // array adapter for the search suggestions
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getBaseContext(),android.R.layout.simple_list_item_1,products);
             searchField.setAdapter(arrayAdapter);
@@ -169,30 +167,9 @@ public class SearchActivity extends AppCompatActivity{
 
     }
 
-//    // use this method if we want to have filled screen to begin with
-//    private void displayAllProducts(){
-//        ArrayList<String> bagsResults = new ArrayList<>();
-//
-//        IProductRepository productRepository = ProductRepository.getInstance();
-//        productRepository.getProducts().observe(this, new Observer<List<Product>>() {
-//            @Override
-//            public void onChanged(List<Product> products) {
-//
-//                for(Product product: products){
-//                    bagsResults.add(product.getBrandName().name() + "\n"
-//                            + product.getProductLongName() + "\n"
-//                            + String.valueOf(product.getProductPrice()));
-//                }
-//                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, bagsResults);
-//                searchResults.setAdapter(adapter);
-//            }
-//        });
-//
-//    }
-
-    // this works for empty as well
     private void incompleteSearch(String searchWord){
-        resultsList.clear(); // the list of search results
+        resultsList.clear();
+        TextView noResultsText = findViewById(R.id.no_results_text);
 
         Query query = cref.orderBy("productShortName").startAt(searchWord).endAt(searchWord + "\uf8ff");
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -202,14 +179,18 @@ public class SearchActivity extends AppCompatActivity{
                     Log.d("Tag incomplete search", "not null");
                 }
                 else {
-                    for(DocumentChange doc: value.getDocumentChanges()){
+                    if (value.isEmpty()) {
+                        noResultsText.setVisibility(View.VISIBLE);
+                    } else {
+                        noResultsText.setVisibility(View.GONE);
+                        for (DocumentChange doc : value.getDocumentChanges()) {
 
-                        Product bag = doc.getDocument().toObject(Product.class);
-                        resultsList.add(bag);
+                            Product bag = doc.getDocument().toObject(Product.class);
+                            resultsList.add(bag);
+                        }
+
+                        setAdapter();
                     }
-
-                    // set adapter call
-                    setAdapter();
 
                 }
 
@@ -217,21 +198,17 @@ public class SearchActivity extends AppCompatActivity{
         });
     }
 
-
-
-    // from the search suggestions
-    // to show one card when a search suggestion is picked
+    // for item selected from suggestions
     private void searchBag(long productID) {
-        ArrayList<String> bagsResults = new ArrayList<>();
+
 
         IProductRepository testRepo = ProductRepository.getInstance();
         testRepo.getProductByID(productID).observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product product) {
-                bagsResults.add(product.getBrandName().name() + "\n"
-                + product.getProductLongName() + "\n"
-                + String.valueOf(product.getProductPrice()));
-
+                resultsList.clear();
+                resultsList.add(product);
+                setAdapter();
             }
         });
 
