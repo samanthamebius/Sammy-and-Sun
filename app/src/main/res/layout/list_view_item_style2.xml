@@ -62,7 +62,8 @@
                 android:id="@+id/list2_favourite_icon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="130dp"
+                android:layout_alignRight="@+id/list2_image_view"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:src="@drawable/selected_heart" />
