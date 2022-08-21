@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -117,10 +119,14 @@ public class SearchActivity extends AppCompatActivity{
 
                             String searchText = searchField.getText().toString();
                             incompleteSearch(searchText);
+                            InputMethodManager inputManager = (InputMethodManager) textView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputManager.hideSoftInputFromWindow(textView.getApplicationWindowToken(), 0);
+
 
                         }
                         return false;
                     }
+
                 });
 
             }
@@ -155,8 +161,9 @@ public class SearchActivity extends AppCompatActivity{
                     // get the id of the product! so preferably reuse code of get product by ID
                     String shortName = searchField.getText().toString();
                     long productID = productDetails.get(shortName);
-
                     searchBag(productID);
+                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
                 }
             });
 
@@ -201,7 +208,6 @@ public class SearchActivity extends AppCompatActivity{
 
     // for item selected from suggestions
     private void searchBag(long productID) {
-
 
         IProductRepository testRepo = ProductRepository.getInstance();
         testRepo.getProductByID(productID).observe(this, new Observer<Product>() {
