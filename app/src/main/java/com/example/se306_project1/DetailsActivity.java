@@ -176,6 +176,6 @@ public class DetailsActivity extends AppCompatActivity {
     public void Back(View v){
         Intent searchIntent = new Intent(this,MainActivity.class);
         startActivity(searchIntent);
-        overridePendingTransition(0, 0);
+        overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

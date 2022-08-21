@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -261,7 +262,7 @@ public class SearchActivity extends AppCompatActivity{
     public void Back(View v){
         Intent searchIntent = new Intent(this,MainActivity.class);
         startActivity(searchIntent);
-        overridePendingTransition(0, R.anim.slide_in_left);
+        overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
 
