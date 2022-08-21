@@ -25,16 +25,17 @@
 
 
         <AutoCompleteTextView
-            style="@style/NormalText"
+            style="@style/MediumText"
+            android:textStyle="normal"
+            android:inputType="textPhonetic"
             android:background="@drawable/rectangle"
             android:id="@+id/search_field"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:inputType="text"
-            android:textSize="30dp"
             android:completionThreshold="1"
             android:drawableLeft="@drawable/ic_baseline_search_24"
             android:padding="10dp"
+
             />
 
         <TextView

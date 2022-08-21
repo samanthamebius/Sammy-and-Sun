@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                setPopularAdapter(popularRecyclerView,popularList, panelListener, popularFavouriteStatusList);
+                setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
 
             }
         });
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     favouriteStatusList.add(true);
                 }
 
-                setFavouritesAdapter(favouritesRecyclerView,favouritesList, panelListener, favouriteStatusList);
+                setFavouritesAdapter(favouritesRecyclerView,favouritesList, favouritesListener, favouriteStatusList);
 
             }
         });
