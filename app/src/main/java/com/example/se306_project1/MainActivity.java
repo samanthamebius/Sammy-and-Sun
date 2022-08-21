@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     private void setPanelAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener) {
         setPanelOnClickListener();
         PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener);
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
                 intent.putExtra("id",favouritesList.get(position).getProductID());
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         };
 
@@ -153,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("header", formattedName);
                 intent.putExtra("id", categoryID);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         };
     }
