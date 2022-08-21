@@ -107,14 +107,6 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         }
     }
 
-    public static int getResource(String imageString) {
-        int resID = context.getResources().getIdentifier(imageString,"layout",context.getPackageName());
-        if (resID == 0) {
-            throw new IllegalArgumentException("No resource string found name" + imageString);
-        } else {
-            return resID;
-        }
-    }
 
     @Override
     public int getItemCount() {

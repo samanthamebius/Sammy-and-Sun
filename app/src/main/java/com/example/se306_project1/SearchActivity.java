@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.nfc.Tag;
@@ -23,6 +26,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.se306_project1.adapters.SearchRecyclerAdapter;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
@@ -53,8 +57,8 @@ public class SearchActivity extends AppCompatActivity{
 
     private AutoCompleteTextView searchField;
     private CollectionReference cref;
-    private ListView searchResults;
-    SearchViewModel searchViewModel;
+    private RecyclerView recyclerView;
+    private ArrayList<Product> resultsList;
     Toolbar toolbar;
 
 
@@ -62,24 +66,22 @@ public class SearchActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-//        setTitle("remember to set this section as logo and add back button");
+
+        resultsList = new ArrayList<>();
+        recyclerView = findViewById(R.id.search_recyclerView);
 
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
         cref = FirebaseFirestore.getInstance().collection("products");
-        searchResults = (ListView) findViewById(R.id.search_results);
 
         toolbar = findViewById(R.id.toolBarBack);
         setSupportActionBar(toolbar);
 
         findViewById(R.id.search_field).requestFocus();
 
-        searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-
         cref.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                populateSearch(value);
-
+                populateSearch(value); // populate suggestions
             }
         });
 
@@ -113,7 +115,7 @@ public class SearchActivity extends AppCompatActivity{
 
                             // populate results adapter
                             String searchText = searchField.getText().toString();
-                            incompleteSearch(searchText);
+                            incompleteSearch(searchText); // incomplete search is when not picking from suggestions
 
                         }
                         return false;
@@ -125,7 +127,7 @@ public class SearchActivity extends AppCompatActivity{
 
     }
 
-
+    // for search suggestions
     // this method should be moved out of activity into search view model
     private void populateSearch(QuerySnapshot snapshot) {
         ArrayList<String> products = new ArrayList<>();
@@ -144,8 +146,6 @@ public class SearchActivity extends AppCompatActivity{
                 productDetails.put(name, productID);
                 products.add(name);
             }
-
-
 
             // when user clicks on item in the drop down list of suggested searches
             searchField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -168,30 +168,30 @@ public class SearchActivity extends AppCompatActivity{
 
     }
 
-    // use this method if we want to have filled screen to begin with
-    private void displayAllProducts(){
-        ArrayList<String> bagsResults = new ArrayList<>();
-
-        IProductRepository productRepository = ProductRepository.getInstance();
-        productRepository.getProducts().observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-
-                for(Product product: products){
-                    bagsResults.add(product.getBrandName().name() + "\n"
-                            + product.getProductLongName() + "\n"
-                            + String.valueOf(product.getProductPrice()));
-                }
-                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, bagsResults);
-                searchResults.setAdapter(adapter);
-            }
-        });
-
-    }
+//    // use this method if we want to have filled screen to begin with
+//    private void displayAllProducts(){
+//        ArrayList<String> bagsResults = new ArrayList<>();
+//
+//        IProductRepository productRepository = ProductRepository.getInstance();
+//        productRepository.getProducts().observe(this, new Observer<List<Product>>() {
+//            @Override
+//            public void onChanged(List<Product> products) {
+//
+//                for(Product product: products){
+//                    bagsResults.add(product.getBrandName().name() + "\n"
+//                            + product.getProductLongName() + "\n"
+//                            + String.valueOf(product.getProductPrice()));
+//                }
+//                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, bagsResults);
+//                searchResults.setAdapter(adapter);
+//            }
+//        });
+//
+//    }
 
     // this works for empty as well
     private void incompleteSearch(String searchWord){
-        ArrayList<String> bagsResults = new ArrayList<>();
+        resultsList.clear(); // the list of search results
 
         Query query = cref.orderBy("productShortName").startAt(searchWord).endAt(searchWord + "\uf8ff");
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -204,23 +204,12 @@ public class SearchActivity extends AppCompatActivity{
                     for(DocumentChange doc: value.getDocumentChanges()){
 
                         Product bag = doc.getDocument().toObject(Product.class);
-                        bagsResults.add(bag.getBrandName().name() + "\n"
-                        + bag.getProductLongName() + "\n"
-                        + String.valueOf(bag.getProductPrice()));
+                        resultsList.add(bag);
                     }
 
-                    ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, bagsResults);
-                    searchResults.setAdapter(adapter);
-                    searchResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                            System.out.println("Using values in the adapter to pass: " + adapterView.getAdapter().getItem(i));
-                            intent.putExtra("productID", adapterView.getAdapter().getItem(i).toString());
+                    // set adapter call
+                    setAdapter();
 
-                            startActivity(intent);
-                        }
-                    });
                 }
 
             }
@@ -230,6 +219,7 @@ public class SearchActivity extends AppCompatActivity{
 
 
     // from the search suggestions
+    // to show one card when a search suggestion is picked
     private void searchBag(long productID) {
         ArrayList<String> bagsResults = new ArrayList<>();
 
@@ -241,21 +231,17 @@ public class SearchActivity extends AppCompatActivity{
                 + product.getProductLongName() + "\n"
                 + String.valueOf(product.getProductPrice()));
 
-                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, bagsResults);
-                searchResults.setAdapter(adapter);
-                searchResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                        System.out.println("Using values in the adapter to pass: " + adapterView.getAdapter().getItem(i));
-                        intent.putExtra("productID", adapterView.getAdapter().getItem(i).toString());
-
-                        startActivity(intent);
-                    }
-                });
             }
         });
 
+    }
+
+    private void setAdapter() {
+        SearchRecyclerAdapter adapter = new SearchRecyclerAdapter(resultsList, getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
     }
 
     public void Back(View v){
