@@ -95,14 +95,15 @@ public class ListActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
                 intent.putExtra("id", productsList.get(position).getProductID());
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         };
     }
 
     public void Back(View v){
-        Intent searchIntent = new Intent(this,MainActivity.class);
-        startActivity(searchIntent);
-        overridePendingTransition(0, 0);
+        Intent mainIntent = new Intent(this,MainActivity.class);
+        startActivity(mainIntent);
+        overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
 }

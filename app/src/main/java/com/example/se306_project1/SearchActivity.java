@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;

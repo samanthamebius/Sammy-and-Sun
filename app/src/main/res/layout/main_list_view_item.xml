@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:paddingRight="10dp">
 
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -34,11 +35,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:src="@drawable/selected_heart" />
-
-
         </RelativeLayout>
-
-
 
 
         <TextView
