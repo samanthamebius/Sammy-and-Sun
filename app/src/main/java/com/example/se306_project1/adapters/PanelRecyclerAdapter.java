@@ -56,7 +56,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         }
 
 
-
     }
 
     @NonNull
