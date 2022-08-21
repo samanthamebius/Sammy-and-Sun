@@ -19,13 +19,15 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
 
     private ArrayList<Product> resultsList;
     private static Context context;
+    private SearchRecyclerViewClickListener listener;
 
-    public SearchRecyclerAdapter(ArrayList<Product> resultsList, Context context){
+    public SearchRecyclerAdapter(ArrayList<Product> resultsList, Context context, SearchRecyclerViewClickListener listener){
         this.resultsList = resultsList;
         this.context = context;
+        this.listener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView nameText;
         private TextView brandText;
         private TextView priceText;
@@ -37,6 +39,12 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
             brandText = view.findViewById(R.id.list1_brand_text_view);
             priceText = view.findViewById(R.id.list1_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.list1_image_view);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            listener.onClick(view, getAbsoluteAdapterPosition());
         }
     }
 
@@ -76,5 +84,9 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
     @Override
     public int getItemCount() {
         return resultsList.size();
+    }
+
+    public interface SearchRecyclerViewClickListener {
+        void onClick(View v, int position);
     }
 }

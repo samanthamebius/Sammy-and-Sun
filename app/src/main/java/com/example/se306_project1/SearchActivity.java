@@ -59,6 +59,7 @@ public class SearchActivity extends AppCompatActivity{
     private CollectionReference cref;
     private RecyclerView recyclerView;
     private ArrayList<Product> resultsList;
+    private SearchRecyclerAdapter.SearchRecyclerViewClickListener listener;
     Toolbar toolbar;
 
 
@@ -237,11 +238,23 @@ public class SearchActivity extends AppCompatActivity{
     }
 
     private void setAdapter() {
-        SearchRecyclerAdapter adapter = new SearchRecyclerAdapter(resultsList, getApplicationContext());
+        setOnClickListener();
+        SearchRecyclerAdapter adapter = new SearchRecyclerAdapter(resultsList, getApplicationContext(), listener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+    }
+
+    private void setOnClickListener() {
+        listener = new SearchRecyclerAdapter.SearchRecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                intent.putExtra("id", resultsList.get(position).getProductID());
+                startActivity(intent);
+            }
+        };
     }
 
     public void Back(View v){
