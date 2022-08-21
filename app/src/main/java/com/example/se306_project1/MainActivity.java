@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
                 popularList.addAll(products);
 
-                for (int i = 0; i < popularList.size(); i++) {
-                    if(popularList.get(i).getIsFavourite()){
+                for (Product item : popularList) {
+                    if(item.getIsFavourite()){
                         popularFavouriteStatusList.add(true);
                     } else {
                         popularFavouriteStatusList.add(false);
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
                 favouritesList.addAll(products);
 
-                for (int i = 0; i < favouritesList.size(); i++) {
+                for (Product item : favouritesList) {
                     favouriteStatusList.add(true);
                 }
 

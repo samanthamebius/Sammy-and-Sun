@@ -20,14 +20,16 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
     private ArrayList<Product> productList;
     private static Context context;
     private long styleID;
+    private ArrayList<Boolean> favouriteStatusList;
     private ListRecyclerAdapter.ListRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public ListRecyclerAdapter(ArrayList<Product> productList, Context context, long styleID, ListRecyclerAdapter.ListRecyclerViewClickListener listener){
+    public ListRecyclerAdapter(ArrayList<Product> productList, Context context, long styleID, ListRecyclerAdapter.ListRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
         this.productList = productList;
         this.context = context;
         this.styleID = styleID;
         this.listener = listener;
+        this.favouriteStatusList = favouriteStatusList;
 
     }
 
@@ -36,6 +38,7 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         private TextView brandText;
         private TextView priceText;
         private ImageView iconImage;
+        private ImageView favIcon;
 
         public MyViewHolder(final View view) {
             super(view);
@@ -45,16 +48,19 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
                 brandText = view.findViewById(R.id.list0_brand_text_view);
                 priceText = view.findViewById(R.id.list0_price_text_view);
                 iconImage = (ImageView) view.findViewById(R.id.list0_image_view);
+                favIcon = (ImageView) view.findViewById(R.id.list0_favourite_icon);
             } else if ((int)styleID == 1) {
                 nameText = view.findViewById(R.id.list1_name_text_view);
                 brandText = view.findViewById(R.id.list1_brand_text_view);
                 priceText = view.findViewById(R.id.list1_price_text_view);
                 iconImage = (ImageView) view.findViewById(R.id.list1_image_view);
+                favIcon = (ImageView) view.findViewById(R.id.list1_favourite_icon);
             } else {
                 nameText = view.findViewById(R.id.list2_name_text_view);
                 brandText = view.findViewById(R.id.list2_brand_text_view);
                 priceText = view.findViewById(R.id.list2_price_text_view);
                 iconImage = (ImageView) view.findViewById(R.id.list2_image_view);
+                favIcon = (ImageView) view.findViewById(R.id.list2_favourite_icon);
             }
             view.setOnClickListener(this);
 
@@ -62,7 +68,7 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
 
         @Override
         public void onClick(View view) {
-            listener.onClick(view,getAdapterPosition());
+            listener.onClick(view,getBindingAdapterPosition());
         }
     }
 
@@ -96,6 +102,11 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         holder.nameText.setText(name);
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
+
+        if (!favouriteStatusList.get(position)){
+            holder.favIcon.setVisibility(View.GONE);
+        }
+
     }
 
     public static int getImageResource(String imageString) {

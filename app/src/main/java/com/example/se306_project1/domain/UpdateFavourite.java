@@ -26,15 +26,36 @@ public class UpdateFavourite {
         if(favouriteStatus == false) {
             System.out.println("detected false");
             updateFavouriteBoolean(p, true);
+            updateFavouriteBooleanCategories(p, true);
             addToFavouriteCollection(p);
         } else {
             updateFavouriteBoolean(p, false);
+            updateFavouriteBooleanCategories(p, false);
             removeFromFavouriteCollection(p);
         }
     }
 
     public static void updateFavouriteBoolean(Product p, Boolean newStatus){
         DocumentReference productRef = db.collection("products").document(""+p.getProductID());
+
+        productRef
+                .update("isFavourite", newStatus)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Favourites Boolean ", "product " + p.getProductID() + " updated.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Favourites Boolean ", "product " + p.getProductID() + " NOT updated.");
+                    }
+                });
+    }
+
+    public static void updateFavouriteBooleanCategories(Product p, Boolean newStatus){
+        DocumentReference productRef = db.collection("category"+p.getCategoryID()).document(""+p.getProductID());
 
         productRef
                 .update("isFavourite", newStatus)
