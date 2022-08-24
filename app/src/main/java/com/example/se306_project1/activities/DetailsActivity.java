@@ -1,6 +1,5 @@
-package com.example.se306_project1;
+package com.example.se306_project1.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
-import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.domain.PopularCountVisit;
 import com.example.se306_project1.domain.UpdateFavourite;
 import com.example.se306_project1.models.Product;
@@ -22,9 +21,6 @@ import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.PopularRepository;
 import com.example.se306_project1.repository.ProductRepository;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -221,7 +217,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     public void Back(View v){
-        Intent searchIntent = new Intent(this,MainActivity.class);
+        Intent searchIntent = new Intent(this, MainActivity.class);
         startActivity(searchIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }

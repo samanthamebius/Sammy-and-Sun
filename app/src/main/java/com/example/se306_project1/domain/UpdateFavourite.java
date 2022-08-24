@@ -2,19 +2,12 @@ package com.example.se306_project1.domain;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 
-import com.example.se306_project1.MainActivity;
 import com.example.se306_project1.models.Product;
-import com.example.se306_project1.repository.IProductRepository;
-import com.example.se306_project1.repository.ProductRepository;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.LinkedHashMap;
 import java.util.Map;

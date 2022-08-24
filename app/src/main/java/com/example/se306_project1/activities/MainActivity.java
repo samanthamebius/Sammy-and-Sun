@@ -1,4 +1,4 @@
-package com.example.se306_project1;
+package com.example.se306_project1.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,12 +11,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
-import com.example.se306_project1.data.CategoriesDataProvider;
-import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.models.Category;
 
 import com.example.se306_project1.models.Product;
@@ -205,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showSearchActivity(View view) {
-        Intent searchIntent = new Intent(this,SearchActivity.class);
+        Intent searchIntent = new Intent(this, SearchActivity.class);
         startActivity(searchIntent);
         overridePendingTransition(0, 0);
     }

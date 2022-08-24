@@ -1,4 +1,4 @@
-package com.example.se306_project1;
+package com.example.se306_project1.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.ListRecyclerAdapter;
-import com.example.se306_project1.adapters.PanelRecyclerAdapter;
 import com.example.se306_project1.models.Product;
-import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.IProductRepository;
-import com.example.se306_project1.repository.PopularRepository;
 import com.example.se306_project1.repository.ProductRepository;
 
 import java.util.ArrayList;
@@ -101,7 +99,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void Back(View v){
-        Intent mainIntent = new Intent(this,MainActivity.class);
+        Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
