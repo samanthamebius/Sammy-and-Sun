@@ -3,6 +3,7 @@ package com.example.se306_project1.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
@@ -114,7 +116,8 @@ public class DetailsActivity extends AppCompatActivity {
                 ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.indicator);
                 recyclerIndicator.attachToRecyclerView(recyclerView);
 
-
+                SnapHelper snapHelper = new PagerSnapHelper();
+                snapHelper.attachToRecyclerView(recyclerView);
             }
         });
     }
