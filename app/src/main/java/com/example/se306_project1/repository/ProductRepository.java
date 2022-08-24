@@ -1,36 +1,29 @@
 package com.example.se306_project1.repository;
 
-
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
-import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepository implements IProductRepository{
 
 
-    public List<Product> productsDataSet = new ArrayList<>();
+    public List<IProduct> productsDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference productColRef = db.collection("products");
     private long productID;
@@ -49,31 +42,31 @@ public class ProductRepository implements IProductRepository{
     // method to make database queries
     // using LiveData so that in activity class there are no public methods to update stored data
     // mutableLiveData exposes SetValue and PostValue that can modify LiveData, so expose mutableLIveData in viewModels
-    public LiveData<List<Product>> getProducts() {
+    public MutableLiveData<List<IProduct>> getProducts() {
         productsDataSet.clear();
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchAllProducts(data);
         return data;
     }
 
-    public LiveData<Product> getProductByID(long productID) {
+    public LiveData<IProduct> getProductByID(long productID) {
         productsDataSet.clear();
         this.productID = productID;
-        MutableLiveData<Product> data = new MutableLiveData<>();
+        MutableLiveData<IProduct> data = new MutableLiveData<>();
         fetchProductByID(data);
         return data;
     }
 
-    public LiveData<List<Product>> getProductsByCategoryID(long categoryID) {
+    public LiveData<List<IProduct>> getProductsByCategoryID(long categoryID) {
         productsDataSet.clear();
         this.categoryID = categoryID;
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchProductsByCategory(data);
         return data;
     }
 
 
-    public void fetchProductByID(MutableLiveData<Product> data){
+    public void fetchProductByID(MutableLiveData<IProduct> data){
         String idString = Long.toString(productID);
         DocumentReference documentReference = productColRef.document(idString);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -112,7 +105,7 @@ public class ProductRepository implements IProductRepository{
 
     }
 
-    public void fetchAllProducts(MutableLiveData<List<Product>> data){
+    public void fetchAllProducts(MutableLiveData<List<IProduct>> data){
 
         productColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -150,7 +143,7 @@ public class ProductRepository implements IProductRepository{
         });
     }
 
-    public void fetchProductsByCategory(MutableLiveData<List<Product>> data){
+    public void fetchProductsByCategory(MutableLiveData<List<IProduct>> data){
         String stringID = "category"+ Long.toString(categoryID);
         CollectionReference collectionRef = db.collection(stringID);
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -188,11 +181,11 @@ public class ProductRepository implements IProductRepository{
     }
 
 
-    public Product determineCategory (long productID, long categoryID, double productPrice,
+    public IProduct determineCategory (long productID, long categoryID, double productPrice,
                                       String productLongName, String productShortName, Brand brandName,
                                       String productDescription, String productDetails, String productCare,
                                       ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
-        Product bag;
+        IProduct bag;
         if(categoryID == 0){
             // type is clutch
             bag = new Clutch(productID, categoryID, productPrice, productLongName, productShortName, brandName,

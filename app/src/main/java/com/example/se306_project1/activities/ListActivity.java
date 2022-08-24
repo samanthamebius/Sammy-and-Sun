@@ -5,17 +5,15 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.ListRecyclerAdapter;
-import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
 
@@ -25,7 +23,7 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    private ArrayList<Product> productsList;
+    private ArrayList<IProduct> productsList;
     private RecyclerView recyclerView;
     private long categoryID;
     private ListRecyclerAdapter.ListRecyclerViewClickListener listener;
@@ -58,14 +56,14 @@ public class ListActivity extends AppCompatActivity {
         headerText.setText(header);
 
         IProductRepository productRepository = ProductRepository.getInstance();
-        productRepository.getProductsByCategoryID(categoryID).observe(this, new Observer<List<Product>>() {
+        productRepository.getProductsByCategoryID(categoryID).observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
                 productsList.clear();
                 favouriteStatusList.clear();
                 productsList.addAll(products);
 
-                for (Product item : productsList) {
+                for (IProduct item : productsList) {
                     if(item.getIsFavourite()){
                         favouriteStatusList.add(true);
                     } else {

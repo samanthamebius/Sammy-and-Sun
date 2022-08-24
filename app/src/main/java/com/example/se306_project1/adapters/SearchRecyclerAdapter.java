@@ -6,22 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.se306_project1.R;
-import com.example.se306_project1.models.Product;
-
+import com.example.se306_project1.models.IProduct;
 import java.util.ArrayList;
 
 public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<Product> resultsList;
+    private ArrayList<IProduct> resultsList;
     private static Context context;
     private SearchRecyclerViewClickListener listener;
 
-    public SearchRecyclerAdapter(ArrayList<Product> resultsList, Context context, SearchRecyclerViewClickListener listener){
+    public SearchRecyclerAdapter(ArrayList<IProduct> resultsList, Context context, SearchRecyclerViewClickListener listener){
         this.resultsList = resultsList;
         this.context = context;
         this.listener = listener;

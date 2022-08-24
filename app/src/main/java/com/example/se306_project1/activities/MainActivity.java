@@ -6,19 +6,16 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
-import com.example.se306_project1.models.Category;
-
-import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.ICategory;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.repository.CategoryRepository;
 import com.example.se306_project1.repository.FavouritesRepository;
 import com.example.se306_project1.repository.ICategoryRepository;
@@ -31,9 +28,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Product> popularList;
-    private ArrayList<Product> favouritesList;
-    private ArrayList<Category> categoryList;
+    private ArrayList<IProduct> popularList;
+    private ArrayList<IProduct> favouritesList;
+    private ArrayList<ICategory> categoryList;
 
     private ArrayList<Boolean> popularFavouriteStatusList;
     private ArrayList<Boolean> favouriteStatusList;
@@ -70,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         IPopularRepository popularRepository = PopularRepository.getInstance();
-        popularRepository.getPopular().observe(this, new Observer<List<Product>>() {
+        popularRepository.getPopular().observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
 
                 popularList.clear();
 
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                 popularList.addAll(products);
 
-                for (Product item : popularList) {
+                for (IProduct item : popularList) {
                     if(item.getIsFavourite()){
                         popularFavouriteStatusList.add(true);
                     } else {
@@ -94,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         IFavouritesRepository favouritesRepository = FavouritesRepository.getInstance();
-        favouritesRepository.getFavourites().observe(this, new Observer<List<Product>>() {
+        favouritesRepository.getFavourites().observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
 
                 favouritesList.clear();
 
@@ -111,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     favouritesView.setVisibility(View.VISIBLE);
                 }
 
-                for (Product item : favouritesList) {
+                for (IProduct item : favouritesList) {
                     favouriteStatusList.add(true);
                 }
 
@@ -121,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ICategoryRepository categoryRepository = CategoryRepository.getInstance();
-        categoryRepository.getCategories().observe(this, new Observer<List<Category>>() {
+        categoryRepository.getCategories().observe(this, new Observer<List<ICategory>>() {
             @Override
-            public void onChanged(List<Category> categories) {
+            public void onChanged(List<ICategory> categories) {
                 categoryList.addAll(categories);
                 setCategoryAdapter(categoryRecyclerView,categoryList);
             }
@@ -132,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setPopularAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> popularFavouriteStatusList) {
+    private void setPopularAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> popularFavouriteStatusList) {
         setPopularOnClickListener();
         PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, popularFavouriteStatusList);
 
@@ -155,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setFavouritesAdapter(RecyclerView view, ArrayList<Product> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> favStatusList) {
+    private void setFavouritesAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> favStatusList) {
   
         setFavouritesOnClickListener();
         PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, favStatusList);
@@ -179,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setCategoryAdapter(RecyclerView view, ArrayList<Category> list) {
+    private void setCategoryAdapter(RecyclerView view, ArrayList<ICategory> list) {
         setCategoryOnClickListener();
         CategoryRecyclerAdapter adapter = new CategoryRecyclerAdapter(list, getApplicationContext(), categoryListener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

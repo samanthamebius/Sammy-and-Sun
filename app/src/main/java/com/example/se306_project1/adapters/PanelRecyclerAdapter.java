@@ -6,26 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.se306_project1.R;
-import com.example.se306_project1.models.Category;
-import com.example.se306_project1.models.Product;
-
+import com.example.se306_project1.models.IProduct;
 import java.util.ArrayList;
 
 public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<Product> productList;
+    private ArrayList<IProduct> productList;
     private static Context context;
     private ArrayList<Boolean> favouriteStatusList;
 
     private PanelRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<Product> productList, Context context, PanelRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
+    public PanelRecyclerAdapter(ArrayList<IProduct> productList, Context context, PanelRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
         this.productList = productList;
         this.context = context;
         this.listener = listener;

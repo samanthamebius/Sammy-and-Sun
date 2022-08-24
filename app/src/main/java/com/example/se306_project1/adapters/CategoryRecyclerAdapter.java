@@ -6,25 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.se306_project1.R;
-import com.example.se306_project1.models.Category;
-
+import com.example.se306_project1.models.ICategory;
 import java.util.ArrayList;
 
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.MyViewHolder> {
 
 
-    private ArrayList<Category> categoryList;
+    private ArrayList<ICategory> categoryList;
     private ArrayList<Integer> imageList;
     private static Context context;
     private CategoryRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public CategoryRecyclerAdapter(ArrayList<Category> categoryList, Context context, CategoryRecyclerViewClickListener listener){
+    public CategoryRecyclerAdapter(ArrayList<ICategory> categoryList, Context context, CategoryRecyclerViewClickListener listener){
         this.categoryList = categoryList;
         this.context = context;
         this.listener = listener;

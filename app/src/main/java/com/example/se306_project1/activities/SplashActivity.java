@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-
 import com.example.se306_project1.R;
 
 public class SplashActivity extends Activity {
