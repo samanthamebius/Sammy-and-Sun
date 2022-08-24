@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity{
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
         cref = FirebaseFirestore.getInstance().collection("products");
 
-        toolbar = findViewById(R.id.toolBarBack);
+        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
         findViewById(R.id.search_field).requestFocus();

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         categoryRecyclerView = findViewById(R.id.categories_recyclerView);
 
 
-        toolbar = findViewById(R.id.toolBar);
+        toolbar = findViewById(R.id.toolBarMain);
         setSupportActionBar(toolbar);
 
         IPopularRepository popularRepository = PopularRepository.getInstance();

@@ -75,7 +75,7 @@ public class DetailsActivity extends AppCompatActivity {
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
         recyclerView = findViewById(R.id.recyclerView);
 
-        toolbar = findViewById(R.id.toolBarBack);
+        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
         IProductRepository prodRepo = ProductRepository.getInstance();

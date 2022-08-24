@@ -35,7 +35,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        toolbar = findViewById(R.id.toolBarBack);
+        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
         TextView headerText = findViewById(R.id.list_header);
