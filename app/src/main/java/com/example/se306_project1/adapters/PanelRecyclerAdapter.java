@@ -22,15 +22,14 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
 
     private ArrayList<IProduct> productList;
     private static Context context;
-    private ArrayList<Boolean> favouriteStatusList;
     private Activity activity;
 
 
 
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<IProduct> productList, ArrayList<Boolean> favouriteStatusList, Activity activity){
+    public PanelRecyclerAdapter(ArrayList<IProduct> productList, Activity activity){
         this.productList = productList;
-        this.favouriteStatusList = favouriteStatusList;
+
         this.activity = activity;
     }
 
@@ -92,9 +91,9 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
 
-//        if (!favouriteStatusList.get(position)){
-//            holder.favIcon.setVisibility(View.GONE);
-//        }
+        if(!productList.get(position).getIsFavourite()){
+            holder.favIcon.setVisibility(View.GONE);
+        }
     }
 
     public static int getImageResource(String imageString) {

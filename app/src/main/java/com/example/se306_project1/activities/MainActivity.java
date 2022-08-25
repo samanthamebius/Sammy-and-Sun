@@ -89,26 +89,21 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
-        // setting horizontal layout to use of popular and favourites
-        LinearLayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
+        // for popular
         setPopularList();
-        setPopularFavouriteStatusList();
-        adapter = new PanelRecyclerAdapter(popularList, favouriteStatusList, this);
-        popularRecyclerView.setAdapter(adapter);
-        popularRecyclerView.setLayoutManager(lm);
+        setAdapter(popularRecyclerView, popularList);
 
 
-
+        // for favourites
         setFavouritesList();
-        setFavouriteStatusList();
         LinearLayout favouritesView = findViewById(R.id.favourites_view);
         if (favouritesList.isEmpty()) {
             favouritesView.setVisibility(View.GONE);
         } else {
             favouritesView.setVisibility(View.VISIBLE);
         }
-        setFavouritesAdapter(favouritesRecyclerView,favouritesList,  favouriteStatusList);
+        setAdapter(favouritesRecyclerView, favouritesList);
 
 
         ICategoryRepository categoryRepository = CategoryRepository.getInstance();
@@ -124,29 +119,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setFavouritesAdapter(RecyclerView view, ArrayList<IProduct> list, ArrayList<Boolean> favStatusList) {
-  
-        //setFavouritesOnClickListener();
-        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, favStatusList, this);
-
+    private void setAdapter(RecyclerView view, ArrayList<IProduct> list) {
+        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
         view.setLayoutManager((layoutManager));
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);
     }
 
-//    private void setFavouritesOnClickListener() {
-//        favouritesListener = new PanelRecyclerAdapter.IPanelRecyclerViewClickListener(){
-//            @Override
-//            public void onClick(View v, int position) {
-//                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-//                intent.putExtra("id",favouritesList.get(position).getProductID());
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//            }
-//        };
-//
-//    }
+
 
     private void setCategoryAdapter(RecyclerView view, ArrayList<ICategory> list) {
         setCategoryOnClickListener();
@@ -190,25 +171,7 @@ public class MainActivity extends AppCompatActivity {
         favouritesList = (ArrayList<IProduct>) mainViewModel.getFavourites();
     }
 
-    private void setFavouriteStatusList(){
-        favouriteStatusList.clear();
 
-        for (IProduct item : favouritesList) {
-                favouriteStatusList.add(true);
-        }
-    }
-
-    private void setPopularFavouriteStatusList() {
-        popularFavouriteStatusList.clear();
-
-        for (IProduct item : popularList) {
-            if(item.getIsFavourite()){
-                popularFavouriteStatusList.add(true);
-            } else {
-                popularFavouriteStatusList.add(false);
-            }
-        }
-    }
 
 
 
