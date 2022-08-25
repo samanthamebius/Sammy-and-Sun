@@ -1,6 +1,7 @@
 package com.example.se306_project1.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,10 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     private static Context context;
     private ArrayList<Boolean> favouriteStatusList;
 
-    private PanelRecyclerViewClickListener listener;
+    private IPanelRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<IProduct> productList, Context context, PanelRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
+    public PanelRecyclerAdapter(ArrayList<IProduct> productList, Context context, IPanelRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
         this.productList = productList;
         this.context = context;
         this.listener = listener;
@@ -48,6 +49,8 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
 
         @Override
         public void onClick(View view) {
+//            Log.e("view",view.toString());
+//            Log.e("position",Integer.toString(getBindingAdapterPosition()));
             listener.onClick(view,getBindingAdapterPosition());
         }
 
@@ -97,7 +100,8 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     }
 
 
-    public interface PanelRecyclerViewClickListener {
+    public interface IPanelRecyclerViewClickListener {
+
         void onClick(View v, int position);
     }
 

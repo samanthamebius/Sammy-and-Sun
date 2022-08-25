@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView categoryRecyclerView;
 
     Toolbar toolbar;
-    private PanelRecyclerAdapter.PanelRecyclerViewClickListener popularListener;
-    private PanelRecyclerAdapter.PanelRecyclerViewClickListener favouritesListener;
+    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener popularListener;
+    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener favouritesListener;
     private CategoryRecyclerAdapter.CategoryRecyclerViewClickListener categoryListener;
 
     MainViewModel mainViewModel;
@@ -157,8 +157,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setPopularAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> popularFavouriteStatusList) {
+    private void setPopularAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.IPanelRecyclerViewClickListener listener, ArrayList<Boolean> popularFavouriteStatusList) {
+
         setPopularOnClickListener();
+
         PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, popularFavouriteStatusList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
@@ -168,9 +170,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPopularOnClickListener() {
-        popularListener = new PanelRecyclerAdapter.PanelRecyclerViewClickListener(){
+        popularListener = new PanelRecyclerAdapter.IPanelRecyclerViewClickListener(){
             @Override
             public void onClick(View v, int position) {
+                Log.e("View",Integer.toString(position));
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
                 intent.putExtra("id",popularList.get(position).getProductID());
                 startActivity(intent);
@@ -180,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setFavouritesAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.PanelRecyclerViewClickListener listener, ArrayList<Boolean> favStatusList) {
+    private void setFavouritesAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.IPanelRecyclerViewClickListener listener, ArrayList<Boolean> favStatusList) {
   
         setFavouritesOnClickListener();
         PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, favStatusList);
@@ -192,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setFavouritesOnClickListener() {
-        favouritesListener = new PanelRecyclerAdapter.PanelRecyclerViewClickListener(){
+        favouritesListener = new PanelRecyclerAdapter.IPanelRecyclerViewClickListener(){
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
