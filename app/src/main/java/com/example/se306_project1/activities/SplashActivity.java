@@ -124,7 +124,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 9000);
+        }, 5000);
     }
 
     public <T> void setList(String key, List<T> list) {

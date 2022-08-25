@@ -1,6 +1,8 @@
 package com.example.se306_project1.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
+import com.example.se306_project1.activities.DetailsActivity;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 
@@ -20,14 +23,15 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     private ArrayList<IProduct> productList;
     private static Context context;
     private ArrayList<Boolean> favouriteStatusList;
+    private Activity activity;
 
-//    private IPanelRecyclerViewClickListener listener;
+
 
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<IProduct> productList, ArrayList<Boolean> favouriteStatusList){
+    public PanelRecyclerAdapter(ArrayList<IProduct> productList, ArrayList<Boolean> favouriteStatusList, Activity activity){
         this.productList = productList;
-//        this.listener = listener;
         this.favouriteStatusList = favouriteStatusList;
+        this.activity = activity;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -48,12 +52,15 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
 
         }
 
-        @Override
+
         public void onClick(View view) {
-//            Log.e("view",view.toString());
-//            Log.e("position",Integer.toString(getBindingAdapterPosition()));
+
+            Log.e("panelAdapter", "Onclick method");
             IProduct clickedProduct = productList.get(getBindingAdapterPosition());
-            //listener.onClick(view,getBindingAdapterPosition());
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("id",clickedProduct.getProductID());
+            context.startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
 
 
@@ -85,9 +92,9 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
 
-        if (!favouriteStatusList.get(position)){
-            holder.favIcon.setVisibility(View.GONE);
-        }
+//        if (!favouriteStatusList.get(position)){
+//            holder.favIcon.setVisibility(View.GONE);
+//        }
     }
 
     public static int getImageResource(String imageString) {
@@ -104,11 +111,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         return productList.size();
     }
 
-
-//    public interface IPanelRecyclerViewClickListener {
-//
-//        void onClick(View v, int position);
-//    }
 
 
 }
