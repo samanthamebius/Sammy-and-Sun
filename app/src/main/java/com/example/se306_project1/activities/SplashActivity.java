@@ -124,11 +124,10 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 3000);
+        }, 9000);
     }
 
     public <T> void setList(String key, List<T> list) {
-
         Gson gson = new Gson();
         String json = gson.toJson(list);
         set(key, json);
@@ -138,7 +137,7 @@ public class SplashActivity extends AppCompatActivity {
         if (sharedPreferences != null) {
             SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
             prefsEditor.putString(key, value);
-            prefsEditor.apply();
+            prefsEditor.commit();
             // note use prefsEditor.commit() for sync, but will likely cause UI lag
         }
     }

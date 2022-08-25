@@ -15,14 +15,13 @@ import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +36,18 @@ public class ProductRepository implements IProductRepository{
     CollectionReference productColRef = db.collection("products");
     private long productID;
     private long categoryID;
-    SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
 
+
+    public ProductRepository(Context context){
+        this.context = context;
+    }
 
     // singleton pattern
 
     private static ProductRepository instance;
     public static IProductRepository getInstance(){
         if(instance == null){
-            instance = new ProductRepository();
+            instance = new ProductRepository(context);
         }
         return instance;
     }
@@ -78,6 +80,7 @@ public class ProductRepository implements IProductRepository{
 
     @Override
     public List<IProduct> getProductCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         List<IProduct> arrayItems = new ArrayList<>();
         String serializedObject = sharedPreferences.getString(key, null);
         if (serializedObject != null) {
@@ -85,10 +88,8 @@ public class ProductRepository implements IProductRepository{
             Type type = new TypeToken<List<Product>>(){}.getType();
             arrayItems = gson.fromJson(serializedObject, type);
         }
-
         return arrayItems;
     }
-
 
     public void fetchProductByID(MutableLiveData<IProduct> data){
         String idString = Long.toString(productID);

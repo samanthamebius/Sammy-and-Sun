@@ -27,6 +27,7 @@ import com.example.se306_project1.repository.ICategoryRepository;
 import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.PopularRepository;
+import com.example.se306_project1.viewmodel.MainViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private PanelRecyclerAdapter.PanelRecyclerViewClickListener favouritesListener;
     private CategoryRecyclerAdapter.CategoryRecyclerViewClickListener categoryListener;
 
+    MainViewModel mainViewModel;
 
     SharedPreferences sharedPreferences;
 
@@ -81,31 +83,34 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
 
+        setPopularList();
 
-        IPopularRepository popularRepository = PopularRepository.getInstance();
-        popularRepository.getPopular().observe(this, new Observer<List<IProduct>>() {
-            @Override
-            public void onChanged(List<IProduct> products) {
+        setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
 
-                popularList.clear();
-
-                popularFavouriteStatusList.clear();
-
-                popularList.addAll(products);
-
-
-                for (IProduct item : popularList) {
-                    if(item.getIsFavourite()){
-                        popularFavouriteStatusList.add(true);
-                    } else {
-                        popularFavouriteStatusList.add(false);
-                    }
-                }
-
-                setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
-
-            }
-        });
+//        IPopularRepository popularRepository = PopularRepository.getInstance();
+//        popularRepository.getPopular().observe(this, new Observer<List<IProduct>>() {
+//            @Override
+//            public void onChanged(List<IProduct> products) {
+//
+//                popularList.clear();
+//
+//                popularFavouriteStatusList.clear();
+//
+//                popularList.addAll(products);
+//
+//
+//                for (IProduct item : popularList) {
+//                    if(item.getIsFavourite()){
+//                        popularFavouriteStatusList.add(true);
+//                    } else {
+//                        popularFavouriteStatusList.add(false);
+//                    }
+//                }
+//
+//                setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
+//
+//            }
+//        });
 
         IFavouritesRepository favouritesRepository = FavouritesRepository.getInstance();
         favouritesRepository.getFavourites().observe(this, new Observer<List<IProduct>>() {
@@ -222,6 +227,23 @@ public class MainActivity extends AppCompatActivity {
         Intent searchIntent = new Intent(this, SearchActivity.class);
         startActivity(searchIntent);
         overridePendingTransition(0, 0);
+    }
+
+    private void setPopularList() {
+        popularList.clear();
+        popularList = (ArrayList<IProduct>) mainViewModel.getPopular();
+    }
+
+    private void setFavouriteStatusList() {
+        popularFavouriteStatusList.clear();
+
+        for (IProduct item : popularList) {
+            if(item.getIsFavourite()){
+                popularFavouriteStatusList.add(true);
+            } else {
+                popularFavouriteStatusList.add(false);
+            }
+        }
     }
 
 
