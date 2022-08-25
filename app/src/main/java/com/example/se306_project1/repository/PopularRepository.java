@@ -3,22 +3,18 @@ package com.example.se306_project1.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
-import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,13 +22,12 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PopularRepository implements IPopularRepository{
 
-    public List<Product> popularDataSet = new ArrayList<>();
+    public List<IProduct> popularDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionRef = db.collection("popular");
 
@@ -45,15 +40,15 @@ public class PopularRepository implements IPopularRepository{
         return instance;
     }
 
-    public LiveData<List<Product>> getPopular() {
+    public LiveData<List<IProduct>> getPopular() {
         popularDataSet.clear();
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchAllPopular(data);
         return data;
     }
 
 
-    public void fetchAllPopular(MutableLiveData<List<Product>> data){
+    public void fetchAllPopular(MutableLiveData<List<IProduct>> data){
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -104,11 +99,11 @@ public class PopularRepository implements IPopularRepository{
     }
 
 
-    public Product determineCategory (long productID, long categoryID, double productPrice,
+    public IProduct determineCategory (long productID, long categoryID, double productPrice,
                                       String productLongName, String productShortName, Brand brandName,
                                       String productDescription, String productDetails, String productCare,
                                       ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
-        Product bag;
+        IProduct bag;
         if(categoryID == 0){
             // type is clutch
             bag = new Clutch(productID, categoryID, productPrice, productLongName, productShortName, brandName,

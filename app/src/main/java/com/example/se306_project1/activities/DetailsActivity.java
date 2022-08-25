@@ -6,22 +6,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
-
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
 import com.example.se306_project1.domain.PopularCountVisit;
 import com.example.se306_project1.domain.UpdateFavourite;
-import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.PopularRepository;
 import com.example.se306_project1.repository.ProductRepository;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -30,7 +29,7 @@ import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    Product product;
+    IProduct product;
     ArrayList<Integer> intImages;
     private static Boolean favouriteStatus;
     RecyclerView recyclerView;
@@ -41,7 +40,7 @@ public class DetailsActivity extends AppCompatActivity {
     Toolbar toolbar;
     long productID;
     int sizeOfCurrentPopular;
-    Product lowestCountProduct;
+    IProduct lowestCountProduct;
 
 
     class ViewHolder {
@@ -56,6 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         productID = 0;
         Bundle extras = getIntent().getExtras();
@@ -79,9 +79,9 @@ public class DetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         IProductRepository prodRepo = ProductRepository.getInstance();
-        prodRepo.getProductByID(productID).observe(this, new Observer<Product>() {
+        prodRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
             @Override
-            public void onChanged(Product p) {
+            public void onChanged(IProduct p) {
                 product = p;
 
                 intImages = GetIntImageArray(p.getProductImages());
@@ -127,21 +127,21 @@ public class DetailsActivity extends AppCompatActivity {
         PopularLogic(sizeOfCurrentPopular, product, lowestCountProduct);
     }
 
-    public void UpdatePopular(Product p){
+    public void UpdatePopular(IProduct p){
         IPopularRepository popRepo = PopularRepository.getInstance();
-        popRepo.getPopular().observe(this, new Observer<List<Product>>() {
+        popRepo.getPopular().observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
 
                 sizeOfCurrentPopular = products.size();
-                products.sort(Comparator.comparing(Product::getProductCountVisit));
+                products.sort(Comparator.comparing(IProduct::getProductCountVisit));
                 lowestCountProduct = products.get(0);
             }
         });
 
     }
 
-    public void PopularLogic(int sizeOfCurrentPopular, Product currentProduct, Product productToSwap){
+    public void PopularLogic(int sizeOfCurrentPopular, IProduct currentProduct, IProduct productToSwap){
 
         if(sizeOfCurrentPopular < maxPopularSize){
             PopularCountVisit.addToPopularCollection(currentProduct);
@@ -159,9 +159,9 @@ public class DetailsActivity extends AppCompatActivity {
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
 
         IProductRepository prodRepo = ProductRepository.getInstance();
-        prodRepo.getProductByID(productID).observe(this, new Observer<Product>() {
+        prodRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
             @Override
-            public void onChanged(Product p) {
+            public void onChanged(IProduct p) {
                 favouriteStatus = p.getIsFavourite();
                 UpdateFavourite.updateFavourite(p, favouriteStatus);
 

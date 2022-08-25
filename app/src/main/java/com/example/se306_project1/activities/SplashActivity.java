@@ -3,7 +3,11 @@ package com.example.se306_project1.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
 import android.content.SharedPreferences;
+
+import android.content.pm.ActivityInfo;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -46,6 +51,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         ImageView myImageView= (ImageView)findViewById(R.id.splashImage);
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         myImageView.startAnimation(myFadeInAnimation);
@@ -53,56 +60,56 @@ public class SplashActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
 
         IProductRepository productRepository = ProductRepository.getInstance();
-        productRepository.getProducts().observe(this, new Observer<List<Product>>() {
+        productRepository.getProducts().observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
 
                 setList("Products", products);
             }
         });
 
-        productRepository.getProductsByCategoryID(Clutch).observe(this, new Observer<List<Product>>() {
+        productRepository.getProductsByCategoryID(Clutch).observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
                 setList("Clutch", products);
             }
         });
 
-        productRepository.getProductsByCategoryID(CrossBody).observe(this, new Observer<List<Product>>() {
+        productRepository.getProductsByCategoryID(CrossBody).observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
                 setList("Crossbody", products);
             }
         });
 
-        productRepository.getProductsByCategoryID(Tote).observe(this, new Observer<List<Product>>() {
+        productRepository.getProductsByCategoryID(Tote).observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
                 setList("Tote", products);
             }
         });
 
         IPopularRepository popularRepository = PopularRepository.getInstance();
-        popularRepository.getPopular().observe(this, new Observer<List<Product>>() {
+        popularRepository.getPopular().observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
                 setList("Popular", products);
             }
         });
 
         IFavouritesRepository favouritesRepository = FavouritesRepository.getInstance();
-        favouritesRepository.getFavourites().observe(this, new Observer<List<Product>>() {
+        favouritesRepository.getFavourites().observe(this, new Observer<List<IProduct>>() {
             @Override
-            public void onChanged(List<Product> products) {
+            public void onChanged(List<IProduct> products) {
                 setList("Favourites", products);
             }
         });
 
 
         ICategoryRepository categoryRepository = CategoryRepository.getInstance();
-        categoryRepository.getCategories().observe(this, new Observer<List<Category>>() {
+        categoryRepository.getCategories().observe(this, new Observer<List<ICategory>>() {
             @Override
-            public void onChanged(List<Category> categories) {
+            public void onChanged(List<ICategory> categories) {
                 setList("Categories", categories);
             }
         });

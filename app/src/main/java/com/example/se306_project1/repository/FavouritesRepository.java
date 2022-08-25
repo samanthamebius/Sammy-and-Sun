@@ -1,39 +1,31 @@
 package com.example.se306_project1.repository;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
-import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FavouritesRepository implements IFavouritesRepository{
 
-    public List<Product> favouritesDataSet = new ArrayList<>();
+    public List<IProduct> favouritesDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionRef = db.collection("favourites");
 
@@ -46,14 +38,14 @@ public class FavouritesRepository implements IFavouritesRepository{
         return instance;
     }
 
-    public LiveData<List<Product>> getFavourites() {
+    public LiveData<List<IProduct>> getFavourites() {
         favouritesDataSet.clear();
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchAllFavourites(data);
         return data;
     }
 
-    public void fetchAllFavourites(MutableLiveData<List<Product>> data){
+    public void fetchAllFavourites(MutableLiveData<List<IProduct>> data){
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -104,11 +96,11 @@ public class FavouritesRepository implements IFavouritesRepository{
     }
 
 
-    public Product determineCategory (long productID, long categoryID, double productPrice,
+    public IProduct determineCategory (long productID, long categoryID, double productPrice,
                                       String productLongName, String productShortName, Brand brandName,
                                       String productDescription, String productDetails, String productCare,
                                       ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
-        Product bag;
+        IProduct bag;
         if(categoryID == 0){
             // type is clutch
             bag = new Clutch(productID, categoryID, productPrice, productLongName, productShortName, brandName,
