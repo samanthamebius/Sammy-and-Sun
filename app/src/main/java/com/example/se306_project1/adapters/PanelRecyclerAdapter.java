@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.models.Product;
+
 import java.util.ArrayList;
 
 public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdapter.MyViewHolder> {
@@ -19,13 +21,12 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     private static Context context;
     private ArrayList<Boolean> favouriteStatusList;
 
-    private IPanelRecyclerViewClickListener listener;
+//    private IPanelRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<IProduct> productList, Context context, IPanelRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
+    public PanelRecyclerAdapter(ArrayList<IProduct> productList, ArrayList<Boolean> favouriteStatusList){
         this.productList = productList;
-        this.context = context;
-        this.listener = listener;
+//        this.listener = listener;
         this.favouriteStatusList = favouriteStatusList;
     }
 
@@ -36,22 +37,23 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         private ImageView iconImage;
         private ImageView favIcon;
 
-        public MyViewHolder(final View view) {
+        public MyViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
             nameText = view.findViewById(R.id.main_name_text_view);
             brandText = view.findViewById(R.id.main_brand_text_view);
             priceText = view.findViewById(R.id.main_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.main_image_view);
             favIcon = (ImageView) view.findViewById(R.id.favourite_icon);
 
-            view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
 //            Log.e("view",view.toString());
 //            Log.e("position",Integer.toString(getBindingAdapterPosition()));
-            listener.onClick(view,getBindingAdapterPosition());
+            IProduct clickedProduct = productList.get(getBindingAdapterPosition());
+            //listener.onClick(view,getBindingAdapterPosition());
         }
 
 
@@ -60,8 +62,11 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     @NonNull
     @Override
     public PanelRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_list_view_item,parent,false);
-        return new MyViewHolder(itemView);
+        context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View itemView = inflater.inflate(R.layout.main_list_view_item, parent, false);
+        MyViewHolder holder = new MyViewHolder(itemView);
+        return holder;
     }
 
     // change contents of text and image views
@@ -100,10 +105,10 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     }
 
 
-    public interface IPanelRecyclerViewClickListener {
-
-        void onClick(View v, int position);
-    }
+//    public interface IPanelRecyclerViewClickListener {
+//
+//        void onClick(View v, int position);
+//    }
 
 
 }

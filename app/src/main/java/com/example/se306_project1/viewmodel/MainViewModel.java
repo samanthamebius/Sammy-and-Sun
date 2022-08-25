@@ -28,7 +28,6 @@ public class MainViewModel extends AndroidViewModel {
     public List<IProduct> getPopular(){
         popularList = new ArrayList<>();
         popularList.addAll(productRepository.getProductCache("Popular"));
-        Log.e("popular List", Integer.toString(popularList.size()));
         return popularList;
     }
 

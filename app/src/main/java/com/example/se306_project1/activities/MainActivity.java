@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView favouritesRecyclerView;
     private RecyclerView categoryRecyclerView;
 
+    PanelRecyclerAdapter k;
     Toolbar toolbar;
-    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener popularListener;
-    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener favouritesListener;
+//    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener popularListener;
+//    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener favouritesListener;
     private CategoryRecyclerAdapter.CategoryRecyclerViewClickListener categoryListener;
 
     MainViewModel mainViewModel;
@@ -86,10 +88,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
 
         setPopularList();
-        setFavouriteStatusList();
-        setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
+        setPopularFavouriteStatusList();
+//        setPopularAdapter(popularRecyclerView,popularList, popularFavouriteStatusList);
+        popularRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        k = new PanelRecyclerAdapter(popularList, favouriteStatusList);
+        popularRecyclerView.setAdapter(k);
 
 
 
@@ -118,32 +124,42 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        IFavouritesRepository favouritesRepository = FavouritesRepository.getInstance();
-        favouritesRepository.getFavourites().observe(this, new Observer<List<IProduct>>() {
-            @Override
-            public void onChanged(List<IProduct> products) {
+        setFavouritesList();
+        setFavouriteStatusList();
+        LinearLayout favouritesView = findViewById(R.id.favourites_view);
+        if (favouritesList.isEmpty()) {
+            favouritesView.setVisibility(View.GONE);
+        } else {
+            favouritesView.setVisibility(View.VISIBLE);
+        }
+        setFavouritesAdapter(favouritesRecyclerView,favouritesList,  favouriteStatusList);
 
-                favouritesList.clear();
-
-                favouriteStatusList.clear();
-
-                favouritesList.addAll(products);
-
-                LinearLayout favouritesView = findViewById(R.id.favourites_view);
-                if (favouritesList.isEmpty()) {
-                    favouritesView.setVisibility(View.GONE);
-                } else {
-                    favouritesView.setVisibility(View.VISIBLE);
-                }
-
-                for (IProduct item : favouritesList) {
-                    favouriteStatusList.add(true);
-                }
-
-                setFavouritesAdapter(favouritesRecyclerView,favouritesList, favouritesListener, favouriteStatusList);
-
-            }
-        });
+//        IFavouritesRepository favouritesRepository = FavouritesRepository.getInstance();
+//        favouritesRepository.getFavourites().observe(this, new Observer<List<IProduct>>() {
+//            @Override
+//            public void onChanged(List<IProduct> products) {
+//
+//                favouritesList.clear();
+//
+//                favouriteStatusList.clear();
+//
+//                favouritesList.addAll(products);
+//
+////                LinearLayout favouritesView = findViewById(R.id.favourites_view);
+////                if (favouritesList.isEmpty()) {
+////                    favouritesView.setVisibility(View.GONE);
+////                } else {
+////                    favouritesView.setVisibility(View.VISIBLE);
+////                }
+//
+//                for (IProduct item : favouritesList) {
+//                    favouriteStatusList.add(true);
+//                }
+//
+//                setFavouritesAdapter(favouritesRecyclerView,favouritesList, favouritesListener, favouriteStatusList);
+//
+//            }
+//        });
 
         ICategoryRepository categoryRepository = CategoryRepository.getInstance();
         categoryRepository.getCategories().observe(this, new Observer<List<ICategory>>() {
@@ -157,11 +173,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setPopularAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.IPanelRecyclerViewClickListener listener, ArrayList<Boolean> popularFavouriteStatusList) {
+    private void setPopularAdapter(RecyclerView view, ArrayList<IProduct> list, ArrayList<Boolean> popularFavouriteStatusList) {
 
-        setPopularOnClickListener();
 
-        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, popularFavouriteStatusList);
+        //setPopularOnClickListener();
+
+        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list,  popularFavouriteStatusList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
         view.setLayoutManager((layoutManager));
@@ -169,24 +186,24 @@ public class MainActivity extends AppCompatActivity {
         view.setAdapter(adapter);
     }
 
-    private void setPopularOnClickListener() {
-        popularListener = new PanelRecyclerAdapter.IPanelRecyclerViewClickListener(){
-            @Override
-            public void onClick(View v, int position) {
-                Log.e("View",Integer.toString(position));
-                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("id",popularList.get(position).getProductID());
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
-        };
+//    private void setPopularOnClickListener() {
+//        popularListener = new PanelRecyclerAdapter.IPanelRecyclerViewClickListener(){
+//            @Override
+//            public void onClick(View v, int position) {
+//                Log.e("View",Integer.toString(position));
+//                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+//                intent.putExtra("id",popularList.get(position).getProductID());
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//            }
+//        };
+//
+//    }
 
-    }
-
-    private void setFavouritesAdapter(RecyclerView view, ArrayList<IProduct> list, PanelRecyclerAdapter.IPanelRecyclerViewClickListener listener, ArrayList<Boolean> favStatusList) {
+    private void setFavouritesAdapter(RecyclerView view, ArrayList<IProduct> list, ArrayList<Boolean> favStatusList) {
   
-        setFavouritesOnClickListener();
-        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, getApplicationContext(), listener, favStatusList);
+        //setFavouritesOnClickListener();
+        PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, favStatusList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((getApplicationContext()),LinearLayoutManager.HORIZONTAL,false);
         view.setLayoutManager((layoutManager));
@@ -194,18 +211,18 @@ public class MainActivity extends AppCompatActivity {
         view.setAdapter(adapter);
     }
 
-    private void setFavouritesOnClickListener() {
-        favouritesListener = new PanelRecyclerAdapter.IPanelRecyclerViewClickListener(){
-            @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("id",favouritesList.get(position).getProductID());
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
-        };
-
-    }
+//    private void setFavouritesOnClickListener() {
+//        favouritesListener = new PanelRecyclerAdapter.IPanelRecyclerViewClickListener(){
+//            @Override
+//            public void onClick(View v, int position) {
+//                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+//                intent.putExtra("id",favouritesList.get(position).getProductID());
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+//            }
+//        };
+//
+//    }
 
     private void setCategoryAdapter(RecyclerView view, ArrayList<ICategory> list) {
         setCategoryOnClickListener();
@@ -240,11 +257,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPopularList() {
         popularList.clear();
-        mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
+
         popularList = (ArrayList<IProduct>) mainViewModel.getPopular();
     }
 
-    private void setFavouriteStatusList() {
+    private void setFavouritesList(){
+        favouritesList.clear();
+        favouritesList = (ArrayList<IProduct>) mainViewModel.getFavourites();
+    }
+
+    private void setFavouriteStatusList(){
+        favouriteStatusList.clear();
+
+        for (IProduct item : favouritesList) {
+                favouriteStatusList.add(true);
+        }
+    }
+
+    private void setPopularFavouriteStatusList() {
         popularFavouriteStatusList.clear();
 
         for (IProduct item : popularList) {
