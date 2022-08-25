@@ -20,6 +20,7 @@ import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
 import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.CategoryRepository;
 import com.example.se306_project1.repository.FavouritesRepository;
 import com.example.se306_project1.repository.ICategoryRepository;
@@ -230,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         String serializedObject = sharedPreferences.getString(key, null);
         if (serializedObject != null) {
             Gson gson = new Gson();
-            Type type = new TypeToken<List<IProduct>>(){}.getType();
+            Type type = new TypeToken<List<Product>>(){}.getType();
             arrayItems = gson.fromJson(serializedObject, type);
         }
 

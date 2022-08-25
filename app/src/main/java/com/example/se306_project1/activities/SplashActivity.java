@@ -23,6 +23,7 @@ import androidx.lifecycle.Observer;
 
 import com.example.se306_project1.R;
 import com.example.se306_project1.models.Category;
+import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.CategoryRepository;
