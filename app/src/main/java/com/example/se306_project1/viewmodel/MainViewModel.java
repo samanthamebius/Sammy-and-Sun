@@ -18,17 +18,15 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
     private List<IProduct> popularList;
     private List<IProduct> favouriteList;
+    IProductRepository productRepository = new ProductRepository(getApplication().getApplicationContext());
 
     public MainViewModel(@NonNull Application application) {
         super(application);
     }
 
 
-    public List<IProduct> getPopular(Context c){
+    public List<IProduct> getPopular(){
         popularList = new ArrayList<>();
-
-        IProductRepository productRepository = new ProductRepository(c);
-//        IProductRepository productRepository = ProductRepository.getInstance();
         popularList.addAll(productRepository.getProductCache("Popular"));
         Log.e("popular List", Integer.toString(popularList.size()));
         return popularList;
@@ -36,7 +34,6 @@ public class MainViewModel extends AndroidViewModel {
 
     public List<IProduct> getFavourites(){
         favouriteList = new ArrayList<>();
-        IProductRepository productRepository = ProductRepository.getInstance();
         favouriteList.addAll(productRepository.getProductCache("Favourites"));
         return favouriteList;
     }

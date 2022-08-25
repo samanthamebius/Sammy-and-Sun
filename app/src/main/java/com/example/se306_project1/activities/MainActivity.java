@@ -237,15 +237,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPopularList() {
         popularList.clear();
-//        IProductRepository productRepository = new ProductRepository(this);
-//        IProductRepository productRepository = ProductRepository.getInstance();
-//        popularList.addAll(productRepository.getProductCache("Popular"));
-//        setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
-
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
-        popularList = (ArrayList<IProduct>) mainViewModel.getPopular(this);
-//        List<IProduct> k = mainViewModel.getPopular();
-//        System.out.println(k.size());
+        popularList = (ArrayList<IProduct>) mainViewModel.getPopular();
     }
 
     private void setFavouriteStatusList() {
