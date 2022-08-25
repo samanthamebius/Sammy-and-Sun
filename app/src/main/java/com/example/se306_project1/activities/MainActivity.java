@@ -6,7 +6,11 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +26,10 @@ import com.example.se306_project1.repository.ICategoryRepository;
 import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.PopularRepository;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private PanelRecyclerAdapter.PanelRecyclerViewClickListener popularListener;
     private PanelRecyclerAdapter.PanelRecyclerViewClickListener favouritesListener;
     private CategoryRecyclerAdapter.CategoryRecyclerViewClickListener categoryListener;
+
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
+
+        sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        for (IProduct bag: getProductList("Popular")){
+
+        }
+
         IPopularRepository popularRepository = PopularRepository.getInstance();
         popularRepository.getPopular().observe(this, new Observer<List<IProduct>>() {
             @Override
@@ -76,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 popularFavouriteStatusList.clear();
 
                 popularList.addAll(products);
+
 
                 for (IProduct item : popularList) {
                     if(item.getIsFavourite()){
@@ -206,4 +223,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(searchIntent);
         overridePendingTransition(0, 0);
     }
+
+
+    public List<IProduct> getProductList(String key){
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<IProduct>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+
+        return arrayItems;
+    }
+
+
 }
