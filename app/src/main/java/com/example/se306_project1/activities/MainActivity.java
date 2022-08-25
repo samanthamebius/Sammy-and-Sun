@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         popularList = new ArrayList();
@@ -79,9 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
-        for (IProduct bag: getProductList("Popular")){
 
-        }
 
         IPopularRepository popularRepository = PopularRepository.getInstance();
         popularRepository.getPopular().observe(this, new Observer<List<IProduct>>() {
@@ -226,17 +225,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public List<IProduct> getProductList(String key){
-        List<IProduct> arrayItems = new ArrayList<>();
-        String serializedObject = sharedPreferences.getString(key, null);
-        if (serializedObject != null) {
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<Product>>(){}.getType();
-            arrayItems = gson.fromJson(serializedObject, type);
-        }
-
-        return arrayItems;
-    }
 
 
 }

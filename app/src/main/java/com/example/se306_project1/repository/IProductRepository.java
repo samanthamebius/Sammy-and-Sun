@@ -9,4 +9,5 @@ public interface IProductRepository {
     public MutableLiveData<List<IProduct>> getProducts();
     public LiveData<IProduct> getProductByID(long productID);
     public LiveData<List<IProduct>> getProductsByCategoryID(long categoryID);
+    public List<IProduct> getProductCache(String key);
 }
