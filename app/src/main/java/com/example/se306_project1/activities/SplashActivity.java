@@ -35,17 +35,10 @@ import java.util.List;
 public class SplashActivity extends AppCompatActivity {
 
 
-    //private static final String PREFS_TAG = "product" ;
-//    private List<Product> productsList, popularList, favouritesList;
-    //SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-    //SharedPreferences sPref = getApplicationContext().getSharedPreferences(PREFS_TAG, Context.MODE_PRIVATE);
-    //SharedPreferences sharedPreferences = getSharedPreferences("shared_pref", MODE_PRIVATE);
-
     SharedPreferences sharedPreferences;
     static Long Clutch =(long) 0;
     static Long CrossBody=(long) 0;
     static Long Tote =(long) 0;
-
 
 
     @Override
@@ -57,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         myImageView.startAnimation(myFadeInAnimation);
 
-        sharedPreferences = getSharedPreferences("test", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
 
         IProductRepository productRepository = ProductRepository.getInstance();
         productRepository.getProducts().observe(this, new Observer<List<Product>>() {
@@ -114,8 +107,8 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
+        // splash screen wait for all onChanged
         new Handler().postDelayed(new Runnable() {
-            ;
 
             @Override
             public void run() {
@@ -123,7 +116,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 5000);
+        }, 3000);
     }
 
     public <T> void setList(String key, List<T> list) {
