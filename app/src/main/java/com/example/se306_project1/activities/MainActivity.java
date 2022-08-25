@@ -3,6 +3,7 @@ package com.example.se306_project1.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.content.SharedPreferences;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.example.se306_project1.R;
@@ -26,7 +28,9 @@ import com.example.se306_project1.repository.FavouritesRepository;
 import com.example.se306_project1.repository.ICategoryRepository;
 import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.repository.IPopularRepository;
+import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.PopularRepository;
+import com.example.se306_project1.repository.ProductRepository;
 import com.example.se306_project1.viewmodel.MainViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -84,8 +88,10 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
 
         setPopularList();
-
+        setFavouriteStatusList();
         setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
+
+
 
 //        IPopularRepository popularRepository = PopularRepository.getInstance();
 //        popularRepository.getPopular().observe(this, new Observer<List<IProduct>>() {
@@ -231,7 +237,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPopularList() {
         popularList.clear();
-        popularList = (ArrayList<IProduct>) mainViewModel.getPopular();
+//        IProductRepository productRepository = new ProductRepository(this);
+//        IProductRepository productRepository = ProductRepository.getInstance();
+//        popularList.addAll(productRepository.getProductCache("Popular"));
+//        setPopularAdapter(popularRecyclerView,popularList, popularListener, popularFavouriteStatusList);
+
+        mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
+        popularList = (ArrayList<IProduct>) mainViewModel.getPopular(this);
+//        List<IProduct> k = mainViewModel.getPopular();
+//        System.out.println(k.size());
     }
 
     private void setFavouriteStatusList() {
