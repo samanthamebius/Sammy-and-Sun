@@ -8,7 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 
+import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.repository.CategoryRepository;
+import com.example.se306_project1.repository.ICategoryRepository;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
 
@@ -18,12 +21,13 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
     private List<IProduct> popularList;
     private List<IProduct> favouriteList;
+    private List<ICategory> categoriesList;
     IProductRepository productRepository = new ProductRepository(getApplication().getApplicationContext());
+    ICategoryRepository categoryRepository = new CategoryRepository(getApplication().getApplicationContext());
 
     public MainViewModel(@NonNull Application application) {
         super(application);
     }
-
 
     public List<IProduct> getPopular(){
         popularList = new ArrayList<>();
@@ -35,5 +39,11 @@ public class MainViewModel extends AndroidViewModel {
         favouriteList = new ArrayList<>();
         favouriteList.addAll(productRepository.getProductCache("Favourites"));
         return favouriteList;
+    }
+
+    public List<ICategory> getCategories(){
+        categoriesList = new ArrayList<>();
+        categoriesList.addAll(categoryRepository.getCategoriesCache("Categories"));
+        return categoriesList;
     }
 }
