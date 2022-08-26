@@ -2,10 +2,12 @@ package com.example.se306_project1.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -14,34 +16,37 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
-import com.example.se306_project1.domain.PopularCountVisit;
-import com.example.se306_project1.domain.UpdateFavourite;
+import com.example.se306_project1.viewmodel.PopularCountVisit;
+import com.example.se306_project1.viewmodel.UpdateFavourite;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.PopularRepository;
 import com.example.se306_project1.repository.ProductRepository;
+import com.example.se306_project1.viewmodel.DetailsViewModel;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    IProduct product;
-    ArrayList<Integer> intImages;
-    private static Boolean favouriteStatus;
-    RecyclerView recyclerView;
-    int detailsCounter = 0;
-    int productCareCounter = 0;
-    int maxPopularSize = 10;
-    ViewHolder vh;
-    Toolbar toolbar;
-    long productID;
-    int sizeOfCurrentPopular;
     IProduct lowestCountProduct;
 
+    private ArrayList<Integer> intImages;
+    private static Boolean favouriteStatus;
+    private int detailsCounter = 0;
+    private int productCareCounter = 0;
+    private int maxPopularSize = 10;
+    private int sizeOfCurrentPopular;
+    private IProduct product;
+    long productID;
+
+    RecyclerView recyclerView;
+    ViewHolder vh;
+    Toolbar toolbar;
+    DetailsViewModel detailsViewModel;
+    SharedPreferences sharedPreferences;
 
     class ViewHolder {
         TextView product_details, product_price, product_brand, product_long_name, product_description,
@@ -63,6 +68,33 @@ public class DetailsActivity extends AppCompatActivity {
             productID = extras.getLong("id");
         }
 
+        sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        detailsViewModel= new ViewModelProvider(this).get(DetailsViewModel.class);
+
+        setUpScreenElements();
+
+        setProduct(productID);
+
+        populateScreenElements();
+
+        PopularCountVisit.updateCountVisit(product);
+        UpdatePopular(product);
+
+        displayFavouriteIcon();
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(getBaseContext(), intImages);
+        recyclerView.setAdapter(sliderImagesAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.indicator);
+        recyclerIndicator.attachToRecyclerView(recyclerView);
+    }
+
+    private void setUpScreenElements() {
         vh = new ViewHolder();
         vh.product_price = (TextView) findViewById(R.id.product_price);
         vh.product_brand = (TextView) findViewById(R.id.product_brand);
@@ -74,51 +106,34 @@ public class DetailsActivity extends AppCompatActivity {
         vh.product_care_icon = (ImageView) findViewById(R.id.product_care_icon);
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
         recyclerView = findViewById(R.id.recyclerView);
-
         toolbar = findViewById(R.id.toolBarBack);
         setSupportActionBar(toolbar);
-
-        IProductRepository prodRepo = ProductRepository.getInstance();
-        prodRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
-            @Override
-            public void onChanged(IProduct p) {
-                product = p;
-
-                intImages = GetIntImageArray(p.getProductImages());
-                vh.product_price.setText("$"+Double.toString(p.getProductPrice())+"0");
-                vh.product_brand.setText(p.getBrandName().name().replaceAll("_"," "));
-                vh.product_long_name.setText(p.getProductLongName());
-                vh.product_description.setText(p.getProductDescription());
-                vh.product_details.setText(p.getProductDetails());
-                vh.product_care.setText(p.getProductCare());
-
-                PopularCountVisit.updateCountVisit(p);
-                UpdatePopular(p);
-
-                favouriteStatus = p.getIsFavourite();
-
-                if(favouriteStatus){
-                    vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
-                } else {
-                    vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
-                }
-
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),
-                        LinearLayoutManager.HORIZONTAL, false);
-                recyclerView.setLayoutManager(layoutManager);
-
-                SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(getBaseContext(), intImages);
-                recyclerView.setAdapter(sliderImagesAdapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
-
-                ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.indicator);
-                recyclerIndicator.attachToRecyclerView(recyclerView);
-
-
-            }
-        });
     }
 
+    private void populateScreenElements() {
+        intImages = GetIntImageArray(product.getProductImages());
+        vh.product_price.setText("$"+Double.toString(product.getProductPrice())+"0");
+        vh.product_brand.setText(product.getBrandName().name().replaceAll("_"," "));
+        vh.product_long_name.setText(product.getProductLongName());
+        vh.product_description.setText(product.getProductDescription());
+        vh.product_details.setText(product.getProductDetails());
+        vh.product_care.setText(product.getProductCare());
+    }
+
+    private void displayFavouriteIcon() {
+        favouriteStatus = product.getIsFavourite();
+
+        if(favouriteStatus){
+            vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
+        } else {
+            vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
+        }
+    }
+
+    private void setProduct(long productID) {
+        product = null;
+        product = detailsViewModel.getProductByID(productID);
+    }
 
     @Override
     protected void onPause() {
@@ -138,7 +153,6 @@ public class DetailsActivity extends AppCompatActivity {
                 lowestCountProduct = products.get(0);
             }
         });
-
     }
 
     public void PopularLogic(int sizeOfCurrentPopular, IProduct currentProduct, IProduct productToSwap){
@@ -152,7 +166,6 @@ public class DetailsActivity extends AppCompatActivity {
             }
         }
     }
-
 
     public void UpdateFavourite(View v) {
         vh = new ViewHolder();

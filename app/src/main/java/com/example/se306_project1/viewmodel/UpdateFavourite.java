@@ -1,4 +1,4 @@
-package com.example.se306_project1.domain;
+package com.example.se306_project1.viewmodel;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
