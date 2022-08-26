@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
+import com.example.se306_project1.data.CategoriesDataProvider;
+import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.viewmodel.MainViewModel;
@@ -60,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
 
         setPopularList();
+        LinearLayout popularView = findViewById(R.id.favourites_view);
+        if (popularList.isEmpty()) {
+            popularView.setVisibility(View.GONE);
+        } else {
+            popularView.setVisibility(View.VISIBLE);
+        }
+
         setFavouritesList();
         LinearLayout favouritesView = findViewById(R.id.favourites_view);
         if (favouritesList.isEmpty()) {
@@ -67,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             favouritesView.setVisibility(View.VISIBLE);
         }
+
         setCategoriesList();
 
         setAdapter(popularRecyclerView, popularList);
