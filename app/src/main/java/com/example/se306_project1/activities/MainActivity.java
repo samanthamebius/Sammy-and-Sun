@@ -44,19 +44,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<IProduct> popularList;
     private ArrayList<IProduct> favouritesList;
-    private ArrayList<ICategory> categoryList;
-
-    private ArrayList<Boolean> popularFavouriteStatusList;
-    private ArrayList<Boolean> favouriteStatusList;
+    private ArrayList<ICategory> categoriesList;
 
     private RecyclerView popularRecyclerView;
     private RecyclerView favouritesRecyclerView;
     private RecyclerView categoryRecyclerView;
 
-    PanelRecyclerAdapter adapter;
     Toolbar toolbar;
-//    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener popularListener;
-//    private PanelRecyclerAdapter.IPanelRecyclerViewClickListener favouritesListener;
+
     private CategoryRecyclerAdapter.CategoryRecyclerViewClickListener categoryListener;
 
     MainViewModel mainViewModel;
@@ -68,24 +63,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         popularList = new ArrayList();
         favouritesList = new ArrayList();
-        categoryList = new ArrayList();
-        popularFavouriteStatusList = new ArrayList();
-        favouriteStatusList = new ArrayList();
-
+        categoriesList = new ArrayList();
 
         popularRecyclerView = findViewById(R.id.popular_recyclerView);
         favouritesRecyclerView = findViewById(R.id.favourites_recyclerView);
         categoryRecyclerView = findViewById(R.id.categories_recyclerView);
 
-
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-
 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
@@ -93,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
         // for popular
         setPopularList();
         setAdapter(popularRecyclerView, popularList);
-
 
         // for favourites
         setFavouritesList();
@@ -105,19 +93,10 @@ public class MainActivity extends AppCompatActivity {
         }
         setAdapter(favouritesRecyclerView, favouritesList);
 
-
-        ICategoryRepository categoryRepository = CategoryRepository.getInstance();
-        categoryRepository.getCategories().observe(this, new Observer<List<ICategory>>() {
-            @Override
-            public void onChanged(List<ICategory> categories) {
-                categoryList.addAll(categories);
-                setCategoryAdapter(categoryRecyclerView,categoryList);
-            }
-        });
-       
+       setCategoriesList();
+       setCategoryAdapter(categoryRecyclerView,categoriesList);
 
     }
-
 
     private void setAdapter(RecyclerView view, ArrayList<IProduct> list) {
         PanelRecyclerAdapter adapter = new PanelRecyclerAdapter(list, this);
@@ -126,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);
     }
-
-
 
     private void setCategoryAdapter(RecyclerView view, ArrayList<ICategory> list) {
         setCategoryOnClickListener();
@@ -143,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), ListActivity.class);
-                String rawName = categoryList.get(position).getCategoryName();
+                String rawName = categoriesList.get(position).getCategoryName();
                 String formattedName = rawName.substring(0, 1).toUpperCase() + rawName.substring(1);
-                long categoryID = categoryList.get(position).getCategoryID();
+                long categoryID = categoriesList.get(position).getCategoryID();
                 intent.putExtra("header", formattedName);
                 intent.putExtra("id", categoryID);
                 startActivity(intent);
@@ -162,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPopularList() {
         popularList.clear();
-
         popularList = (ArrayList<IProduct>) mainViewModel.getPopular();
     }
 
@@ -171,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
         favouritesList = (ArrayList<IProduct>) mainViewModel.getFavourites();
     }
 
+    private void setCategoriesList(){
+        categoriesList.clear();
+        categoriesList = (ArrayList<ICategory>) mainViewModel.getCategories();
+    }
 
 
 
