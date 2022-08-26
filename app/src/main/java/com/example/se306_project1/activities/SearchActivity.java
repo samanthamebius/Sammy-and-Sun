@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +33,8 @@ import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
+import com.example.se306_project1.viewmodel.MainViewModel;
+import com.example.se306_project1.viewmodel.SearchViewModel;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -53,6 +56,9 @@ public class SearchActivity extends AppCompatActivity{
     private ArrayList<IProduct> resultsList;
     private SearchRecyclerAdapter.SearchRecyclerViewClickListener listener;
     Toolbar toolbar;
+    SearchViewModel searchViewModel;
+    SharedPreferences sharedPreferences;
+    private IProduct bagClicked;
 
 
     @Override
@@ -70,6 +76,9 @@ public class SearchActivity extends AppCompatActivity{
 
         toolbar = findViewById(R.id.toolBarBack);
         setSupportActionBar(toolbar);
+
+        sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        searchViewModel= new ViewModelProvider(this).get(SearchViewModel.class);
 
         findViewById(R.id.search_field).requestFocus();
 
@@ -200,17 +209,18 @@ public class SearchActivity extends AppCompatActivity{
     // for item selected from suggestions
     private void searchBag(long productID) {
         TextView noResultsText = findViewById(R.id.no_results_text);
-        IProductRepository testRepo = ProductRepository.getInstance();
-        testRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
-            @Override
-            public void onChanged(IProduct product) {
-
-                noResultsText.setVisibility(View.GONE);
-                resultsList.clear();
-                resultsList.add(product);
-                setAdapter();
-            }
-        });
+        setBagClicked(productID);
+//        IProductRepository testRepo = ProductRepository.getInstance();
+//        testRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
+//            @Override
+//            public void onChanged(IProduct product) {
+//
+//                noResultsText.setVisibility(View.GONE);
+//                resultsList.clear();
+//                resultsList.add(product);
+//                setAdapter();
+//            }
+//        });
 
     }
 
@@ -240,5 +250,12 @@ public class SearchActivity extends AppCompatActivity{
         overridePendingTransition(0, 0);
     }
 
+
+    private void setBagClicked(long productID) {
+        bagClicked = null;
+        bagClicked = searchViewModel.getProductByID(productID);
+        Log.e("BagClicked", bagClicked.getProductShortName());
+
+    }
 
 }
