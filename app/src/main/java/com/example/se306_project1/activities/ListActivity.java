@@ -26,8 +26,6 @@ public class ListActivity extends AppCompatActivity {
     private ArrayList<IProduct> productsList;
     private RecyclerView recyclerView;
     private long categoryID;
-    private ListRecyclerAdapter.ListRecyclerViewClickListener listener;
-    private ArrayList<Boolean> favouriteStatusList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +40,6 @@ public class ListActivity extends AppCompatActivity {
         TextView headerText = findViewById(R.id.list_header);
 
         productsList = new ArrayList();
-        favouriteStatusList = new ArrayList();
 
         recyclerView = findViewById(R.id.list_recyclerView);
 
@@ -60,22 +57,11 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<IProduct> products) {
                 productsList.clear();
-                favouriteStatusList.clear();
                 productsList.addAll(products);
-
-                for (IProduct item : productsList) {
-                    if(item.getIsFavourite()){
-                        favouriteStatusList.add(true);
-                    } else {
-                        favouriteStatusList.add(false);
-                    }
-                }
 
                 setAdapter();
             }
         });
-
-
     }
 
     private void setAdapter() {
@@ -91,7 +77,5 @@ public class ListActivity extends AppCompatActivity {
         startActivity(mainIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
-
-
 
 }
