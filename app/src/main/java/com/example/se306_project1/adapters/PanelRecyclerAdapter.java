@@ -29,7 +29,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     // create instance of adapter for list of categories
     public PanelRecyclerAdapter(ArrayList<IProduct> productList, Activity activity){
         this.productList = productList;
-
         this.activity = activity;
     }
 
@@ -53,8 +52,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
 
 
         public void onClick(View view) {
-
-            Log.e("panelAdapter", "Onclick method");
             IProduct clickedProduct = productList.get(getBindingAdapterPosition());
             Intent intent = new Intent(context, DetailsActivity.class);
             intent.putExtra("id",clickedProduct.getProductID());
