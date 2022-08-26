@@ -79,24 +79,11 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        setOnClickListener();
-        ListRecyclerAdapter adapter = new ListRecyclerAdapter(productsList, getApplicationContext(), categoryID, listener, favouriteStatusList);
+        ListRecyclerAdapter adapter = new ListRecyclerAdapter(categoryID, productsList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-    }
-
-    private void setOnClickListener() {
-        listener = new ListRecyclerAdapter.ListRecyclerViewClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("id", productsList.get(position).getProductID());
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
-        };
     }
 
     public void Back(View v){

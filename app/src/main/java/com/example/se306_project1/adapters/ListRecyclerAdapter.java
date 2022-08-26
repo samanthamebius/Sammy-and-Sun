@@ -1,6 +1,8 @@
 package com.example.se306_project1.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,25 +11,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
+import com.example.se306_project1.activities.DetailsActivity;
 import com.example.se306_project1.models.IProduct;
 import java.util.ArrayList;
 
 public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<IProduct> productList;
+    private Activity activity;
     private static Context context;
     private long styleID;
-    private ArrayList<Boolean> favouriteStatusList;
-    private ListRecyclerAdapter.ListRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public ListRecyclerAdapter(ArrayList<IProduct> productList, Context context, long styleID, ListRecyclerAdapter.ListRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
-        this.productList = productList;
-        this.context = context;
+    public ListRecyclerAdapter(long styleID, ArrayList<IProduct> productList, Activity activity){
         this.styleID = styleID;
-        this.listener = listener;
-        this.favouriteStatusList = favouriteStatusList;
-
+        this.activity = activity;
+        this.productList = productList;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -60,12 +59,15 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
                 favIcon = (ImageView) view.findViewById(R.id.list2_favourite_icon);
             }
             view.setOnClickListener(this);
-
         }
 
         @Override
         public void onClick(View view) {
-            listener.onClick(view,getBindingAdapterPosition());
+            IProduct clickedProduct = productList.get(getBindingAdapterPosition());
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("id",clickedProduct.getProductID());
+            context.startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
@@ -73,6 +75,7 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
     @Override
     public ListRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
+        context = parent.getContext();
         if ((int)styleID == 0) {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_item_style0, parent, false);
         }  else if ((int)styleID == 1) {
@@ -80,7 +83,6 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         }  else {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_item_style2, parent, false);
         }
-
         return new MyViewHolder(itemView);
     }
 
@@ -100,10 +102,9 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
 
-        if (!favouriteStatusList.get(position)){
+        if(!productList.get(position).getIsFavourite()){
             holder.favIcon.setVisibility(View.GONE);
         }
-
     }
 
     public static int getImageResource(String imageString) {
@@ -115,15 +116,9 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         }
     }
 
-
     @Override
     public int getItemCount() {
         return productList.size();
     }
-
-    public interface ListRecyclerViewClickListener {
-        void onClick(View v, int position);
-    }
-
 
 }
