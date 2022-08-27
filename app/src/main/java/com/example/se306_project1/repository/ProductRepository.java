@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ProductRepository implements IProductRepository{
@@ -91,6 +92,26 @@ public class ProductRepository implements IProductRepository{
         return arrayItems;
     }
 
+    @Override
+    public IProduct getProductByIDCache(String key, long productID) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        IProduct bagToReturn = null;
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+
+        for(IProduct bag: arrayItems){
+            if(bag.getProductID() == productID){
+                bagToReturn = bag;
+            }
+        }
+        return bagToReturn;
+    }
+
     public void fetchProductByID(MutableLiveData<IProduct> data){
         String idString = Long.toString(productID);
         DocumentReference documentReference = productColRef.document(idString);
@@ -136,10 +157,10 @@ public class ProductRepository implements IProductRepository{
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase fetch all products", String.valueOf(task.getResult()));
                     // getting snapshot of all the documents in the collection
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag : snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");
