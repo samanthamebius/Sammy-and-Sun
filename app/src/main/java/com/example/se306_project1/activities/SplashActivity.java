@@ -72,21 +72,21 @@ public class SplashActivity extends AppCompatActivity {
         productRepository.getProductsByCategoryID(Clutch).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Clutch", products);
+                setList("Clutches", products);
             }
         });
 
         productRepository.getProductsByCategoryID(CrossBody).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Crossbody", products);
+                setList("Cross-Body Bags", products);
             }
         });
 
         productRepository.getProductsByCategoryID(Tote).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Tote", products);
+                setList("Tote Bags", products);
             }
         });
 
