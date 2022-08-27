@@ -52,9 +52,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-
-
-
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         productID = 0;
@@ -73,12 +70,9 @@ public class DetailsActivity extends AppCompatActivity {
         setPopular(product);
         detailsViewModel.updatePopularCount(product, sharedPreferences);
 
+        favouriteStatus = detailsViewModel.displayFavouritesStatus(product, vh.favouriteIcon);
 
-
-        displayFavouriteIcon();
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),
-                LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(getBaseContext(), intImages);
@@ -116,22 +110,10 @@ public class DetailsActivity extends AppCompatActivity {
         vh.product_care.setText(product.getProductCare());
     }
 
-    private void displayFavouriteIcon() {
-        favouriteStatus = product.getIsFavourite();
-
-        if(favouriteStatus){
-            vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
-        } else {
-            vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
-        }
-    }
-
     private void setProduct(long productID) {
         product = null;
         product = detailsViewModel.getProductByID(productID);
     }
-
-
 
     public void setPopular(IProduct product){
         popularList.clear();
@@ -177,8 +159,8 @@ public class DetailsActivity extends AppCompatActivity {
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
 
         favouriteStatus = product.getIsFavourite();
-        UpdateFavourite.updateFavourite(product, favouriteStatus);
-        detailsViewModel.updateFavouritesCache(sharedPreferences,product, favouriteStatus);
+//        UpdateFavourite.updateFavourite(product, favouriteStatus);
+        detailsViewModel.changeFavouriteStatus(sharedPreferences);
 
         if(favouriteStatus){
             vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);

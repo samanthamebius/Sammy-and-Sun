@@ -125,6 +125,7 @@ public class PopularRepository implements IPopularRepository{
                     Log.d("firebase popular", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
 
+                    popularDataSet.clear();
                     for(DocumentSnapshot favouriteBagReference : snapshots){
 
                         // getting foreign key reference
@@ -148,7 +149,6 @@ public class PopularRepository implements IPopularRepository{
                                     boolean isFavourite = (boolean) value.get("isFavourite");
                                     ArrayList<String> productImages = (ArrayList<String>) value.get("productImages");
 
-                                    popularDataSet.clear();
                                     popularDataSet.add(determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                                             productDescription, productDetails, productCare,
                                             productColourType, productCountVisit, isFavourite, productImages));

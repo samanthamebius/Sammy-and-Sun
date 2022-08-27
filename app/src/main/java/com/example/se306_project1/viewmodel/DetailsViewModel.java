@@ -4,9 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+
+import com.example.se306_project1.R;
+import com.example.se306_project1.models.Category;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.FavouritesRepository;
@@ -27,6 +31,8 @@ public class DetailsViewModel extends AndroidViewModel {
     private List<IProduct> popularList;
     private List<IProduct> favouritesList;
     private List<IProduct> productsList;
+    private List<IProduct> categoryList;
+    Boolean favouriteStatus;
     IProductRepository productRepository = new ProductRepository(getApplication().getApplicationContext());
     IPopularRepository popularRepository = new PopularRepository(getApplication().getApplicationContext());
     IFavouritesRepository favouritesRepository = new FavouritesRepository(getApplication().getApplicationContext());
@@ -53,10 +59,40 @@ public class DetailsViewModel extends AndroidViewModel {
         return popularList;
     }
 
+    public List<IProduct> getCategoryCache(long categoryID){
+        categoryList = new ArrayList<>();
+        categoryList.addAll(productRepository.getProductCache(Long.toString(categoryID)));
+        return categoryList;
+    }
+
     public List<IProduct> getFavourites(){
         favouritesList = new ArrayList<>();
         favouritesList.addAll(favouritesRepository.getFavouritesCache("Favourites"));
         return favouritesList;
+    }
+
+    public Boolean displayFavouritesStatus(IProduct product, ImageView icon){
+        favouriteStatus = product.getIsFavourite();
+
+        if(favouriteStatus){
+            icon.setImageResource(R.drawable.selected_heart);
+        } else {
+            icon.setImageResource(R.drawable.unselected_heart);
+        }
+        return favouriteStatus;
+    }
+
+    public void changeFavouriteStatus(SharedPreferences sharedPreferences){
+        favouritesRepository.updateFavouriteBoolean(product, !favouriteStatus);
+        renewFavouriteStatus(sharedPreferences);
+        if (!favouriteStatus){
+            favouritesRepository.addToFavouriteCollection(product);
+            addProductToFavouriteCache(sharedPreferences);
+        }
+        else{
+            favouritesRepository.removeFromFavouriteCollection(product);
+            removeProductFromFavouriteCache(sharedPreferences);
+        }
     }
 
     public void updatePopularCount(IProduct product, SharedPreferences sharedPreferences){
@@ -105,9 +141,40 @@ public class DetailsViewModel extends AndroidViewModel {
                 productsList.set(i, product);
             }
         }
-
         renewSharedPreferences(sharedPreferences, productsList, "Products");
+    }
 
+    public void addProductToFavouriteCache(SharedPreferences sharedPreferences){
+        favouritesList = getFavourites();
+        favouritesList.add(product);
+        renewSharedPreferences(sharedPreferences, favouritesList, "Favourites");
+    }
+
+    public void removeProductFromFavouriteCache(SharedPreferences sharedPreferences){
+        favouritesList = getFavourites();
+        for(IProduct p: favouritesList){
+            if (p.getProductID() == product.getProductID()){
+                favouritesList.remove(p);
+            }
+        }
+        renewSharedPreferences(sharedPreferences, favouritesList, "Favourites");
+    }
+
+    public void renewFavouriteStatus(SharedPreferences sharedPreferences){
+        productsList = getProducts();
+        for(IProduct p: productsList){
+            if(p.getProductID() == product.getProductID()){
+                p.setProductIsFavourite(!product.getIsFavourite());
+            }
+        }
+        categoryList = getCategoryCache(product.getCategoryID());
+        for(IProduct p: categoryList){
+            if(p.getProductID() == product.getProductID()){
+                p.setProductIsFavourite(!product.getIsFavourite());
+            }
+        }
+        renewSharedPreferences(sharedPreferences, productsList, "Products");
+        renewSharedPreferences(sharedPreferences, categoryList, Long.toString(product.getCategoryID()));
     }
 
     public void addProductToPopularCache(SharedPreferences sharedPreferences, IProduct product){
@@ -115,6 +182,8 @@ public class DetailsViewModel extends AndroidViewModel {
         popularList.add(product);
         renewSharedPreferences(sharedPreferences, popularList, "Popular");
     }
+
+
 
     public void swapProductsInPopularCache(SharedPreferences sharedPreferences, IProduct removeProduct, IProduct addProduct){
         popularList = getPopular();
@@ -137,7 +206,4 @@ public class DetailsViewModel extends AndroidViewModel {
         }
     }
 
-
-    public void updateFavouritesCache(SharedPreferences sharedPreferences, IProduct product, Boolean favouriteStatus) {
-    }
 }

@@ -14,18 +14,18 @@ import java.util.Map;
 public class UpdateFavourite {
     static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public static void updateFavourite(IProduct p, Boolean favouriteStatus){
-        if(favouriteStatus == false) {
-            System.out.println("detected false");
-            updateFavouriteBoolean(p, true);
-            updateFavouriteBooleanCategories(p, true);
-            addToFavouriteCollection(p);
-        } else {
-            updateFavouriteBoolean(p, false);
-            updateFavouriteBooleanCategories(p, false);
-            removeFromFavouriteCollection(p);
-        }
-    }
+//    public static void updateFavourite(IProduct p, Boolean favouriteStatus){
+//        if(favouriteStatus == false) {
+//            System.out.println("detected false");
+//            updateFavouriteBoolean(p, true);
+//            updateFavouriteBooleanCategories(p, true);
+//            addToFavouriteCollection(p);
+//        } else {
+//            updateFavouriteBoolean(p, false);
+//            updateFavouriteBooleanCategories(p, false);
+//            removeFromFavouriteCollection(p);
+//        }
+//    }
 
     public static void updateFavouriteBoolean(IProduct p, Boolean newStatus){
         DocumentReference productRef = db.collection("products").document(""+p.getProductID());
