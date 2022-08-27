@@ -47,6 +47,7 @@ public class SplashActivity extends AppCompatActivity {
     static Long Tote =(long) 1;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +65,6 @@ public class SplashActivity extends AppCompatActivity {
         productRepository.getProducts().observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-
                 setList("Products", products);
             }
         });

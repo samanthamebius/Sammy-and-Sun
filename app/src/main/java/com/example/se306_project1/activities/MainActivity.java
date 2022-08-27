@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.example.se306_project1.R;
@@ -22,6 +23,7 @@ import com.example.se306_project1.data.CategoriesDataProvider;
 import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.viewmodel.IMainViewModel;
 import com.example.se306_project1.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView categoryRecyclerView;
 
     Toolbar toolbar;
-    MainViewModel mainViewModel;
+    IMainViewModel mainViewModel;
     SharedPreferences sharedPreferences;
 
     @Override
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         popularList = new ArrayList();
         favouritesList = new ArrayList();
         categoriesList = new ArrayList();
@@ -61,8 +62,14 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
         setPopularList();
-        LinearLayout popularView = findViewById(R.id.favourites_view);
+        LinearLayout popularView = findViewById(R.id.popular_view);
         if (popularList.isEmpty()) {
             popularView.setVisibility(View.GONE);
         } else {
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         setAdapter(popularRecyclerView, popularList);
         setAdapter(favouritesRecyclerView, favouritesList);
         setCategoryAdapter(categoryRecyclerView,categoriesList);
+
     }
 
     private void setPopularList() {

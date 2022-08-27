@@ -11,4 +11,6 @@ public interface IProductRepository {
     public LiveData<List<IProduct>> getProductsByCategoryID(long categoryID);
     public List<IProduct> getProductCache(String key);
     public List<IProduct> getCategoryCache(String key);
+    public IProduct getProductByIDCache(String key, long productID);
+
 }
