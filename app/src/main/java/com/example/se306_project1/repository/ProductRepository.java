@@ -1,5 +1,7 @@
 package com.example.se306_project1.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -9,32 +11,45 @@ import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
 import com.example.se306_project1.models.IProduct;
+//import com.example.se306_project1.models.Product;
+import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class ProductRepository implements IProductRepository{
 
 
+    private static Context context;
     public List<IProduct> productsDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference productColRef = db.collection("products");
     private long productID;
     private long categoryID;
 
+
+    public ProductRepository(Context context){
+        this.context = context;
+    }
+
     // singleton pattern
 
     private static ProductRepository instance;
     public static IProductRepository getInstance(){
         if(instance == null){
-            instance = new ProductRepository();
+            instance = new ProductRepository(context);
         }
         return instance;
     }
@@ -63,6 +78,65 @@ public class ProductRepository implements IProductRepository{
         MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchProductsByCategory(data);
         return data;
+    }
+
+    @Override
+    public List<IProduct> getProductCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+
+
+
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+        return arrayItems;
+    }
+
+    @Override
+    public List<IProduct> getCategoryCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            if(key.equals("0")){
+                type = new TypeToken<List<Clutch>>(){}.getType();
+            }
+            else if(key.equals("1")){
+                type = new TypeToken<List<Tote>>(){}.getType();
+            }
+            else{
+                type = new TypeToken<List<CrossBody>>(){}.getType();
+            }
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+        return arrayItems;
+    }
+
+    @Override
+    public IProduct getProductByIDCache(String key, long productID) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        IProduct bagToReturn = null;
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+
+        for(IProduct bag: arrayItems){
+            if(bag.getProductID() == productID){
+                bagToReturn = bag;
+            }
+        }
+        return bagToReturn;
+   
     }
 
 
@@ -111,10 +185,10 @@ public class ProductRepository implements IProductRepository{
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase fetch all products", String.valueOf(task.getResult()));
                     // getting snapshot of all the documents in the collection
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag : snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");
@@ -152,6 +226,7 @@ public class ProductRepository implements IProductRepository{
                 if(task.isSuccessful()){
                     Log.d("firebase fetch product by category", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag: snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");

@@ -1,6 +1,8 @@
 package com.example.se306_project1.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,22 +11,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
+import com.example.se306_project1.activities.DetailsActivity;
+import com.example.se306_project1.activities.ListActivity;
 import com.example.se306_project1.models.ICategory;
+import com.example.se306_project1.models.IProduct;
+
 import java.util.ArrayList;
 
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.MyViewHolder> {
 
 
     private ArrayList<ICategory> categoryList;
-    private ArrayList<Integer> imageList;
     private static Context context;
-    private CategoryRecyclerViewClickListener listener;
+    private Activity activity;
 
     // create instance of adapter for list of categories
-    public CategoryRecyclerAdapter(ArrayList<ICategory> categoryList, Context context, CategoryRecyclerViewClickListener listener){
+    public CategoryRecyclerAdapter(ArrayList<ICategory> categoryList, Activity activity){
         this.categoryList = categoryList;
-        this.context = context;
-        this.listener = listener;
+        this.activity = activity;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -39,14 +43,25 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
         @Override
         public void onClick(View view) {
-            listener.onClick(view, getAdapterPosition());
+            ICategory clickedCategory = categoryList.get(getBindingAdapterPosition());
+            Intent intent = new Intent(context, ListActivity.class);
+            String rawName = clickedCategory.getCategoryName();
+            String formattedName = rawName.substring(0, 1).toUpperCase() + rawName.substring(1);
+            intent.putExtra("id",clickedCategory.getCategoryID());
+            intent.putExtra("header",formattedName);
+            intent.putExtra("name",clickedCategory.getCategoryName());
+            intent.putExtra("class", clickedCategory.getClass());
+            context.startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
     @NonNull
     @Override
     public CategoryRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_list_view_item,parent,false);
+        context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View itemView = inflater.inflate(R.layout.category_list_view_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -73,10 +88,6 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     @Override
     public int getItemCount() {
         return categoryList.size();
-    }
-
-    public interface CategoryRecyclerViewClickListener{
-        void onClick(View v, int position);
     }
 
 }

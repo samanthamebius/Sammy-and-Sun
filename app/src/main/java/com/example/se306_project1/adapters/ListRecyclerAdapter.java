@@ -1,6 +1,8 @@
 package com.example.se306_project1.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,82 +13,101 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
+import com.example.se306_project1.activities.DetailsActivity;
+import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.models.Tote;
+
 import java.util.ArrayList;
 
 public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<IProduct> productList;
+    private Activity activity;
     private static Context context;
-    private long styleID;
-    private ArrayList<Boolean> favouriteStatusList;
-    private ListRecyclerAdapter.ListRecyclerViewClickListener listener;
+    private Class aClass;
 
-    // create instance of adapter for list of categories
-    public ListRecyclerAdapter(ArrayList<IProduct> productList, Context context, long styleID, ListRecyclerAdapter.ListRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
+    public ListRecyclerAdapter( ArrayList<IProduct> productList, Activity activity){
+        this.activity = activity;
         this.productList = productList;
-        this.context = context;
-        this.styleID = styleID;
-        this.listener = listener;
-        this.favouriteStatusList = favouriteStatusList;
+        this.aClass = productList.get(0).getClass();
+    }
 
+    public class ClutchViewHolder extends MyViewHolder {
+        public ClutchViewHolder(@NonNull View itemView) {
+            super(itemView);
+            nameText = itemView.findViewById(R.id.list0_name_text_view);
+            brandText = itemView.findViewById(R.id.list0_brand_text_view);
+            priceText = itemView.findViewById(R.id.list0_price_text_view);
+            iconImage = (ImageView) itemView.findViewById(R.id.list0_image_view);
+            favIcon = (ImageView) itemView.findViewById(R.id.list0_favourite_icon);
+        }
+    }
+
+    public class CrossBodyViewHolder extends MyViewHolder {
+        public CrossBodyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            nameText = itemView.findViewById(R.id.list2_name_text_view);
+            brandText = itemView.findViewById(R.id.list2_brand_text_view);
+            priceText = itemView.findViewById(R.id.list2_price_text_view);
+            iconImage = (ImageView) itemView.findViewById(R.id.list2_image_view);
+            favIcon = (ImageView) itemView.findViewById(R.id.list2_favourite_icon);
+
+        }
+    }
+
+    public class ToteViewHolder extends MyViewHolder {
+        public ToteViewHolder(@NonNull View itemView) {
+            super(itemView);
+            nameText = itemView.findViewById(R.id.list1_name_text_view);
+            brandText = itemView.findViewById(R.id.list1_brand_text_view);
+            priceText = itemView.findViewById(R.id.list1_price_text_view);
+            iconImage = (ImageView) itemView.findViewById(R.id.list1_image_view);
+            favIcon = (ImageView) itemView.findViewById(R.id.list1_favourite_icon);
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private TextView nameText;
-        private TextView brandText;
-        private TextView priceText;
-        private ImageView iconImage;
-        private ImageView favIcon;
+        protected TextView nameText;
+        protected TextView brandText;
+        protected TextView priceText;
+        protected ImageView iconImage;
+        protected ImageView favIcon;
 
         public MyViewHolder(final View view) {
             super(view);
-
-            if ((int)styleID == 0) {
-                nameText = view.findViewById(R.id.list0_name_text_view);
-                brandText = view.findViewById(R.id.list0_brand_text_view);
-                priceText = view.findViewById(R.id.list0_price_text_view);
-                iconImage = (ImageView) view.findViewById(R.id.list0_image_view);
-                favIcon = (ImageView) view.findViewById(R.id.list0_favourite_icon);
-            } else if ((int)styleID == 1) {
-                nameText = view.findViewById(R.id.list1_name_text_view);
-                brandText = view.findViewById(R.id.list1_brand_text_view);
-                priceText = view.findViewById(R.id.list1_price_text_view);
-                iconImage = (ImageView) view.findViewById(R.id.list1_image_view);
-                favIcon = (ImageView) view.findViewById(R.id.list1_favourite_icon);
-            } else {
-                nameText = view.findViewById(R.id.list2_name_text_view);
-                brandText = view.findViewById(R.id.list2_brand_text_view);
-                priceText = view.findViewById(R.id.list2_price_text_view);
-                iconImage = (ImageView) view.findViewById(R.id.list2_image_view);
-                favIcon = (ImageView) view.findViewById(R.id.list2_favourite_icon);
-            }
             view.setOnClickListener(this);
-
         }
-
         @Override
         public void onClick(View view) {
-            listener.onClick(view,getBindingAdapterPosition());
+            IProduct clickedProduct = productList.get(getBindingAdapterPosition());
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("id",clickedProduct.getProductID());
+            context.startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
     @NonNull
     @Override
-    public ListRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
-        if ((int)styleID == 0) {
+        MyViewHolder viewHolderToReturn;
+        context = parent.getContext();
+        if (aClass == Clutch.class) {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_item_style0, parent, false);
-        }  else if ((int)styleID == 1) {
+            viewHolderToReturn = new ClutchViewHolder(itemView);
+        }  else if (aClass == Tote.class) {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_item_style1, parent, false);
+            viewHolderToReturn = new ToteViewHolder(itemView);
         }  else {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_item_style2, parent, false);
+            viewHolderToReturn = new CrossBodyViewHolder(itemView);
         }
 
-        return new MyViewHolder(itemView);
+        return viewHolderToReturn;
     }
 
-    // change contents of text and image views
     @Override
     public void onBindViewHolder(@NonNull ListRecyclerAdapter.MyViewHolder holder, int position) {
         Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in_row);
@@ -104,7 +125,7 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
 
-        if (!favouriteStatusList.get(position)){
+        if(!productList.get(position).getIsFavourite()){
             holder.favIcon.setVisibility(View.GONE);
         }
 
@@ -119,16 +140,9 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
             return resID;
         }
     }
-
-
     @Override
     public int getItemCount() {
         return productList.size();
     }
-
-    public interface ListRecyclerViewClickListener {
-        void onClick(View v, int position);
-    }
-
 
 }

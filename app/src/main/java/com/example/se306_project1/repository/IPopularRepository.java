@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface IPopularRepository {
     public LiveData<List<IProduct>> getPopular();
+    public List<IProduct> getPopularCache(String key);
+    public void updateCountVisit(IProduct product);
+    public void removeProductFromPopular(IProduct product);
+    public void addProductToPopular(IProduct product);
 }

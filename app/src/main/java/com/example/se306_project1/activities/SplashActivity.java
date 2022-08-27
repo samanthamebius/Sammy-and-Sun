@@ -43,8 +43,9 @@ public class SplashActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     static Long Clutch =(long) 0;
-    static Long CrossBody=(long) 0;
-    static Long Tote =(long) 0;
+    static Long CrossBody=(long) 2;
+    static Long Tote =(long) 1;
+
 
 
     @Override
@@ -64,7 +65,6 @@ public class SplashActivity extends AppCompatActivity {
         productRepository.getProducts().observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-
                 setList("Products", products);
             }
         });
@@ -72,21 +72,21 @@ public class SplashActivity extends AppCompatActivity {
         productRepository.getProductsByCategoryID(Clutch).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Clutch", products);
+                setList("0", products);
             }
         });
 
         productRepository.getProductsByCategoryID(CrossBody).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Crossbody", products);
+                setList("2", products);
             }
         });
 
         productRepository.getProductsByCategoryID(Tote).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Tote", products);
+                setList("1", products);
             }
         });
 
@@ -124,11 +124,10 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 3000);
+        }, 5000);
     }
 
     public <T> void setList(String key, List<T> list) {
-
         Gson gson = new Gson();
         String json = gson.toJson(list);
         set(key, json);
@@ -138,7 +137,7 @@ public class SplashActivity extends AppCompatActivity {
         if (sharedPreferences != null) {
             SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
             prefsEditor.putString(key, value);
-            prefsEditor.apply();
+            prefsEditor.commit();
             // note use prefsEditor.commit() for sync, but will likely cause UI lag
         }
     }

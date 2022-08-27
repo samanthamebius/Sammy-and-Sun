@@ -1,6 +1,9 @@
 package com.example.se306_project1.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,23 +12,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
+import com.example.se306_project1.activities.DetailsActivity;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.models.Product;
+
 import java.util.ArrayList;
 
 public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<IProduct> productList;
     private static Context context;
-    private ArrayList<Boolean> favouriteStatusList;
+    private Activity activity;
 
-    private PanelRecyclerViewClickListener listener;
+
 
     // create instance of adapter for list of categories
-    public PanelRecyclerAdapter(ArrayList<IProduct> productList, Context context, PanelRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
+    public PanelRecyclerAdapter(ArrayList<IProduct> productList, Activity activity){
         this.productList = productList;
-        this.context = context;
-        this.listener = listener;
-        this.favouriteStatusList = favouriteStatusList;
+        this.activity = activity;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -35,20 +39,24 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         private ImageView iconImage;
         private ImageView favIcon;
 
-        public MyViewHolder(final View view) {
+        public MyViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
             nameText = view.findViewById(R.id.main_name_text_view);
             brandText = view.findViewById(R.id.main_brand_text_view);
             priceText = view.findViewById(R.id.main_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.main_image_view);
             favIcon = (ImageView) view.findViewById(R.id.favourite_icon);
 
-            view.setOnClickListener(this);
         }
 
-        @Override
+
         public void onClick(View view) {
-            listener.onClick(view,getBindingAdapterPosition());
+            IProduct clickedProduct = productList.get(getBindingAdapterPosition());
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("id",clickedProduct.getProductID());
+            context.startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
 
 
@@ -57,8 +65,11 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
     @NonNull
     @Override
     public PanelRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_list_view_item,parent,false);
-        return new MyViewHolder(itemView);
+        context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View itemView = inflater.inflate(R.layout.main_list_view_item, parent, false);
+        MyViewHolder holder = new MyViewHolder(itemView);
+        return holder;
     }
 
     // change contents of text and image views
@@ -77,7 +88,7 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         holder.brandText.setText(brand);
         holder.priceText.setText(price);
 
-        if (!favouriteStatusList.get(position)){
+        if(!productList.get(position).getIsFavourite()){
             holder.favIcon.setVisibility(View.GONE);
         }
     }
@@ -96,10 +107,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         return productList.size();
     }
 
-
-    public interface PanelRecyclerViewClickListener {
-        void onClick(View v, int position);
-    }
 
 
 }
