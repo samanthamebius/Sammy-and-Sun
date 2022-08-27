@@ -85,6 +85,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         ScrollingPagerIndicator recyclerIndicator = findViewById(R.id.indicator);
         recyclerIndicator.attachToRecyclerView(recyclerView);
+
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
     }
 
     private void setUpScreenElements() {
