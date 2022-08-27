@@ -140,6 +140,7 @@ public class ProductRepository implements IProductRepository{
                     // getting snapshot of all the documents in the collection
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag : snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");
@@ -177,6 +178,7 @@ public class ProductRepository implements IProductRepository{
                 if(task.isSuccessful()){
                     Log.d("firebase fetch product by category", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag: snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");

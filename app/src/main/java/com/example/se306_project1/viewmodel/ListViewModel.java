@@ -1,6 +1,7 @@
 package com.example.se306_project1.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,10 +21,11 @@ public class ListViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public List<IProduct> getProductsList(String categoryName){
+    public List<IProduct> getProductsList(long categoryID){
+        String key = Long.toString(categoryID);
         productsList = new ArrayList<>();
         productsList.clear();
-        productsList.addAll(productRepository.getProductCache("Clutches"));
+        productsList.addAll(productRepository.getProductCache(key));
         return productsList;
     }
 

@@ -54,33 +54,23 @@ public class ListActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         listViewModel= new ViewModelProvider(this).get(ListViewModel.class);
 
-        String header = "Header";
+
         categoryID = 0;
         categoryName = "Clutches";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            header = extras.getString("header");
             categoryID = extras.getLong("id");
             categoryName = extras.getString("name");
         }
-        headerText.setText(header);
 
-//        IProductRepository productRepository = ProductRepository.getInstance();
-//        productRepository.getProductsByCategoryID(categoryID).observe(this, new Observer<List<IProduct>>() {
-//            @Override
-//            public void onChanged(List<IProduct> products) {
-//
-//            }
-//        });
-
-        setProductList(categoryName);
-
+        headerText.setText(categoryName);
+        setProductList(categoryID);
         setAdapter();
     }
 
-    private void setProductList(String categoryName) {
+    private void setProductList(long categoryID) {
         productsList.clear();
-        productsList = (ArrayList<IProduct>) listViewModel.getProductsList(categoryName);
+        productsList = (ArrayList<IProduct>) listViewModel.getProductsList(categoryID);
     }
 
     private void setAdapter() {
