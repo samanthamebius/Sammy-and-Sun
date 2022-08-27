@@ -15,16 +15,12 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
-import com.example.se306_project1.repository.FavouritesRepository;
-import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.viewmodel.PopularCountVisit;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.viewmodel.DetailsViewModel;
 import com.example.se306_project1.viewmodel.UpdateFavourite;
-
 import java.util.ArrayList;
 import java.util.Comparator;
-
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -58,7 +54,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        popularList = new ArrayList();
+
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -68,16 +64,18 @@ public class DetailsActivity extends AppCompatActivity {
             productID = extras.getLong("id");
         }
 
+        popularList = new ArrayList();
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         detailsViewModel= new ViewModelProvider(this).get(DetailsViewModel.class);
 
         setUpScreenElements();
-
-        setProduct(productID);
-
         populateScreenElements();
 
-        PopularCountVisit.updateCountVisit(product);
+
+
+
+        detailsViewModel.updatePopularCount(product, sharedPreferences);
+
         UpdatePopular(product);
 
         displayFavouriteIcon();
@@ -111,6 +109,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void populateScreenElements() {
+        setProduct(productID);
         intImages = GetIntImageArray(product.getProductImages());
         vh.product_price.setText("$"+Double.toString(product.getProductPrice())+"0");
         vh.product_brand.setText(product.getBrandName().name().replaceAll("_"," "));
@@ -135,37 +134,36 @@ public class DetailsActivity extends AppCompatActivity {
         product = detailsViewModel.getProductByID(productID);
     }
 
-    // Update to popular when item is viewed
+
+
     public void UpdatePopular(IProduct product){
         popularList.clear();
         popularList = (ArrayList<IProduct>) detailsViewModel.getPopular();
 
         sizeOfCurrentPopular = popularList.size();
         popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
-        lowestCountProduct = popularList.get(0);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         // only need to update when we leave activity
-        PopularLogic(sizeOfCurrentPopular, product, lowestCountProduct);
+//        PopularLogic(sizeOfCurrentPopular, product, lowestCountProduct, maxPopularSize);
+        detailsViewModel.PopularLogic(sizeOfCurrentPopular, popularList, product, maxPopularSize, sharedPreferences);
     }
 
     // Helper method depending on current size of popular list, remove or swap out item in list
-    public void PopularLogic(int sizeOfCurrentPopular, IProduct currentProduct, IProduct productToSwap){
-        if(sizeOfCurrentPopular < maxPopularSize){
-            PopularCountVisit.addToPopularCollection(currentProduct);
-            detailsViewModel.addToPopularCache(sharedPreferences, currentProduct);
-        }else{
-            if(productToSwap.getProductCountVisit() < currentProduct.getProductCountVisit()){
-                PopularCountVisit.removeFromPopularCollection(productToSwap);
-                detailsViewModel.removeFromPopularCache(sharedPreferences,productToSwap);
-                PopularCountVisit.addToPopularCollection(currentProduct);
-                detailsViewModel.addToPopularCache(sharedPreferences, currentProduct);
-            }
-        }
-    }
+//    public void PopularLogic(int sizeOfCurrentPopular, IProduct currentProduct, IProduct productToSwap, int maxPopularSize){
+//        if(sizeOfCurrentPopular < maxPopularSize){
+//            PopularCountVisit.addToPopularCollection(currentProduct);
+//        }else{
+//            if(productToSwap.getProductCountVisit() < currentProduct.getProductCountVisit()){
+//                PopularCountVisit.removeFromPopularCollection(productToSwap);
+//                PopularCountVisit.addToPopularCollection(currentProduct);
+//
+//            }
+//        }
+//    }
 
     // Helper method to set array of image strings to array of integers
     private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
@@ -226,6 +224,18 @@ public class DetailsActivity extends AppCompatActivity {
         } else {
             vh.product_care.setVisibility(View.VISIBLE);
             vh.product_care_icon.setImageResource(R.drawable.drop_down_opposite);
+        }
+    }
+
+    public void expandTextView(View v, int counter, TextView textView, ImageView icon){
+        counter++;
+        if(counter%2 == 0){
+            textView.setVisibility(View.GONE);
+            icon.setImageResource(R.drawable.drop_down);
+        }
+        else {
+            textView.setVisibility(View.VISIBLE);
+            icon.setImageResource(R.drawable.drop_down_opposite);
         }
     }
 

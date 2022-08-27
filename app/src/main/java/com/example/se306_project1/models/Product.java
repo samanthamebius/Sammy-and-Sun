@@ -111,7 +111,12 @@ import java.util.ArrayList;
         return this.productCountVisit;
     }
 
-    @Exclude
+    @Override
+    public void increaseProductViewCount() {
+        this.productCountVisit = productCountVisit++;
+    }
+
+        @Exclude
     public Boolean getIsFavourite() {
         return productIsFavourite;
     }
