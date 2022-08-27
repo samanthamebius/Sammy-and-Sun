@@ -1,18 +1,13 @@
 package com.example.se306_project1.viewmodel;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.se306_project1.R;
-import com.example.se306_project1.models.Category;
 import com.example.se306_project1.models.IProduct;
-import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.FavouritesRepository;
 import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.repository.IPopularRepository;
@@ -20,12 +15,11 @@ import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.PopularRepository;
 import com.example.se306_project1.repository.ProductRepository;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class DetailsViewModel extends AndroidViewModel {
+public class DetailsViewModel extends AndroidViewModel implements IDetailsViewModel {
 
     private IProduct product;
     private List<IProduct> popularList;

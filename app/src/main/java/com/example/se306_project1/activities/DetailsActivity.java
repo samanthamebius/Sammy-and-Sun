@@ -17,6 +17,7 @@ import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.viewmodel.DetailsViewModel;
+import com.example.se306_project1.viewmodel.IDetailsViewModel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,7 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ViewHolder vh;
     Toolbar toolbar;
-    DetailsViewModel detailsViewModel;
+    IDetailsViewModel detailsViewModel;
     SharedPreferences sharedPreferences;
 
     class ViewHolder {
