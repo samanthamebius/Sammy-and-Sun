@@ -27,6 +27,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+
+import com.airbnb.lottie.L;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SearchRecyclerAdapter;
 import com.example.se306_project1.models.IProduct;
@@ -54,7 +56,8 @@ public class SearchActivity extends AppCompatActivity{
     private CollectionReference cref;
     private RecyclerView recyclerView;
     private ArrayList<IProduct> resultsList;
-    private SearchRecyclerAdapter.SearchRecyclerViewClickListener listener;
+    private List<IProduct> allProducts;
+
     Toolbar toolbar;
     SearchViewModel searchViewModel;
     SharedPreferences sharedPreferences;
@@ -69,6 +72,7 @@ public class SearchActivity extends AppCompatActivity{
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         resultsList = new ArrayList<IProduct>();
+        allProducts = new ArrayList<>();
         recyclerView = findViewById(R.id.search_recyclerView);
 
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
@@ -85,9 +89,11 @@ public class SearchActivity extends AppCompatActivity{
         cref.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                populateSearch(value); // populate suggestions
+                populateSearchSuggestions(value);
             }
         });
+
+        setAllProducts();
 
     }
 
@@ -110,38 +116,29 @@ public class SearchActivity extends AppCompatActivity{
                 searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView textView, int i, KeyEvent event) {
-                        // if enter key pressed
+
                         if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (i == EditorInfo.IME_ACTION_DONE)) {
-                            Log.e("TAG","Enter pressed");
-
-                            //close search suggestions dropdown
                             searchField.dismissDropDown();
-
-                            String searchText = searchField.getText().toString();
-                            incompleteSearch(searchText);
+                            incompleteSearch(searchField.getText().toString());
                             InputMethodManager inputManager = (InputMethodManager) textView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             inputManager.hideSoftInputFromWindow(textView.getApplicationWindowToken(), 0);
-
-
                         }
                         return false;
                     }
 
                 });
-
             }
         });
 
     }
 
-    // for search suggestions
-    // this method should be moved out of activity into search view model
-    private void populateSearch(QuerySnapshot snapshot) {
+
+    private void populateSearchSuggestions(QuerySnapshot snapshot) {
         ArrayList<String> products = new ArrayList<>();
         HashMap<String, Long> productDetails = new HashMap<>();
 
         if(snapshot.isEmpty()){
-            Log.d("search", "no products found!");
+            Log.e("search", "no products found!");
         }
         else {
             Log.d("search", "products found for search");
@@ -158,16 +155,14 @@ public class SearchActivity extends AppCompatActivity{
             searchField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    // get the id of the product! so preferably reuse code of get product by ID
-                    String shortName = searchField.getText().toString();
-                    long productID = productDetails.get(shortName);
+
+                    long productID = productDetails.get(searchField.getText().toString());
                     searchBag(productID);
                     InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
                 }
             });
 
-            // array adapter for the search suggestions
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getBaseContext(),android.R.layout.simple_list_item_1,products);
             searchField.setAdapter(arrayAdapter);
 
@@ -176,73 +171,43 @@ public class SearchActivity extends AppCompatActivity{
     }
 
     private void incompleteSearch(String searchWord){
-        resultsList.clear();
         TextView noResultsText = findViewById(R.id.no_results_text);
-
-        Query query = cref.orderBy("productShortName").startAt(searchWord).endAt(searchWord + "\uf8ff");
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if(error != null){
-                    Log.d("Tag incomplete search", "not null");
-                }
-                else {
-                    if (value.isEmpty()) {
-                        noResultsText.setVisibility(View.VISIBLE);
-                    } else {
-                        noResultsText.setVisibility(View.GONE);
-                        for (DocumentChange doc : value.getDocumentChanges()) {
-
-                            IProduct bag = doc.getDocument().toObject(Product.class);
-                            resultsList.add(bag);
-                        }
-
-                        setAdapter();
-                    }
-
-                }
-
-            }
-        });
+        resultsList.clear();
+        resultsList = (ArrayList<IProduct>) searchViewModel.getIncompleteSearchList(searchWord, resultsList, allProducts, noResultsText);
+        setAdapter(recyclerView, resultsList);
     }
 
     // for item selected from suggestions
     private void searchBag(long productID) {
         TextView noResultsText = findViewById(R.id.no_results_text);
         setBagClicked(productID);
-//        IProductRepository testRepo = ProductRepository.getInstance();
-//        testRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
-//            @Override
-//            public void onChanged(IProduct product) {
-//
-//                noResultsText.setVisibility(View.GONE);
-//                resultsList.clear();
-//                resultsList.add(product);
-//                setAdapter();
-//            }
-//        });
+        noResultsText.setVisibility(View.GONE);
+        resultsList.clear();
+        resultsList.add(bagClicked);
+        setAdapter(recyclerView, resultsList);
 
     }
 
-    private void setAdapter() {
-        setOnClickListener();
-        SearchRecyclerAdapter adapter = new SearchRecyclerAdapter(resultsList, getApplicationContext(), listener);
+    private void setBagClicked(long productID) {
+        bagClicked = null;
+        bagClicked = searchViewModel.getProductByID(productID);
+    }
+
+    private void setAllProducts(){
+        allProducts.clear();
+        allProducts = searchViewModel.getAllProducts();
+    }
+
+
+    private void setAdapter(RecyclerView view, ArrayList<IProduct> list) {
+        SearchRecyclerAdapter adapter = new SearchRecyclerAdapter(list, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
 
-    private void setOnClickListener() {
-        listener = new SearchRecyclerAdapter.SearchRecyclerViewClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("id", resultsList.get(position).getProductID());
-                startActivity(intent);
-            }
-        };
-    }
+
 
     public void Back(View v){
         Intent searchIntent = new Intent(this, MainActivity.class);
@@ -251,11 +216,6 @@ public class SearchActivity extends AppCompatActivity{
     }
 
 
-    private void setBagClicked(long productID) {
-        bagClicked = null;
-        bagClicked = searchViewModel.getProductByID(productID);
-        Log.e("BagClicked", bagClicked.getProductShortName());
 
-    }
 
 }
