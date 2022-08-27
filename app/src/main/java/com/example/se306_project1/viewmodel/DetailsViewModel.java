@@ -85,6 +85,7 @@ public class DetailsViewModel extends AndroidViewModel {
     public void changeFavouriteStatus(SharedPreferences sharedPreferences){
         favouritesRepository.updateFavouriteBoolean(product, !favouriteStatus);
         renewFavouriteStatus(sharedPreferences);
+        product.setProductIsFavourite(!favouriteStatus);
         if (!favouriteStatus){
             favouritesRepository.addToFavouriteCollection(product);
             addProductToFavouriteCache(sharedPreferences);
@@ -95,55 +96,6 @@ public class DetailsViewModel extends AndroidViewModel {
         }
     }
 
-    public void updatePopularCount(IProduct product, SharedPreferences sharedPreferences){
-        popularRepository.updateCountVisit(product);
-        renewProductCache(sharedPreferences);
-    }
-
-    public void PopularLogic(int sizeOfCurrentPopular, List<IProduct> popularList, IProduct productToSwap, int maxPopularSize, SharedPreferences sharedPreferences) {
-        Boolean contains = false;
-        popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
-        Log.e("view model size of current popular", Integer.toString(sizeOfCurrentPopular));
-
-        for(int i = 0; i < popularList.size(); i++){
-            if (popularList.get(i).getProductID() == productToSwap.getProductID()){
-                contains = true;
-            }
-        }
-        if(!contains){
-            IProduct leastViewProduct = popularList.get(0);
-            Log.e("view model count of current", Long.toString(productToSwap.getProductCountVisit()));
-            Log.e("view model count of least", Long.toString(leastViewProduct.getProductCountVisit()));
-            if (sizeOfCurrentPopular < maxPopularSize){
-                Log.e("view model appended to list", productToSwap.getProductShortName());
-                popularRepository.addProductToPopular(productToSwap);
-                addProductToPopularCache(sharedPreferences, productToSwap);
-
-            }
-            else if(productToSwap.getProductCountVisit() > leastViewProduct.getProductCountVisit()){
-                Log.e("view model ", "swapping happening");
-                Log.e("view model logic, least view product: ", leastViewProduct.getProductShortName());
-                Log.e("view model logic, current swap: ", productToSwap.getProductShortName());
-                popularRepository.addProductToPopular(productToSwap);
-                popularRepository.removeProductFromPopular(leastViewProduct);
-                swapProductsInPopularCache(sharedPreferences, leastViewProduct, productToSwap);
-            }
-        }
-    }
-
-
-    public void renewProductCache(SharedPreferences sharedPreferences){
-
-        product.increaseProductViewCount();
-        productsList = getProducts();
-        for(int i = 0; i < productsList.size(); i++){
-            if (productsList.get(i).getProductID() == product.getProductID()){
-                productsList.set(i, product);
-            }
-        }
-        renewSharedPreferences(sharedPreferences, productsList, "Products");
-    }
-
     public void addProductToFavouriteCache(SharedPreferences sharedPreferences){
         favouritesList = getFavourites();
         favouritesList.add(product);
@@ -152,11 +104,13 @@ public class DetailsViewModel extends AndroidViewModel {
 
     public void removeProductFromFavouriteCache(SharedPreferences sharedPreferences){
         favouritesList = getFavourites();
+        IProduct itemToRemove = null;
         for(IProduct p: favouritesList){
             if (p.getProductID() == product.getProductID()){
-                favouritesList.remove(p);
+                itemToRemove = p;
             }
         }
+        favouritesList.remove(itemToRemove);
         renewSharedPreferences(sharedPreferences, favouritesList, "Favourites");
     }
 
@@ -173,8 +127,53 @@ public class DetailsViewModel extends AndroidViewModel {
                 p.setProductIsFavourite(!product.getIsFavourite());
             }
         }
+        popularList = getPopular();
+        for(IProduct p: popularList){
+            if(p.getProductID() == product.getProductID()){
+                p.setProductIsFavourite(!product.getIsFavourite());
+            }
+        }
         renewSharedPreferences(sharedPreferences, productsList, "Products");
+        renewSharedPreferences(sharedPreferences, popularList, "Popular");
         renewSharedPreferences(sharedPreferences, categoryList, Long.toString(product.getCategoryID()));
+    }
+
+    public void updatePopularCount(IProduct product, SharedPreferences sharedPreferences){
+        popularRepository.updateCountVisit(product);
+        renewProductCache(sharedPreferences);
+    }
+
+    public void PopularLogic(int sizeOfCurrentPopular, List<IProduct> popularList, IProduct productToSwap, int maxPopularSize, SharedPreferences sharedPreferences) {
+        Boolean contains = false;
+        popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
+        for(int i = 0; i < popularList.size(); i++){
+            if (popularList.get(i).getProductID() == productToSwap.getProductID()){
+                contains = true;
+            }
+        }
+        if(!contains){
+            IProduct leastViewProduct = popularList.get(0);
+            if (sizeOfCurrentPopular < maxPopularSize){
+                popularRepository.addProductToPopular(productToSwap);
+                addProductToPopularCache(sharedPreferences, productToSwap);
+            }
+            else if(productToSwap.getProductCountVisit() > leastViewProduct.getProductCountVisit()){
+                popularRepository.addProductToPopular(productToSwap);
+                popularRepository.removeProductFromPopular(leastViewProduct);
+                swapProductsInPopularCache(sharedPreferences, leastViewProduct, productToSwap);
+            }
+        }
+    }
+
+    public void renewProductCache(SharedPreferences sharedPreferences){
+        product.increaseProductViewCount();
+        productsList = getProducts();
+        for(int i = 0; i < productsList.size(); i++){
+            if (productsList.get(i).getProductID() == product.getProductID()){
+                productsList.set(i, product);
+            }
+        }
+        renewSharedPreferences(sharedPreferences, productsList, "Products");
     }
 
     public void addProductToPopularCache(SharedPreferences sharedPreferences, IProduct product){
@@ -182,8 +181,6 @@ public class DetailsViewModel extends AndroidViewModel {
         popularList.add(product);
         renewSharedPreferences(sharedPreferences, popularList, "Popular");
     }
-
-
 
     public void swapProductsInPopularCache(SharedPreferences sharedPreferences, IProduct removeProduct, IProduct addProduct){
         popularList = getPopular();

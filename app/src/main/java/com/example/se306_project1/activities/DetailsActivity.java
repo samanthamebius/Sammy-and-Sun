@@ -17,7 +17,7 @@ import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.viewmodel.DetailsViewModel;
-import com.example.se306_project1.viewmodel.UpdateFavourite;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
@@ -129,8 +129,6 @@ public class DetailsActivity extends AppCompatActivity {
         detailsViewModel.PopularLogic(sizeOfCurrentPopular, popularList, product, maxPopularSize, sharedPreferences);
     }
 
-
-
     // Helper method to set array of image strings to array of integers
     private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
         ArrayList<Integer> intImages = new ArrayList<Integer>();
@@ -159,7 +157,6 @@ public class DetailsActivity extends AppCompatActivity {
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
 
         favouriteStatus = product.getIsFavourite();
-//        UpdateFavourite.updateFavourite(product, favouriteStatus);
         detailsViewModel.changeFavouriteStatus(sharedPreferences);
 
         if(favouriteStatus){
@@ -190,18 +187,6 @@ public class DetailsActivity extends AppCompatActivity {
         } else {
             vh.product_care.setVisibility(View.VISIBLE);
             vh.product_care_icon.setImageResource(R.drawable.drop_down_opposite);
-        }
-    }
-
-    public void expandTextView(View v, int counter, TextView textView, ImageView icon){
-        counter++;
-        if(counter%2 == 0){
-            textView.setVisibility(View.GONE);
-            icon.setImageResource(R.drawable.drop_down);
-        }
-        else {
-            textView.setVisibility(View.VISIBLE);
-            icon.setImageResource(R.drawable.drop_down_opposite);
         }
     }
 

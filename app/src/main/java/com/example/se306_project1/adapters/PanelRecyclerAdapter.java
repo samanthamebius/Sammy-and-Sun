@@ -89,9 +89,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         holder.priceText.setText(price);
 
         if(!productList.get(position).getIsFavourite()){
-            Log.e("panel adapter position", Integer.toString(position));
-            Log.e("panel adapter product", productList.get(position).getProductShortName());
-            Log.e("panel adapter product is favourite?", productList.get(position).getIsFavourite().toString());
             holder.favIcon.setVisibility(View.GONE);
         }
     }
