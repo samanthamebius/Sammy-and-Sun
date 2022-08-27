@@ -15,8 +15,11 @@ import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.reflect.TypeToken;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,7 +31,9 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FavouritesRepository implements IFavouritesRepository{
 
@@ -69,6 +74,79 @@ public class FavouritesRepository implements IFavouritesRepository{
         }
         return arrayItems;
     }
+
+    @Override
+    public void addToFavouriteCollection(IProduct p) {
+        DocumentReference productRef = db.document("products/"+p.getProductID());
+
+        Map<String, DocumentReference> favourite = new LinkedHashMap<String, DocumentReference>();
+        favourite.put("ProductRef", productRef);
+
+        db.collection("favourites").document("" + p.getProductID()).set(favourite).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Favourites Collection Add", "product " + p.getProductID() + " added.");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Log.w("Favourites Collection Add", "product " + p.getProductID() + " NOT added.");
+            }
+        });
+    }
+
+    @Override
+    public void removeFromFavouriteCollection(IProduct p) {
+        db.collection("favourites").document("" + p.getProductID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Favourites Collection ", "product " + p.getProductID() + " removed.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Favourites Collection ", "product " + p.getProductID() + " NOT removed.");
+                    }
+                });
+    }
+
+    @Override
+    public void updateFavouriteBoolean(IProduct p, Boolean newStatus) {
+        DocumentReference categoryRef = db.collection("category"+p.getCategoryID()).document(""+p.getProductID());
+        DocumentReference productRef = db.collection("products").document(""+p.getProductID());
+
+        productRef
+                .update("isFavourite", newStatus)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Favourites Boolean ", "product " + p.getProductID() + " updated.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Favourites Boolean ", "product " + p.getProductID() + " NOT updated.");
+                    }
+                });
+
+        categoryRef
+                .update("isFavourite", newStatus)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Favourites Boolean ", "product " + p.getProductID() + " updated.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Favourites Boolean ", "product " + p.getProductID() + " NOT updated.");
+                    }
+                });
+    }
+
     public void fetchAllFavourites(MutableLiveData<List<IProduct>> data){
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -78,6 +156,7 @@ public class FavouritesRepository implements IFavouritesRepository{
                     Log.d("firebase favourites", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
 
+                    favouritesDataSet.clear();
                     for(DocumentSnapshot favouriteBagReference : snapshots){
 
                         // getting foreign key reference

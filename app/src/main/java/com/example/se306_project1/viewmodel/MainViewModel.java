@@ -14,7 +14,9 @@ import com.example.se306_project1.repository.CategoryRepository;
 import com.example.se306_project1.repository.FavouritesRepository;
 import com.example.se306_project1.repository.ICategoryRepository;
 import com.example.se306_project1.repository.IFavouritesRepository;
+import com.example.se306_project1.repository.IPopularRepository;
 import com.example.se306_project1.repository.IProductRepository;
+import com.example.se306_project1.repository.PopularRepository;
 import com.example.se306_project1.repository.ProductRepository;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class MainViewModel extends AndroidViewModel {
     private List<IProduct> popularList;
     private List<IProduct> favouriteList;
     private List<ICategory> categoriesList;
-    IProductRepository productRepository = new ProductRepository(getApplication().getApplicationContext());
+    IPopularRepository popularRepository = new PopularRepository(getApplication().getApplicationContext());
     ICategoryRepository categoryRepository = new CategoryRepository(getApplication().getApplicationContext());
     IFavouritesRepository favouritesRepository = new FavouritesRepository(getApplication().getApplicationContext());
 
@@ -34,7 +36,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public List<IProduct> getPopular(){
         popularList = new ArrayList<>();
-        popularList.addAll(productRepository.getProductCache("Popular"));
+        popularList.addAll(popularRepository.getPopularCache("Popular"));
         return popularList;
     }
 

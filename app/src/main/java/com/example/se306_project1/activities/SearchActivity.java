@@ -102,14 +102,10 @@ public class SearchActivity extends AppCompatActivity{
         super.onStart();
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -144,7 +140,6 @@ public class SearchActivity extends AppCompatActivity{
             Log.d("search", "products found for search");
             List<DocumentSnapshot> snapshots = snapshot.getDocuments();
             for (DocumentSnapshot singleBag : snapshots){
-
                 String name = (String) singleBag.get("productShortName");
                 long productID = (long) singleBag.get("productID");
                 productDetails.put(name, productID);
@@ -198,7 +193,6 @@ public class SearchActivity extends AppCompatActivity{
         allProducts = searchViewModel.getAllProducts();
     }
 
-
     private void setAdapter(RecyclerView view, ArrayList<IProduct> list) {
         SearchRecyclerAdapter adapter = new SearchRecyclerAdapter(list, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -206,7 +200,6 @@ public class SearchActivity extends AppCompatActivity{
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
-
 
 
     public void Back(View v){

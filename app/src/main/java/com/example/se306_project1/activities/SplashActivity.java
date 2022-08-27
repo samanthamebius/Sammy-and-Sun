@@ -43,8 +43,8 @@ public class SplashActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     static Long Clutch =(long) 0;
-    static Long CrossBody=(long) 0;
-    static Long Tote =(long) 0;
+    static Long CrossBody=(long) 1;
+    static Long Tote =(long) 2;
 
 
     @Override
@@ -71,21 +71,21 @@ public class SplashActivity extends AppCompatActivity {
         productRepository.getProductsByCategoryID(Clutch).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Clutch", products);
+                setList("0", products);
             }
         });
 
         productRepository.getProductsByCategoryID(CrossBody).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Crossbody", products);
+                setList("1", products);
             }
         });
 
         productRepository.getProductsByCategoryID(Tote).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-                setList("Tote", products);
+                setList("2", products);
             }
         });
 

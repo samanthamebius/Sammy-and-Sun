@@ -9,4 +9,7 @@ import java.util.List;
 public interface IFavouritesRepository {
     public LiveData<List<IProduct>> getFavourites();
     public List<IProduct> getFavouritesCache(String key);
+    public void addToFavouriteCollection(IProduct product);
+    public void removeFromFavouriteCollection(IProduct product);
+    public void updateFavouriteBoolean(IProduct product, Boolean newStatus);
 }

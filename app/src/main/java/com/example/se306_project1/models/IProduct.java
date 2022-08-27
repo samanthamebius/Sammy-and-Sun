@@ -17,6 +17,7 @@ public interface IProduct {
 
     public ColourType getProductColourType();
     public long getProductCountVisit();
+    public void increaseProductViewCount();
     public Boolean getIsFavourite();
     public void setProductIsFavourite(Boolean isFavourite);
     public ArrayList<String> getProductImages();

@@ -1,5 +1,7 @@
 package com.example.se306_project1.models;
 
+import android.util.Log;
+
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
@@ -111,7 +113,12 @@ import java.util.ArrayList;
         return this.productCountVisit;
     }
 
-    @Exclude
+    @Override
+    public void increaseProductViewCount() {
+        this.productCountVisit = productCountVisit + 1;
+    }
+
+        @Exclude
     public Boolean getIsFavourite() {
         return productIsFavourite;
     }
