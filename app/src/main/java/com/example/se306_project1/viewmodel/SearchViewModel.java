@@ -44,7 +44,7 @@ public class SearchViewModel extends AndroidViewModel implements ISearchViewMode
 
     public List<IProduct> getIncompleteSearchList (String searchWord, ArrayList<IProduct> resultsList, List<IProduct> allProducts, TextView view){
         Collections.sort(allProducts, Comparator.comparing(IProduct::getProductShortName));
-        resultsList = (ArrayList<IProduct>) allProducts.stream().filter(iProduct -> iProduct.getProductShortName().startsWith(searchWord)).collect(Collectors.toList());
+        resultsList = (ArrayList<IProduct>) allProducts.stream().filter(iProduct -> iProduct.getProductShortName().startsWith(searchWord.toUpperCase())).collect(Collectors.toList());
 
         if (resultsList.isEmpty()){
             view.setVisibility(View.VISIBLE);
