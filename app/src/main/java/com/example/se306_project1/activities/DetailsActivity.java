@@ -167,26 +167,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void UpdateFavourite(View v) {
-        vh = new ViewHolder();
-        vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
-
-        IProductRepository prodRepo = ProductRepository.getInstance();
-        prodRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
-            @Override
-            public void onChanged(IProduct p) {
-                favouriteStatus = p.getIsFavourite();
-                UpdateFavourite.updateFavourite(p, favouriteStatus);
-
-                if(favouriteStatus){
-                    vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
-                } else {
-                    vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
-                }
-            }
-        });
-    }
-
+    // Helper method to set image strings to drawable integers
     private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
         ArrayList<Integer> intImages = new ArrayList<Integer>();
 
@@ -197,6 +178,7 @@ public class DetailsActivity extends AppCompatActivity {
         return intImages;
     }
 
+    // Helper method
     private static int GetImageResource(Context c, String imageName) {
         int ResourceID = c.getResources().getIdentifier(imageName, "drawable", c.getPackageName());
         if (ResourceID == 0) {
@@ -207,7 +189,23 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void ExpandDetails(View v){
+    // OnClick method to update product favourite status
+    public void updateFavourite(View v) {
+        vh = new ViewHolder();
+        vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
+
+        favouriteStatus = product.getIsFavourite();
+        UpdateFavourite.updateFavourite(product, favouriteStatus);
+
+        if(favouriteStatus){
+            vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
+        } else {
+            vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
+        }
+    }
+
+    // OnClick method to expand details drop down
+    public void expandDetails(View v){
         detailsCounter++;
         if(detailsCounter%2 == 0){
             vh.product_details.setVisibility(View.GONE);
@@ -218,7 +216,8 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void ExpandProductCare(View v){
+    // OnClick method to expand product drop down
+    public void expandProductCare(View v){
         productCareCounter++;
         if(productCareCounter%2 == 0){
             vh.product_care.setVisibility(View.GONE);
@@ -229,6 +228,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
+    // OnClick method for back in appbar
     public void Back(View v){
         Intent searchIntent = new Intent(this, MainActivity.class);
         startActivity(searchIntent);

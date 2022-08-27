@@ -54,7 +54,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
-                    android:onClick="UpdateFavourite"
+                    android:onClick="updateFavourite"
                     android:src="@drawable/unselected_heart" />
             </RelativeLayout>
 
@@ -129,7 +129,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="ExpandDetails">
+                    android:onClick="expandDetails">
 
                     <TextView
                         android:id="@+id/details_heading"
@@ -167,7 +167,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="ExpandProductCare">
+                    android:onClick="expandProductCare">
 
                     <TextView
                         android:id="@+id/product_care_heading"
