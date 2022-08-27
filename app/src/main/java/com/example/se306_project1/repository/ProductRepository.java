@@ -11,6 +11,7 @@ import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
 import com.example.se306_project1.models.IProduct;
+//import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -86,7 +87,32 @@ public class ProductRepository implements IProductRepository{
         String serializedObject = sharedPreferences.getString(key, null);
         if (serializedObject != null) {
             Gson gson = new Gson();
+
+
+
             Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+        return arrayItems;
+    }
+
+    @Override
+    public List<IProduct> getCategoryCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            if(key.equals("0")){
+                type = new TypeToken<List<Clutch>>(){}.getType();
+            }
+            else if(key.equals("1")){
+                type = new TypeToken<List<Tote>>(){}.getType();
+            }
+            else{
+                type = new TypeToken<List<CrossBody>>(){}.getType();
+            }
             arrayItems = gson.fromJson(serializedObject, type);
         }
         return arrayItems;
@@ -110,7 +136,9 @@ public class ProductRepository implements IProductRepository{
             }
         }
         return bagToReturn;
+   
     }
+
 
     public void fetchProductByID(MutableLiveData<IProduct> data){
         String idString = Long.toString(productID);
@@ -198,6 +226,7 @@ public class ProductRepository implements IProductRepository{
                 if(task.isSuccessful()){
                     Log.d("firebase fetch product by category", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag: snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");

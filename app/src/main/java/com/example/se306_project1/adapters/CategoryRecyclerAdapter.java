@@ -49,6 +49,8 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
             String formattedName = rawName.substring(0, 1).toUpperCase() + rawName.substring(1);
             intent.putExtra("id",clickedCategory.getCategoryID());
             intent.putExtra("header",formattedName);
+            intent.putExtra("name",clickedCategory.getCategoryName());
+            intent.putExtra("class", clickedCategory.getClass());
             context.startActivity(intent);
             activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
