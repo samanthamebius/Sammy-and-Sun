@@ -64,7 +64,6 @@ public class SplashActivity extends AppCompatActivity {
         productRepository.getProducts().observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
-
                 setList("Products", products);
             }
         });

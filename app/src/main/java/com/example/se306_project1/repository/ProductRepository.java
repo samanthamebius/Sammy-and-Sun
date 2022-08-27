@@ -157,10 +157,10 @@ public class ProductRepository implements IProductRepository{
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase fetch all products", String.valueOf(task.getResult()));
                     // getting snapshot of all the documents in the collection
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag : snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");
