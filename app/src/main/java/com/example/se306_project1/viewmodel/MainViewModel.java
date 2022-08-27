@@ -11,7 +11,9 @@ import androidx.lifecycle.ViewModel;
 import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.repository.CategoryRepository;
+import com.example.se306_project1.repository.FavouritesRepository;
 import com.example.se306_project1.repository.ICategoryRepository;
+import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
 
@@ -24,6 +26,7 @@ public class MainViewModel extends AndroidViewModel {
     private List<ICategory> categoriesList;
     IProductRepository productRepository = new ProductRepository(getApplication().getApplicationContext());
     ICategoryRepository categoryRepository = new CategoryRepository(getApplication().getApplicationContext());
+    IFavouritesRepository favouritesRepository = new FavouritesRepository(getApplication().getApplicationContext());
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -37,7 +40,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public List<IProduct> getFavourites(){
         favouriteList = new ArrayList<>();
-        favouriteList.addAll(productRepository.getProductCache("Favourites"));
+        favouriteList.addAll(favouritesRepository.getFavouritesCache("Favourites"));
         return favouriteList;
     }
 

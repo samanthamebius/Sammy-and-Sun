@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.example.se306_project1.R;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
 
         setPopularList();
-        LinearLayout popularView = findViewById(R.id.favourites_view);
+        LinearLayout popularView = findViewById(R.id.popular_view);
         if (popularList.isEmpty()) {
             popularView.setVisibility(View.GONE);
         } else {

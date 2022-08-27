@@ -1,5 +1,7 @@
 package com.example.se306_project1.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,9 +12,11 @@ import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,20 +24,28 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FavouritesRepository implements IFavouritesRepository{
 
+    private static Context context;
     public List<IProduct> favouritesDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionRef = db.collection("favourites");
+
+    public FavouritesRepository(Context context){
+        this.context = context;
+    }
 
     // singleton pattern
     private static FavouritesRepository instance;
     public static FavouritesRepository getInstance(){
         if(instance == null){
-            instance = new FavouritesRepository();
+            instance = new FavouritesRepository(context);
         }
         return instance;
     }
@@ -45,6 +57,18 @@ public class FavouritesRepository implements IFavouritesRepository{
         return data;
     }
 
+    @Override
+    public List<IProduct> getFavouritesCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+        return arrayItems;
+    }
     public void fetchAllFavourites(MutableLiveData<List<IProduct>> data){
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
