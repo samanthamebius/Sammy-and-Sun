@@ -30,33 +30,32 @@ public class ListActivity extends AppCompatActivity {
     Toolbar toolbar;
     private ArrayList<IProduct> productsList;
     private RecyclerView recyclerView;
-    private long categoryID;
+    private long categoryID = 0;
     ListViewModel listViewModel;
     SharedPreferences sharedPreferences;
-    String categoryName;
+    String categoryName = "Clutches";
+    TextView headerText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         toolbar = findViewById(R.id.toolBarBack);
         setSupportActionBar(toolbar);
-
-        TextView headerText = findViewById(R.id.list_header);
-
+        headerText = findViewById(R.id.list_header);
         productsList = new ArrayList();
-
         recyclerView = findViewById(R.id.list_recyclerView);
 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         listViewModel= new ViewModelProvider(this).get(ListViewModel.class);
 
+    }
 
-        categoryID = 0;
-        categoryName = "Clutches";
+    @Override
+    protected void onResume() {
+        super.onResume();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             categoryID = extras.getLong("id");
@@ -74,7 +73,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        ListRecyclerAdapter adapter = new ListRecyclerAdapter(categoryID, productsList, this);
+        ListRecyclerAdapter adapter = new ListRecyclerAdapter(productsList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

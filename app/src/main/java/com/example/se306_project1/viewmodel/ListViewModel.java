@@ -25,7 +25,7 @@ public class ListViewModel extends AndroidViewModel {
         String key = Long.toString(categoryID);
         productsList = new ArrayList<>();
         productsList.clear();
-        productsList.addAll(productRepository.getProductCache(key));
+        productsList.addAll(productRepository.getCategoryCache(key));
         return productsList;
     }
 
