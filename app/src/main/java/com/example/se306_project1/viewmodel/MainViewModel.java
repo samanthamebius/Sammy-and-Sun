@@ -22,7 +22,7 @@ import com.example.se306_project1.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel implements IMainViewModel {
     private List<IProduct> popularList;
     private List<IProduct> favouriteList;
     private List<ICategory> categoriesList;

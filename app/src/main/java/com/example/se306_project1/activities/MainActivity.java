@@ -23,6 +23,7 @@ import com.example.se306_project1.data.CategoriesDataProvider;
 import com.example.se306_project1.data.ProductsDataProvider;
 import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
+import com.example.se306_project1.viewmodel.IMainViewModel;
 import com.example.se306_project1.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView categoryRecyclerView;
 
     Toolbar toolbar;
-    MainViewModel mainViewModel;
+    IMainViewModel mainViewModel;
     SharedPreferences sharedPreferences;
 
     @Override
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        
+
         setPopularList();
         LinearLayout popularView = findViewById(R.id.popular_view);
         if (popularList.isEmpty()) {
