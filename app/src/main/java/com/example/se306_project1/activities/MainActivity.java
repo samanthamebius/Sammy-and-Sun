@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         popularList = new ArrayList();
         favouritesList = new ArrayList();
         categoriesList = new ArrayList();
@@ -62,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         mainViewModel= new ViewModelProvider(this).get(MainViewModel.class);
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        
         setPopularList();
         LinearLayout popularView = findViewById(R.id.popular_view);
         if (popularList.isEmpty()) {
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         setAdapter(popularRecyclerView, popularList);
         setAdapter(favouritesRecyclerView, favouritesList);
         setCategoryAdapter(categoryRecyclerView,categoriesList);
+
     }
 
     private void setPopularList() {
