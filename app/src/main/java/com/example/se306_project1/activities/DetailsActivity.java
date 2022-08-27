@@ -156,10 +156,13 @@ public class DetailsActivity extends AppCompatActivity {
     public void PopularLogic(int sizeOfCurrentPopular, IProduct currentProduct, IProduct productToSwap){
         if(sizeOfCurrentPopular < maxPopularSize){
             PopularCountVisit.addToPopularCollection(currentProduct);
+            detailsViewModel.addToPopularCache(sharedPreferences, currentProduct);
         }else{
             if(productToSwap.getProductCountVisit() < currentProduct.getProductCountVisit()){
                 PopularCountVisit.removeFromPopularCollection(productToSwap);
+                detailsViewModel.removeFromPopularCache(sharedPreferences,productToSwap);
                 PopularCountVisit.addToPopularCollection(currentProduct);
+                detailsViewModel.addToPopularCache(sharedPreferences, currentProduct);
             }
         }
     }
@@ -193,6 +196,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         favouriteStatus = product.getIsFavourite();
         UpdateFavourite.updateFavourite(product, favouriteStatus);
+        detailsViewModel.updateFavouritesCache(sharedPreferences,product, favouriteStatus);
 
         if(favouriteStatus){
             vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
