@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchViewModel extends AndroidViewModel {
+public class SearchViewModel extends AndroidViewModel implements ISearchViewModel {
 
     private IProduct bag;
     private List<IProduct> allProducts;

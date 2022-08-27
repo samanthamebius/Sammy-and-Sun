@@ -3,18 +3,14 @@ package com.example.se306_project1.activities;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
-
 import android.content.pm.ActivityInfo;
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,25 +23,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-
-import com.airbnb.lottie.L;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SearchRecyclerAdapter;
 import com.example.se306_project1.models.IProduct;
-import com.example.se306_project1.models.Product;
-import com.example.se306_project1.repository.IProductRepository;
-import com.example.se306_project1.repository.ProductRepository;
-import com.example.se306_project1.viewmodel.MainViewModel;
+import com.example.se306_project1.viewmodel.ISearchViewModel;
 import com.example.se306_project1.viewmodel.SearchViewModel;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +47,7 @@ public class SearchActivity extends AppCompatActivity{
     private List<IProduct> allProducts;
 
     Toolbar toolbar;
-    SearchViewModel searchViewModel;
+    ISearchViewModel searchViewModel;
     SharedPreferences sharedPreferences;
     private IProduct bagClicked;
 
