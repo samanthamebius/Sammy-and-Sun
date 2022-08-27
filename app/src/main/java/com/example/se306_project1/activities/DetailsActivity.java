@@ -1,7 +1,6 @@
 package com.example.se306_project1.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,25 +15,24 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
+import com.example.se306_project1.repository.FavouritesRepository;
+import com.example.se306_project1.repository.IFavouritesRepository;
 import com.example.se306_project1.viewmodel.PopularCountVisit;
-import com.example.se306_project1.viewmodel.UpdateFavourite;
 import com.example.se306_project1.models.IProduct;
-import com.example.se306_project1.repository.IPopularRepository;
-import com.example.se306_project1.repository.IProductRepository;
-import com.example.se306_project1.repository.PopularRepository;
-import com.example.se306_project1.repository.ProductRepository;
 import com.example.se306_project1.viewmodel.DetailsViewModel;
+import com.example.se306_project1.viewmodel.UpdateFavourite;
+
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class DetailsActivity extends AppCompatActivity {
 
     IProduct lowestCountProduct;
-
+    private ArrayList<IProduct> popularList;
     private ArrayList<Integer> intImages;
-    private static Boolean favouriteStatus;
+    private Boolean favouriteStatus;
     private int detailsCounter = 0;
     private int productCareCounter = 0;
     private int maxPopularSize = 10;
@@ -59,6 +57,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        popularList = new ArrayList();
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -135,6 +135,16 @@ public class DetailsActivity extends AppCompatActivity {
         product = detailsViewModel.getProductByID(productID);
     }
 
+    // Update to popular when item is viewed
+    public void UpdatePopular(IProduct product){
+        popularList.clear();
+        popularList = (ArrayList<IProduct>) detailsViewModel.getPopular();
+
+        sizeOfCurrentPopular = popularList.size();
+        popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
+        lowestCountProduct = popularList.get(0);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -142,21 +152,8 @@ public class DetailsActivity extends AppCompatActivity {
         PopularLogic(sizeOfCurrentPopular, product, lowestCountProduct);
     }
 
-    public void UpdatePopular(IProduct p){
-        IPopularRepository popRepo = PopularRepository.getInstance();
-        popRepo.getPopular().observe(this, new Observer<List<IProduct>>() {
-            @Override
-            public void onChanged(List<IProduct> products) {
-
-                sizeOfCurrentPopular = products.size();
-                products.sort(Comparator.comparing(IProduct::getProductCountVisit));
-                lowestCountProduct = products.get(0);
-            }
-        });
-    }
-
+    // Helper method depending on current size of popular list, remove or swap out item in list
     public void PopularLogic(int sizeOfCurrentPopular, IProduct currentProduct, IProduct productToSwap){
-
         if(sizeOfCurrentPopular < maxPopularSize){
             PopularCountVisit.addToPopularCollection(currentProduct);
         }else{
@@ -167,7 +164,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    // Helper method to set image strings to drawable integers
+    // Helper method to set array of image strings to array of integers
     private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
         ArrayList<Integer> intImages = new ArrayList<Integer>();
 
@@ -178,7 +175,7 @@ public class DetailsActivity extends AppCompatActivity {
         return intImages;
     }
 
-    // Helper method
+    // Helper method set string to drawable int
     private static int GetImageResource(Context c, String imageName) {
         int ResourceID = c.getResources().getIdentifier(imageName, "drawable", c.getPackageName());
         if (ResourceID == 0) {

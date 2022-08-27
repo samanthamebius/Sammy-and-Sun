@@ -15,6 +15,7 @@ import java.util.List;
 
 public class DetailsViewModel extends AndroidViewModel {
     private IProduct product;
+    private List<IProduct> popularList;
     IProductRepository productRepository = new ProductRepository(getApplication().getApplicationContext());
 
     public DetailsViewModel(@NonNull Application application) {
@@ -24,5 +25,11 @@ public class DetailsViewModel extends AndroidViewModel {
     public IProduct getProductByID(long productID){
         product = productRepository.getProductByIDCache("Products", productID);
         return product;
+    }
+
+    public List<IProduct> getPopular(){
+        popularList = new ArrayList<>();
+        popularList.addAll(productRepository.getProductCache("Popular"));
+        return popularList;
     }
 }
