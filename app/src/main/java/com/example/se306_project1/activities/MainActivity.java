@@ -27,6 +27,7 @@ import com.example.se306_project1.viewmodel.IMainViewModel;
 import com.example.se306_project1.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     private void setFavouritesList(){
         favouritesList.clear();
         favouritesList = (ArrayList<IProduct>) mainViewModel.getFavourites();
+        Collections.reverse(favouritesList);
     }
 
     private void setCategoriesList(){

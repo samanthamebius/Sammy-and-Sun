@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,13 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.ListRecyclerAdapter;
 import com.example.se306_project1.models.IProduct;
-import com.example.se306_project1.repository.IProductRepository;
-import com.example.se306_project1.repository.ProductRepository;
+import com.example.se306_project1.viewmodel.IListViewModel;
 import com.example.se306_project1.viewmodel.ListViewModel;
-import com.example.se306_project1.viewmodel.MainViewModel;
-
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class ListActivity extends AppCompatActivity {
 
@@ -31,7 +27,7 @@ public class ListActivity extends AppCompatActivity {
     private ArrayList<IProduct> productsList;
     private RecyclerView recyclerView;
     private long categoryID = 0;
-    ListViewModel listViewModel;
+    IListViewModel listViewModel;
     SharedPreferences sharedPreferences;
     String categoryName = "Clutches";
     TextView headerText;

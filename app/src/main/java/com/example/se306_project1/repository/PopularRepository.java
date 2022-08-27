@@ -127,13 +127,11 @@ public class PopularRepository implements IPopularRepository{
 
                     popularDataSet.clear();
                     for(DocumentSnapshot favouriteBagReference : snapshots){
-
                         // getting foreign key reference
                         DocumentReference docRef = (DocumentReference) favouriteBagReference.get("ProductRef");
                         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-
                                 if(value.exists()){
                                     long productID = (long) value.get("productID");
                                     long categoryID = (long) value.get("categoryID");

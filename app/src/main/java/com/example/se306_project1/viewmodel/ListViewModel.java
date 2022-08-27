@@ -13,7 +13,7 @@ import com.example.se306_project1.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListViewModel extends AndroidViewModel {
+public class ListViewModel extends AndroidViewModel implements IListViewModel{
     List<IProduct> productsList;
     IProductRepository productRepository = new ProductRepository(getApplication().getApplicationContext());
 

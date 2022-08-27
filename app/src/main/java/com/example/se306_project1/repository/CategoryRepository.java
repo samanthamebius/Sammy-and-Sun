@@ -70,6 +70,7 @@ public class CategoryRepository implements ICategoryRepository{
                 if(task.isSuccessful()){
                     Log.d("firebase fetch categories", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    categoryGroups.clear();
                     for(DocumentSnapshot snap: snapshots){
                         long categoryID = (long) snap.get("categoryID");
                         String categoryImage = snap.get("categoryImage").toString();
