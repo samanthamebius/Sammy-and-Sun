@@ -124,7 +124,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 5000);
+        }, 3500);
     }
 
     public <T> void setList(String key, List<T> list) {
@@ -138,7 +138,6 @@ public class SplashActivity extends AppCompatActivity {
             SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
             prefsEditor.putString(key, value);
             prefsEditor.commit();
-            // note use prefsEditor.commit() for sync, but will likely cause UI lag
         }
     }
 }
