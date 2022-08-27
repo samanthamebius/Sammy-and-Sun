@@ -8,25 +8,22 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.se306_project1.R;
-import com.example.se306_project1.models.Product;
-
+import com.example.se306_project1.models.IProduct;
 import java.util.ArrayList;
 
 public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<Product> productList;
+    private ArrayList<IProduct> productList;
     private static Context context;
     private long styleID;
     private ArrayList<Boolean> favouriteStatusList;
     private ListRecyclerAdapter.ListRecyclerViewClickListener listener;
 
     // create instance of adapter for list of categories
-    public ListRecyclerAdapter(ArrayList<Product> productList, Context context, long styleID, ListRecyclerAdapter.ListRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
+    public ListRecyclerAdapter(ArrayList<IProduct> productList, Context context, long styleID, ListRecyclerAdapter.ListRecyclerViewClickListener listener, ArrayList<Boolean> favouriteStatusList){
         this.productList = productList;
         this.context = context;
         this.styleID = styleID;

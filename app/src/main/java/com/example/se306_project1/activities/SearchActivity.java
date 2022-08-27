@@ -7,9 +7,13 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
+
+import android.content.SharedPreferences;
+
+import android.content.pm.ActivityInfo;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,11 +26,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-
 import com.example.se306_project1.R;
-import com.example.se306_project1.activities.DetailsActivity;
-import com.example.se306_project1.activities.MainActivity;
 import com.example.se306_project1.adapters.SearchRecyclerAdapter;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.IProductRepository;
 import com.example.se306_project1.repository.ProductRepository;
@@ -48,7 +50,7 @@ public class SearchActivity extends AppCompatActivity{
     private AutoCompleteTextView searchField;
     private CollectionReference cref;
     private RecyclerView recyclerView;
-    private ArrayList<Product> resultsList;
+    private ArrayList<IProduct> resultsList;
     private SearchRecyclerAdapter.SearchRecyclerViewClickListener listener;
     Toolbar toolbar;
 
@@ -58,7 +60,9 @@ public class SearchActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        resultsList = new ArrayList<>();
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        resultsList = new ArrayList<IProduct>();
         recyclerView = findViewById(R.id.search_recyclerView);
 
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
@@ -180,7 +184,7 @@ public class SearchActivity extends AppCompatActivity{
                         noResultsText.setVisibility(View.GONE);
                         for (DocumentChange doc : value.getDocumentChanges()) {
 
-                            Product bag = doc.getDocument().toObject(Product.class);
+                            IProduct bag = doc.getDocument().toObject(Product.class);
                             resultsList.add(bag);
                         }
 
@@ -197,9 +201,9 @@ public class SearchActivity extends AppCompatActivity{
     private void searchBag(long productID) {
         TextView noResultsText = findViewById(R.id.no_results_text);
         IProductRepository testRepo = ProductRepository.getInstance();
-        testRepo.getProductByID(productID).observe(this, new Observer<Product>() {
+        testRepo.getProductByID(productID).observe(this, new Observer<IProduct>() {
             @Override
-            public void onChanged(Product product) {
+            public void onChanged(IProduct product) {
 
                 noResultsText.setVisibility(View.GONE);
                 resultsList.clear();

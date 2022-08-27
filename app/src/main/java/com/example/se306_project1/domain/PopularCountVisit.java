@@ -1,32 +1,26 @@
 package com.example.se306_project1.domain;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
-import com.example.se306_project1.models.Product;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.se306_project1.models.IProduct;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PopularCountVisit {
     static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public static void updateCountVisit(Product p){
+    public static void updateCountVisit(IProduct p){
         DocumentReference productRef = db.collection("products").document(""+p.getProductID());
         productRef.update("productCountVisit", FieldValue.increment(1));
     }
 
-    public static void addToPopularCollection(Product p) {
+    public static void addToPopularCollection(IProduct p) {
         DocumentReference productRef = db.document("products/"+p.getProductID());
 
         Map<String, DocumentReference> popular = new LinkedHashMap<String, DocumentReference>();
@@ -46,7 +40,7 @@ public class PopularCountVisit {
     }
 
 
-    public static void removeFromPopularCollection(Product p) {
+    public static void removeFromPopularCollection(IProduct p) {
         db.collection("popular").document("" + p.getProductID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
