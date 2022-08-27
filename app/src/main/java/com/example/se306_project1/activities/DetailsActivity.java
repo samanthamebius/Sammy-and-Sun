@@ -3,6 +3,7 @@ package com.example.se306_project1.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.SnapHelper;
+
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
 import com.example.se306_project1.models.IProduct;
@@ -99,6 +102,7 @@ public class DetailsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolBarBack);
         setSupportActionBar(toolbar);
     }
+
 
     private void populateScreenElements() {
         setProduct(productID);

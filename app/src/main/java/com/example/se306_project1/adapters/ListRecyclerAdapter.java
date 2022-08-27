@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -108,6 +110,8 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ListRecyclerAdapter.MyViewHolder holder, int position) {
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.fade_in_row);
+
         String name = productList.get(position).getProductShortName();
 
         String brand = productList.get(position).getBrandName().toString().replaceAll("_"," ");
@@ -124,6 +128,8 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         if(!productList.get(position).getIsFavourite()){
             holder.favIcon.setVisibility(View.GONE);
         }
+
+        holder.itemView.startAnimation(animation);
     }
 
     public static int getImageResource(String imageString) {
