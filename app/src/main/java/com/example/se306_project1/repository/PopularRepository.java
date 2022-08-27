@@ -76,25 +76,25 @@ public class PopularRepository implements IPopularRepository{
     }
 
     public void addProductToPopular(IProduct p){
-        DocumentReference productRef = db.document("products/"+p.getProductID());
+        DocumentReference productRef = FirebaseFirestore.getInstance().document("products/"+p.getProductID());
         Map<String, DocumentReference> popular = new LinkedHashMap<String, DocumentReference>();
         popular.put("ProductRef", productRef);
 
         db.collection("popular").document("" + p.getProductID()).set(popular).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d("Popular Collection Add", "product " + p.getProductID() + " added.");
+                Log.e("Popular Collection Add", "product " + p.getProductID() + " added.");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull @NotNull Exception e) {
-                Log.w("Popular Collection Add", "product " + p.getProductID() + " NOT added.");
+                Log.e("Popular Collection Add", "product " + p.getProductID() + " NOT added.");
             }
         });
     }
 
     public void removeProductFromPopular(IProduct p){
-        db.collection("popular").document("" + p.getProductID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseFirestore.getInstance().collection("popular").document("" + p.getProductID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
                 public void onSuccess(Void aVoid) {
                     Log.d("Popular Collection ", "product " + p.getProductID() + " removed.");
@@ -148,6 +148,7 @@ public class PopularRepository implements IPopularRepository{
                                     boolean isFavourite = (boolean) value.get("isFavourite");
                                     ArrayList<String> productImages = (ArrayList<String>) value.get("productImages");
 
+                                    popularDataSet.clear();
                                     popularDataSet.add(determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                                             productDescription, productDetails, productCare,
                                             productColourType, productCountVisit, isFavourite, productImages));

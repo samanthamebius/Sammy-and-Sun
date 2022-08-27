@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SliderImagesAdapter;
-import com.example.se306_project1.viewmodel.PopularCountVisit;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.viewmodel.DetailsViewModel;
 import com.example.se306_project1.viewmodel.UpdateFavourite;
@@ -25,7 +24,7 @@ import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    IProduct lowestCountProduct;
+
     private ArrayList<IProduct> popularList;
     private ArrayList<Integer> intImages;
     private Boolean favouriteStatus;
@@ -71,12 +70,10 @@ public class DetailsActivity extends AppCompatActivity {
         setUpScreenElements();
         populateScreenElements();
 
-
-
-
+        setPopular(product);
         detailsViewModel.updatePopularCount(product, sharedPreferences);
 
-        UpdatePopular(product);
+
 
         displayFavouriteIcon();
 
@@ -136,10 +133,9 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-    public void UpdatePopular(IProduct product){
+    public void setPopular(IProduct product){
         popularList.clear();
         popularList = (ArrayList<IProduct>) detailsViewModel.getPopular();
-
         sizeOfCurrentPopular = popularList.size();
         popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
     }
@@ -148,22 +144,10 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // only need to update when we leave activity
-//        PopularLogic(sizeOfCurrentPopular, product, lowestCountProduct, maxPopularSize);
         detailsViewModel.PopularLogic(sizeOfCurrentPopular, popularList, product, maxPopularSize, sharedPreferences);
     }
 
-    // Helper method depending on current size of popular list, remove or swap out item in list
-//    public void PopularLogic(int sizeOfCurrentPopular, IProduct currentProduct, IProduct productToSwap, int maxPopularSize){
-//        if(sizeOfCurrentPopular < maxPopularSize){
-//            PopularCountVisit.addToPopularCollection(currentProduct);
-//        }else{
-//            if(productToSwap.getProductCountVisit() < currentProduct.getProductCountVisit()){
-//                PopularCountVisit.removeFromPopularCollection(productToSwap);
-//                PopularCountVisit.addToPopularCollection(currentProduct);
-//
-//            }
-//        }
-//    }
+
 
     // Helper method to set array of image strings to array of integers
     private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {

@@ -64,34 +64,28 @@ public class DetailsViewModel extends AndroidViewModel {
         renewProductCache(sharedPreferences);
     }
 
-    public void updateFavouritesCache (SharedPreferences sharedPreferences, IProduct product, Boolean favouriteStatus){
-        Gson gson = new Gson();
-        String json = gson.toJson(product);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if(favouriteStatus){
-            editor.putString("Favourites", json);
-        } else {
-            editor.remove(json);
-        }
-    }
-
     public void PopularLogic(int sizeOfCurrentPopular, List<IProduct> popularList, IProduct productToSwap, int maxPopularSize, SharedPreferences sharedPreferences) {
-        // first check is product to swap is in current popular list
+        Boolean contains = false;
         popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
-
         Log.e("view model size of current popular", Integer.toString(sizeOfCurrentPopular));
 
-        if(!popularList.contains(productToSwap)){
+        for(int i = 0; i < popularList.size(); i++){
+            if (popularList.get(i).getProductID() == productToSwap.getProductID()){
+                contains = true;
+            }
+        }
+        if(!contains){
             IProduct leastViewProduct = popularList.get(0);
             Log.e("view model count of current", Long.toString(productToSwap.getProductCountVisit()));
             Log.e("view model count of least", Long.toString(leastViewProduct.getProductCountVisit()));
             if (sizeOfCurrentPopular < maxPopularSize){
-                // add product to Swap to firebase
+                Log.e("view model appended to list", productToSwap.getProductShortName());
                 popularRepository.addProductToPopular(productToSwap);
                 addProductToPopularCache(sharedPreferences, productToSwap);
-                // add product to swap to cache
+
             }
             else if(productToSwap.getProductCountVisit() > leastViewProduct.getProductCountVisit()){
+                Log.e("view model ", "swapping happening");
                 Log.e("view model logic, least view product: ", leastViewProduct.getProductShortName());
                 Log.e("view model logic, current swap: ", productToSwap.getProductShortName());
                 popularRepository.addProductToPopular(productToSwap);
@@ -99,14 +93,7 @@ public class DetailsViewModel extends AndroidViewModel {
                 swapProductsInPopularCache(sharedPreferences, leastViewProduct, productToSwap);
             }
         }
-
-
     }
-
-
-
-    // get current list of popular
-    // get current list of favourites
 
 
     public void renewProductCache(SharedPreferences sharedPreferences){
@@ -151,7 +138,6 @@ public class DetailsViewModel extends AndroidViewModel {
     }
 
 
-
-
-
+    public void updateFavouritesCache(SharedPreferences sharedPreferences, IProduct product, Boolean favouriteStatus) {
+    }
 }

@@ -101,6 +101,7 @@ public class FavouritesRepository implements IFavouritesRepository{
                                     boolean isFavourite = (boolean) value.get("isFavourite");
                                     ArrayList<String> productImages = (ArrayList<String>) value.get("productImages");
 
+                                    favouritesDataSet.clear();
                                     favouritesDataSet.add(determineCategory(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                                             productDescription, productDetails, productCare,
                                             productColourType, productCountVisit, isFavourite, productImages));
