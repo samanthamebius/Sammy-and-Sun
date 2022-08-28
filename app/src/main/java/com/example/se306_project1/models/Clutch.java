@@ -1,12 +1,9 @@
 package com.example.se306_project1.models;
 
 import com.google.firebase.database.Exclude;
-
 import java.util.ArrayList;
 
 public class Clutch extends Product{
-
-
     public Clutch(long productID, long categoryID, Double productPrice,
                   String productLongName, String productShortName, Brand brandName,
                   String productDescription, String productDetails, String productCare,

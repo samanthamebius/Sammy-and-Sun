@@ -3,23 +3,22 @@ package com.example.se306_project1.models;
 import java.util.ArrayList;
 
 public interface IProduct {
-    public long getProductID();
-    public long getCategoryID();
-    public double getProductPrice();
+    long getProductID();
+    long getCategoryID();
+    double getProductPrice();
 
-    public String getProductLongName();
-    public String getProductShortName();
-    public Brand getBrandName();
+    String getProductLongName();
+    String getProductShortName();
+    Brand getBrandName();
 
-    public String getProductDescription();
-    public String getProductDetails();
-    public String getProductCare();
+    String getProductDescription();
+    String getProductDetails();
+    String getProductCare();
 
-    public ColourType getProductColourType();
-    public long getProductCountVisit();
-    public void increaseProductViewCount();
-    public Boolean getIsFavourite();
-    public void setProductIsFavourite(Boolean isFavourite);
-    public ArrayList<String> getProductImages();
+    long getProductCountVisit();
+    void increaseProductViewCount();
+    Boolean getIsFavourite();
+    void setProductIsFavourite(Boolean isFavourite);
+    ArrayList<String> getProductImages();
 
 }
