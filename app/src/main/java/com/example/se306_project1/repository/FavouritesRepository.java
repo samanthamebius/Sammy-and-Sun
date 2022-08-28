@@ -28,7 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -40,7 +39,7 @@ public class FavouritesRepository implements IFavouritesRepository{
     private static Context context;
     public List<IProduct> favouritesDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collectionRef = db.collection("favourites");
+    CollectionReference collRef = db.collection("favourites");
 
     public FavouritesRepository(Context context){
         this.context = context;
@@ -54,6 +53,11 @@ public class FavouritesRepository implements IFavouritesRepository{
         }
         return instance;
     }
+
+    /**
+     * Get favourites data from firebase collection.
+     * @return  LiveData list of IProduct
+     */
 
     public LiveData<List<IProduct>> getFavourites() {
         favouritesDataSet.clear();
@@ -149,7 +153,7 @@ public class FavouritesRepository implements IFavouritesRepository{
 
     public void fetchAllFavourites(MutableLiveData<List<IProduct>> data){
 
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        collRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
