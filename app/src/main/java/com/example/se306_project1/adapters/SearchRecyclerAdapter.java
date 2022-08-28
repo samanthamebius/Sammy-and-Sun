@@ -11,12 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.L;
 import com.example.se306_project1.R;
 import com.example.se306_project1.activities.DetailsActivity;
 import com.example.se306_project1.models.IProduct;
 import java.util.ArrayList;
 
+/**
+ * An adapter class to display the search results on the SearchActivity
+ */
 public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<IProduct> resultsList;
@@ -27,7 +29,6 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
     public SearchRecyclerAdapter(ArrayList<IProduct> resultsList, Activity activity){
         this.resultsList = resultsList;
         this.activity = activity;
-
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -36,7 +37,6 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
         private TextView priceText;
         private ImageView iconImage;
         private ImageView favIcon;
-
 
         public MyViewHolder(final View view) {
             super(view);
@@ -48,9 +48,7 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
             favIcon = (ImageView) view.findViewById(R.id.list1_favourite_icon);
         }
 
-
         public void onClick(View view) {
-//            listener.onClick(view, getAbsoluteAdapterPosition());
             IProduct clickedProduct = resultsList.get(getBindingAdapterPosition());
             Intent intent = new Intent(context, DetailsActivity.class);
             intent.putExtra("id", clickedProduct.getProductID());
@@ -86,6 +84,11 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
         holder.favIcon.setVisibility(View.GONE);
     }
 
+    /**
+     * Converts a image string to an integer
+     * @param imageString - a string of the file name of an image
+     * @return resID - an integer resource ID
+     */
     public static int getImageResource(String imageString) {
         int resID = context.getResources().getIdentifier(imageString,"drawable",context.getPackageName());
         if (resID == 0) {

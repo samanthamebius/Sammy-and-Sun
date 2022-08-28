@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
 import java.util.ArrayList;
 
+/**
+ * An adapter class to display the images of the product on the DetailsActivity
+ */
 public class SliderImagesAdapter extends RecyclerView.Adapter<SliderImagesAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Integer> intImages;
-    ViewHolder vh;
 
     public SliderImagesAdapter(Context context, ArrayList<Integer> intImages) {
         this.context = context;

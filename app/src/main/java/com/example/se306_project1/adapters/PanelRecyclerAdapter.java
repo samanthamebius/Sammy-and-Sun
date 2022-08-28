@@ -3,7 +3,6 @@ package com.example.se306_project1.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
 import com.example.se306_project1.activities.DetailsActivity;
 import com.example.se306_project1.models.IProduct;
-import com.example.se306_project1.models.Product;
 
 import java.util.ArrayList;
 
+/**
+ * An adapter class to display the panel items on the main screen
+ */
 public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<IProduct> productList;
     private static Context context;
     private Activity activity;
 
-
-
-    // create instance of adapter for list of categories
     public PanelRecyclerAdapter(ArrayList<IProduct> productList, Activity activity){
         this.productList = productList;
         this.activity = activity;
@@ -50,7 +48,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
 
         }
 
-
         public void onClick(View view) {
             IProduct clickedProduct = productList.get(getBindingAdapterPosition());
             Intent intent = new Intent(context, DetailsActivity.class);
@@ -58,7 +55,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
             context.startActivity(intent);
             activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
-
 
     }
 
@@ -72,7 +68,6 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         return holder;
     }
 
-    // change contents of text and image views
     @Override
     public void onBindViewHolder(@NonNull PanelRecyclerAdapter.MyViewHolder holder, int position) {
         String name = productList.get(position).getProductShortName();
@@ -93,6 +88,11 @@ public class PanelRecyclerAdapter extends RecyclerView.Adapter<PanelRecyclerAdap
         }
     }
 
+    /**
+     * Converts a image string to an integer
+     * @param imageString - a string of the file name of an image
+     * @return resID - an integer resource ID
+     */
     public static int getImageResource(String imageString) {
         int resID = context.getResources().getIdentifier(imageString,"drawable",context.getPackageName());
         if (resID == 0) {

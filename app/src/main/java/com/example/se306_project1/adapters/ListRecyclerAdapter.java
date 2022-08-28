@@ -20,6 +20,9 @@ import com.example.se306_project1.models.Tote;
 
 import java.util.ArrayList;
 
+/**
+ * An adapter class to display the list items on the ListActivity
+ */
 public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<IProduct> productList;
@@ -132,6 +135,11 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
         holder.itemView.startAnimation(animation);
     }
 
+    /**
+     * Converts a image string to an integer
+     * @param imageString
+     * @return
+     */
     public static int getImageResource(String imageString) {
         int resID = context.getResources().getIdentifier(imageString,"drawable",context.getPackageName());
         if (resID == 0) {

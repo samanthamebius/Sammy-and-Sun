@@ -11,21 +11,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.se306_project1.R;
-import com.example.se306_project1.activities.DetailsActivity;
 import com.example.se306_project1.activities.ListActivity;
 import com.example.se306_project1.models.ICategory;
-import com.example.se306_project1.models.IProduct;
 
 import java.util.ArrayList;
 
+/**
+ * An adapter class to display the category items on the main screen
+ */
 public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.MyViewHolder> {
-
-
+    
     private ArrayList<ICategory> categoryList;
     private static Context context;
     private Activity activity;
 
-    // create instance of adapter for list of categories
     public CategoryRecyclerAdapter(ArrayList<ICategory> categoryList, Activity activity){
         this.categoryList = categoryList;
         this.activity = activity;
@@ -65,7 +64,6 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         return new MyViewHolder(itemView);
     }
 
-    // change contents of text and image views
     @Override
     public void onBindViewHolder(@NonNull CategoryRecyclerAdapter.MyViewHolder holder, int position) {
         String rawName = categoryList.get(position).getCategoryName();
@@ -76,6 +74,11 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         holder.nameText.setText(formattedName);
     }
 
+    /**
+     * Converts a image string to an integer
+     * @param imageString - a string of the file name of an image
+     * @return resID - an integer resource ID
+     */
     public static int getImageResource(String imageString) {
         int resID = context.getResources().getIdentifier(imageString,"drawable",context.getPackageName());
         if (resID == 0) {
