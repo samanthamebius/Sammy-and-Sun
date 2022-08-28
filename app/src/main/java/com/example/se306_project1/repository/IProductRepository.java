@@ -6,11 +6,10 @@ import com.example.se306_project1.models.IProduct;
 import java.util.List;
 
 public interface IProductRepository {
-    public MutableLiveData<List<IProduct>> getProducts();
-    public LiveData<IProduct> getProductByID(long productID);
-    public LiveData<List<IProduct>> getProductsByCategoryID(long categoryID);
-    public List<IProduct> getProductCache(String key);
-    public List<IProduct> getCategoryCache(String key);
-    public IProduct getProductByIDCache(String key, long productID);
-
+    MutableLiveData<List<IProduct>> getProducts();
+    LiveData<IProduct> getProductByID(long productID);
+    LiveData<List<IProduct>> getProductsByCategoryID(long categoryID);
+    List<IProduct> getProductCache(String key);
+    List<IProduct> getCategoryCache(String key);
+    IProduct getProductByIDCache(String key, long productID);
 }
