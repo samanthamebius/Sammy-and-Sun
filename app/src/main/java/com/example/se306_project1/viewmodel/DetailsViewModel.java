@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-
 import com.example.se306_project1.R;
 import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.repository.FavouritesRepository;
@@ -19,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * View model layer for the DetailsActivity
+ */
 public class DetailsViewModel extends AndroidViewModel implements IDetailsViewModel {
 
     private IProduct product;
@@ -76,6 +78,10 @@ public class DetailsViewModel extends AndroidViewModel implements IDetailsViewMo
         return favouriteStatus;
     }
 
+    /**
+     * changeFavouriteStatus updates the favourites Status on click
+     * @param sharedPreferences
+     */
     public void changeFavouriteStatus(SharedPreferences sharedPreferences){
         favouritesRepository.updateFavouriteBoolean(product, !favouriteStatus);
         renewFavouriteStatus(sharedPreferences);
@@ -108,6 +114,11 @@ public class DetailsViewModel extends AndroidViewModel implements IDetailsViewMo
         renewSharedPreferences(sharedPreferences, favouritesList, "Favourites");
     }
 
+    /**
+     *  renewFavouriteStatus updates the products favourites status
+     *  in the cache of products, category and popular
+     * @param sharedPreferences
+     */
     public void renewFavouriteStatus(SharedPreferences sharedPreferences){
         productsList = getProducts();
         for(IProduct p: productsList){
@@ -137,28 +148,10 @@ public class DetailsViewModel extends AndroidViewModel implements IDetailsViewMo
         renewProductCache(sharedPreferences);
     }
 
-    public void PopularLogic(int sizeOfCurrentPopular, List<IProduct> popularList, IProduct productToSwap, int maxPopularSize, SharedPreferences sharedPreferences) {
-        Boolean contains = false;
-        popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
-        for(int i = 0; i < popularList.size(); i++){
-            if (popularList.get(i).getProductID() == productToSwap.getProductID()){
-                contains = true;
-            }
-        }
-        if(!contains){
-            IProduct leastViewProduct = popularList.get(0);
-            if (sizeOfCurrentPopular < maxPopularSize){
-                popularRepository.addProductToPopular(productToSwap);
-                addProductToPopularCache(sharedPreferences, productToSwap);
-            }
-            else if(productToSwap.getProductCountVisit() > leastViewProduct.getProductCountVisit()){
-                popularRepository.addProductToPopular(productToSwap);
-                popularRepository.removeProductFromPopular(leastViewProduct);
-                swapProductsInPopularCache(sharedPreferences, leastViewProduct, productToSwap);
-            }
-        }
-    }
-
+    /**
+     * renewProductCache is a helper method that updates the product view count in the cached products list
+     * @param sharedPreferences
+     */
     public void renewProductCache(SharedPreferences sharedPreferences){
         product.increaseProductViewCount();
         productsList = getProducts();
@@ -187,6 +180,43 @@ public class DetailsViewModel extends AndroidViewModel implements IDetailsViewMo
         renewSharedPreferences(sharedPreferences, popularList, "Popular");
     }
 
+    /**
+     * PopularLogic is used to determine whether the product should be appended to popular, swapped with a product in popular
+     * or not added to popular based on current view count
+     * @param sizeOfCurrentPopular
+     * @param popularList
+     * @param productToSwap
+     * @param maxPopularSize
+     * @param sharedPreferences
+     */
+    public void PopularLogic(int sizeOfCurrentPopular, List<IProduct> popularList, IProduct productToSwap, int maxPopularSize, SharedPreferences sharedPreferences) {
+        Boolean contains = false;
+        popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
+        for(int i = 0; i < popularList.size(); i++){
+            if (popularList.get(i).getProductID() == productToSwap.getProductID()){
+                contains = true;
+            }
+        }
+        if(!contains){
+            IProduct leastViewProduct = popularList.get(0);
+            if (sizeOfCurrentPopular < maxPopularSize){
+                popularRepository.addProductToPopular(productToSwap);
+                addProductToPopularCache(sharedPreferences, productToSwap);
+            }
+            else if(productToSwap.getProductCountVisit() > leastViewProduct.getProductCountVisit()){
+                popularRepository.addProductToPopular(productToSwap);
+                popularRepository.removeProductFromPopular(leastViewProduct);
+                swapProductsInPopularCache(sharedPreferences, leastViewProduct, productToSwap);
+            }
+        }
+    }
+
+    /**
+     * renewSharedPreferences is a helper method that updates the list of the sharedPreference
+     * @param sharedPreferences
+     * @param list
+     * @param key
+     */
     public void renewSharedPreferences(SharedPreferences sharedPreferences, List<IProduct> list, String key){
         Gson gson = new Gson();
         String json = gson.toJson(list);

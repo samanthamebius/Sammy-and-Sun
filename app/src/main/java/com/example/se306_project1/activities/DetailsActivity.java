@@ -97,16 +97,10 @@ public class DetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         populateScreenElements();
 
-        // check if new view of product places the item in popular
 
         setPopular(product);
         detailsViewModel.updatePopularCount(product, sharedPreferences);
-
-        // determine the status of the heart icon
-
         isFavourite = detailsViewModel.displayFavouritesStatus(product, vh.favouriteIcon);
-
-        // display image slider
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -152,7 +146,6 @@ public class DetailsActivity extends AppCompatActivity {
         detailsViewModel.PopularLogic(popularCurrentSize, popularList, product, POPULAR_MAX_SIZE, sharedPreferences);
     }
 
-    // Helper method to set array of image strings to array of integers
     private ArrayList<Integer> getIntImageArray(ArrayList<String> images) {
         ArrayList<Integer> intImages = new ArrayList<Integer>();
 
@@ -163,7 +156,6 @@ public class DetailsActivity extends AppCompatActivity {
         return intImages;
     }
 
-    // Helper method set string to drawable int
     private static int getImageResource(Context c, String imageName) {
         int ResourceID = c.getResources().getIdentifier(imageName, "drawable", c.getPackageName());
         if (ResourceID == 0) {
@@ -188,7 +180,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    // OnClick method to expand details drop down
     public void expandDetails(View v){
         detailsClicksCounter++;
         if(detailsClicksCounter %2 == 0){
@@ -200,7 +191,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    // OnClick method to expand product drop down
     public void expandProductCare(View v){
         productCareClicksCounter++;
         if(productCareClicksCounter%2 == 0){
@@ -212,7 +202,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    // OnClick method for back in appbar
     public void goBack(View v){
         Intent searchIntent = new Intent(this, MainActivity.class);
         startActivity(searchIntent);
