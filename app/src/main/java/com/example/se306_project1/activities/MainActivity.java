@@ -15,7 +15,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.CategoryRecyclerAdapter;
 import com.example.se306_project1.adapters.PanelRecyclerAdapter;
@@ -38,24 +41,38 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView popularRecyclerView;
     private RecyclerView favouritesRecyclerView;
     private RecyclerView categoryRecyclerView;
+    private LinearLayout popularView;
+    private LinearLayout favouritesView;
 
     Toolbar toolbar;
     IMainViewModel mainViewModel;
     SharedPreferences sharedPreferences;
+    ViewHolder vh;
+
+    private class ViewHolder {
+
+        public ViewHolder() {
+            popularRecyclerView = findViewById(R.id.popular_recyclerView);
+            favouritesRecyclerView = findViewById(R.id.favourites_recyclerView);
+            categoryRecyclerView = findViewById(R.id.categories_recyclerView);
+            popularView = findViewById(R.id.popular_view);
+            favouritesView = findViewById(R.id.favourites_view);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        vh = new ViewHolder();
+
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         popularList = new ArrayList();
         favouritesList = new ArrayList();
         categoriesList = new ArrayList();
 
-        popularRecyclerView = findViewById(R.id.popular_recyclerView);
-        favouritesRecyclerView = findViewById(R.id.favourites_recyclerView);
-        categoryRecyclerView = findViewById(R.id.categories_recyclerView);
+
         toolbar = findViewById(R.id.toolBarMain);
         setSupportActionBar(toolbar);
 
@@ -69,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         setPopularList();
-        LinearLayout popularView = findViewById(R.id.popular_view);
+
         if (popularList.isEmpty()) {
             popularView.setVisibility(View.GONE);
         } else {
@@ -77,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setFavouritesList();
-        LinearLayout favouritesView = findViewById(R.id.favourites_view);
+
         if (favouritesList.isEmpty()) {
             favouritesView.setVisibility(View.GONE);
         } else {

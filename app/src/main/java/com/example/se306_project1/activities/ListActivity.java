@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,6 +32,16 @@ public class ListActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String categoryName = "Clutches";
     TextView headerText;
+    ViewHolder vh;
+
+    private class ViewHolder {
+
+        public ViewHolder() {
+            toolbar = findViewById(R.id.toolBar);
+            headerText = findViewById(R.id.list_header);
+            recyclerView = findViewById(R.id.list_recyclerView);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +49,12 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        toolbar = findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
-        headerText = findViewById(R.id.list_header);
-        productsList = new ArrayList();
-        recyclerView = findViewById(R.id.list_recyclerView);
+        vh = new ViewHolder();
 
+        setSupportActionBar(toolbar);
+        productsList = new ArrayList();
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         listViewModel= new ViewModelProvider(this).get(ListViewModel.class);
-
     }
 
     @Override

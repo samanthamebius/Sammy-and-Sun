@@ -46,11 +46,24 @@ public class SearchActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private ArrayList<IProduct> resultsList;
     private List<IProduct> allProducts;
-
+    private ImageView searchIcon;
+    private TextView noResultsText;
+    ViewHolder vh;
     Toolbar toolbar;
     ISearchViewModel searchViewModel;
     SharedPreferences sharedPreferences;
     private IProduct bagClicked;
+
+    private class ViewHolder {
+
+        public ViewHolder() {
+            recyclerView = findViewById(R.id.search_recyclerView);
+            searchIcon = (ImageView) findViewById(R.id.search_icon);
+            searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
+            toolbar = findViewById(R.id.toolBar);
+            noResultsText = findViewById(R.id.no_results_text);
+        }
+    }
 
 
     @Override
@@ -60,17 +73,15 @@ public class SearchActivity extends AppCompatActivity{
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        vh = new ViewHolder();
+
         resultsList = new ArrayList<IProduct>();
         allProducts = new ArrayList<>();
-        recyclerView = findViewById(R.id.search_recyclerView);
 
-        searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
         cref = FirebaseFirestore.getInstance().collection("products");
 
-        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        ImageView searchIcon = (ImageView) findViewById(R.id.search_icon);
         searchIcon.setVisibility(View.GONE);
         
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
@@ -159,7 +170,6 @@ public class SearchActivity extends AppCompatActivity{
     }
 
     private void incompleteSearch(String searchWord){
-        TextView noResultsText = findViewById(R.id.no_results_text);
         resultsList.clear();
         resultsList = (ArrayList<IProduct>) searchViewModel.getIncompleteSearchList(searchWord, resultsList, allProducts, noResultsText);
         setAdapter(recyclerView, resultsList);
@@ -167,7 +177,6 @@ public class SearchActivity extends AppCompatActivity{
 
     // for item selected from suggestions
     private void searchBag(long productID) {
-        TextView noResultsText = findViewById(R.id.no_results_text);
         setBagClicked(productID);
         noResultsText.setVisibility(View.GONE);
         resultsList.clear();

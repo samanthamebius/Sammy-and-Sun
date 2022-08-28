@@ -37,7 +37,7 @@ public class DetailsActivity extends AppCompatActivity {
     private int maxPopularSize = 10;
     private int sizeOfCurrentPopular;
     private IProduct product;
-    long productID;
+    long productID = 0;
 
     RecyclerView recyclerView;
     ViewHolder vh;
@@ -45,10 +45,24 @@ public class DetailsActivity extends AppCompatActivity {
     IDetailsViewModel detailsViewModel;
     SharedPreferences sharedPreferences;
 
-    class ViewHolder {
+    private class ViewHolder {
         TextView product_details, product_price, product_brand, product_long_name, product_description,
                 product_care;
         ImageView details_icon, product_care_icon, favouriteIcon;
+
+        public ViewHolder() {
+            product_price = (TextView) findViewById(R.id.product_price);
+            product_brand = (TextView) findViewById(R.id.product_brand);
+            product_long_name = (TextView) findViewById(R.id.product_long_name);
+            product_description = (TextView) findViewById(R.id.product_description);
+            product_details = (TextView) findViewById(R.id.product_details);
+            details_icon = (ImageView) findViewById(R.id.details_icon);
+            product_care = (TextView) findViewById(R.id.product_care);
+            product_care_icon = (ImageView) findViewById(R.id.product_care_icon);
+            favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
+            recyclerView = findViewById(R.id.recyclerView);
+            toolbar = findViewById(R.id.toolBar);
+        }
     }
 
     @Override
@@ -58,7 +72,6 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        productID = 0;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             productID = extras.getLong("id");
@@ -69,6 +82,11 @@ public class DetailsActivity extends AppCompatActivity {
         detailsViewModel= new ViewModelProvider(this).get(DetailsViewModel.class);
 
         setUpScreenElements();
+    }
+
+    private void setUpScreenElements() {
+        vh = new ViewHolder();
+        setSupportActionBar(toolbar);
         populateScreenElements();
 
         setPopular(product);
@@ -88,22 +106,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
-    }
-
-    private void setUpScreenElements() {
-        vh = new ViewHolder();
-        vh.product_price = (TextView) findViewById(R.id.product_price);
-        vh.product_brand = (TextView) findViewById(R.id.product_brand);
-        vh.product_long_name = (TextView) findViewById(R.id.product_long_name);
-        vh.product_description = (TextView) findViewById(R.id.product_description);
-        vh.product_details = (TextView) findViewById(R.id.product_details);
-        vh.details_icon = (ImageView) findViewById(R.id.details_icon);
-        vh.product_care = (TextView) findViewById(R.id.product_care);
-        vh.product_care_icon = (ImageView) findViewById(R.id.product_care_icon);
-        vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
-        recyclerView = findViewById(R.id.recyclerView);
-        toolbar = findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
     }
 
 
