@@ -102,7 +102,7 @@ public class DetailsActivity extends AppCompatActivity {
         vh.product_care_icon = (ImageView) findViewById(R.id.product_care_icon);
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
         recyclerView = findViewById(R.id.recyclerView);
-        toolbar = findViewById(R.id.toolBarBack);
+        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
     }
 
@@ -203,5 +203,11 @@ public class DetailsActivity extends AppCompatActivity {
         Intent searchIntent = new Intent(this, MainActivity.class);
         startActivity(searchIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    public void showSearchActivity(View view) {
+        Intent searchIntent = new Intent(this, SearchActivity.class);
+        startActivity(searchIntent);
+        overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

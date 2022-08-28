@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
         popularRecyclerView = findViewById(R.id.popular_recyclerView);
         favouritesRecyclerView = findViewById(R.id.favourites_recyclerView);
         categoryRecyclerView = findViewById(R.id.categories_recyclerView);
-
-        toolbar = findViewById(R.id.toolBar);
+        toolbar = findViewById(R.id.toolBarMain);
         setSupportActionBar(toolbar);
 
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     public void showSearchActivity(View view) {
         Intent searchIntent = new Intent(this, SearchActivity.class);
         startActivity(searchIntent);
-        overridePendingTransition(0, 0);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 }

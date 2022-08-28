@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/activityToolBar"
-        layout="@layout/appbar_back" />
+        layout="@layout/appbar" />
 
     <ScrollView
         android:layout_width="match_parent"

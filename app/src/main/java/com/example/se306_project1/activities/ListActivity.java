@@ -38,7 +38,7 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        toolbar = findViewById(R.id.toolBarBack);
+        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         headerText = findViewById(R.id.list_header);
         productsList = new ArrayList();
@@ -82,4 +82,9 @@ public class ListActivity extends AppCompatActivity {
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
+    public void showSearchActivity(View view) {
+        Intent searchIntent = new Intent(this, SearchActivity.class);
+        startActivity(searchIntent);
+        overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 }

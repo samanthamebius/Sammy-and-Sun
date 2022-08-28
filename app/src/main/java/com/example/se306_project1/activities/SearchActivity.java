@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.se306_project1.R;
 import com.example.se306_project1.adapters.SearchRecyclerAdapter;
@@ -66,11 +67,15 @@ public class SearchActivity extends AppCompatActivity{
         searchField = (AutoCompleteTextView) findViewById(R.id.search_field);
         cref = FirebaseFirestore.getInstance().collection("products");
 
-        toolbar = findViewById(R.id.toolBarBack);
+        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
+        ImageView searchIcon = (ImageView) findViewById(R.id.search_icon);
+        searchIcon.setVisibility(View.GONE);
+        
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         searchViewModel= new ViewModelProvider(this).get(SearchViewModel.class);
+
 
         findViewById(R.id.search_field).requestFocus();
 
@@ -192,11 +197,8 @@ public class SearchActivity extends AppCompatActivity{
 
     public void Back(View v){
         Intent searchIntent = new Intent(this, MainActivity.class);
+
         startActivity(searchIntent);
-        overridePendingTransition(0, 0);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-
-
-
-
 }
