@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:paddingRight="10dp">
 
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -39,7 +38,6 @@
                 android:src="@drawable/selected_heart" />
         </RelativeLayout>
 
-
         <TextView
             android:id="@+id/main_brand_text_view"
             style="@style/SmallHeaderText"
@@ -61,7 +59,5 @@
             android:layout_height="wrap_content"
             android:text="$1,068.35"
             android:paddingBottom="-5dp"/>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

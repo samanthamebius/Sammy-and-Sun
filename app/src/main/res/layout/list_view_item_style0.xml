@@ -37,7 +37,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:src="@drawable/selected_heart" />
-
         </RelativeLayout>
 
         <LinearLayout
@@ -69,7 +68,6 @@
                     android:layout_height="wrap_content"
                     android:text="Hamilton Legacy" />
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -86,12 +84,7 @@
                     android:textAlignment="textEnd"
                     android:text="$1,068.35" />
 
-
             </LinearLayout>
-
-
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

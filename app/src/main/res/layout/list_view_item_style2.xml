@@ -69,9 +69,5 @@
                 android:src="@drawable/selected_heart" />
 
         </RelativeLayout>
-
-
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

@@ -68,7 +68,5 @@
                 android:text="$1,068.35" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>
