@@ -29,7 +29,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -41,7 +40,7 @@ public class PopularRepository implements IPopularRepository{
     private static Context context;
     public List<IProduct> popularDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collectionRef = db.collection("popular");
+    CollectionReference collRef = db.collection("popular");
 
     public PopularRepository(Context context){
         this.context = context;
@@ -55,6 +54,10 @@ public class PopularRepository implements IPopularRepository{
         return instance;
     }
 
+    /**
+     * Get popular data from firebase collection.
+     * @return  LiveData list of IProduct
+     */
     public LiveData<List<IProduct>> getPopular() {
         popularDataSet.clear();
         MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
@@ -118,7 +121,7 @@ public class PopularRepository implements IPopularRepository{
 
     public void fetchAllPopular(MutableLiveData<List<IProduct>> data){
 
-        collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        collRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){

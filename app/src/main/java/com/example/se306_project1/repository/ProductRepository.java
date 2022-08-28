@@ -11,7 +11,6 @@ import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
 import com.example.se306_project1.models.IProduct;
-//import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,8 +25,6 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class ProductRepository implements IProductRepository{
 
@@ -54,9 +51,11 @@ public class ProductRepository implements IProductRepository{
         return instance;
     }
 
-    // method to make database queries
-    // using LiveData so that in activity class there are no public methods to update stored data
-    // mutableLiveData exposes SetValue and PostValue that can modify LiveData, so expose mutableLIveData in viewModels
+    /**
+     * Make database queries, using LiveData so that in activity classes there are no public methods to stored data
+     * MutableLiveData exposes SetValue and PostValue that can modify LiveData, so expose mutableLiveData in viewModels
+     * @return MutableLiveData<List<IProduct>>
+     */
     public MutableLiveData<List<IProduct>> getProducts() {
         productsDataSet.clear();
         MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
@@ -87,9 +86,6 @@ public class ProductRepository implements IProductRepository{
         String serializedObject = sharedPreferences.getString(key, null);
         if (serializedObject != null) {
             Gson gson = new Gson();
-
-
-
             Type type = new TypeToken<List<Product>>(){}.getType();
             arrayItems = gson.fromJson(serializedObject, type);
         }
@@ -136,9 +132,7 @@ public class ProductRepository implements IProductRepository{
             }
         }
         return bagToReturn;
-   
     }
-
 
     public void fetchProductByID(MutableLiveData<IProduct> data){
         String idString = Long.toString(productID);
@@ -175,8 +169,6 @@ public class ProductRepository implements IProductRepository{
                 data.setValue(productsDataSet.get(0));
             }
         });
-
-
     }
 
     public void fetchAllProducts(MutableLiveData<List<IProduct>> data){
@@ -255,7 +247,6 @@ public class ProductRepository implements IProductRepository{
         });
     }
 
-
     public IProduct determineCategory (long productID, long categoryID, double productPrice,
                                       String productLongName, String productShortName, Brand brandName,
                                       String productDescription, String productDetails, String productCare,
@@ -266,7 +257,6 @@ public class ProductRepository implements IProductRepository{
             bag = new Clutch(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                     productDescription, productDetails, productCare,
                     productColourType, productCountVisit, isFavourite, productImages);
-
         }
         else if (categoryID == 1){
             // type is crossBody
@@ -279,10 +269,7 @@ public class ProductRepository implements IProductRepository{
             bag = new Tote(productID, categoryID, productPrice, productLongName, productShortName, brandName,
                     productDescription, productDetails, productCare,
                     productColourType, productCountVisit, isFavourite, productImages);
-
         }
         return bag;
     }
-
-
 }
