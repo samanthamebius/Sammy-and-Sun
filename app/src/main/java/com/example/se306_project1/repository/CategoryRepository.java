@@ -8,8 +8,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.se306_project1.models.Category;
 import com.example.se306_project1.models.ICategory;
-import com.example.se306_project1.models.IProduct;
-import com.example.se306_project1.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.reflect.TypeToken;
@@ -18,7 +16,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +40,10 @@ public class CategoryRepository implements ICategoryRepository{
         return instance;
     }
 
+    /**
+     * Get categories data from firebase collection.
+     * @return  LiveData list of ICategory
+     */
     public LiveData<List<ICategory>> getCategories() {
         categoryGroups.clear();
         MutableLiveData<List<ICategory>> data = new MutableLiveData<>();
@@ -81,7 +82,6 @@ public class CategoryRepository implements ICategoryRepository{
                 else {
                     Log.d("Firebase", "error getting categories!", task.getException());
                 }
-
                 data.setValue(categoryGroups);
             }
         });

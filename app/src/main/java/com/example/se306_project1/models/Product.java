@@ -1,14 +1,10 @@
 package com.example.se306_project1.models;
 
-import android.util.Log;
-
 import com.google.firebase.database.Exclude;
-
 import java.util.ArrayList;
 
     public class Product implements IProduct {
 
-        // instance fields
         private long productID;
         private long categoryID;
         private double productPrice;
@@ -21,15 +17,11 @@ import java.util.ArrayList;
         private String productDetails;
         private String productCare;
 
-
         private ColourType productColourType;
         private long productCountVisit = 0;
         private Boolean productIsFavourite;
         private ArrayList<String> productImages;
 
-       public Product(){
-
-       }
 
         public Product(long productID, long categoryID, double productPrice,
                        String productLongName, String productShortName, Brand brandName,
@@ -52,9 +44,7 @@ import java.util.ArrayList;
             this.productCountVisit = productCountVisit;
             this.productIsFavourite = isFavourite;
             this.productImages = productImages;
-
         }
-
 
 
     @Exclude
@@ -99,7 +89,6 @@ import java.util.ArrayList;
     }
     
 
-
     @Exclude
     public ColourType getProductColourType() {
         return productColourType;
@@ -118,7 +107,7 @@ import java.util.ArrayList;
         this.productCountVisit = productCountVisit + 1;
     }
 
-        @Exclude
+    @Exclude
     public Boolean getIsFavourite() {
         return productIsFavourite;
     }
@@ -130,11 +119,6 @@ import java.util.ArrayList;
     public ArrayList<String> getProductImages() {
         return productImages;
     }
-//
-//    @Override
-//    public int compareTo(Product p) {
-//        return getProductCountVisit().compareTo(p.getProductCountVisit());
-//    }
 
 }
 

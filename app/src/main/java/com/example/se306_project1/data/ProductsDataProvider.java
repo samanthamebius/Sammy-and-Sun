@@ -17,9 +17,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is used to provide product data to firestore
+ */
 public class ProductsDataProvider {
 
-    // Add number documents to Firestore
+    // Add documents to Firestore
     public static void addProductsToFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         List<IProduct> productsList = getProducts();
@@ -56,6 +59,9 @@ public class ProductsDataProvider {
         }
     }
 
+    /**
+     * Collates all product data to be added to firestore
+     */
     public static List<IProduct> getProducts() {
         List<IProduct> bagsList = new ArrayList<>();
 
