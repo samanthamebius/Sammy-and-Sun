@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,7 +20,9 @@ import com.example.se306_project1.viewmodel.IListViewModel;
 import com.example.se306_project1.viewmodel.ListViewModel;
 import java.util.ArrayList;
 
-
+/**
+ * Represents the screen that shows a list of items that fall under a particular category
+ */
 public class ListActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -34,6 +35,9 @@ public class ListActivity extends AppCompatActivity {
     TextView headerText;
     ViewHolder vh;
 
+    /**
+     * Describes the view of items in ListActivity
+     */
     private class ViewHolder {
 
         public ViewHolder() {
@@ -41,6 +45,7 @@ public class ListActivity extends AppCompatActivity {
             headerText = findViewById(R.id.list_header);
             recyclerView = findViewById(R.id.list_recyclerView);
         }
+
     }
 
     @Override
@@ -57,6 +62,19 @@ public class ListActivity extends AppCompatActivity {
         listViewModel= new ViewModelProvider(this).get(ListViewModel.class);
     }
 
+    private void setProductList(long categoryID) {
+        productsList.clear();
+        productsList = (ArrayList<IProduct>) listViewModel.getProductsList(categoryID);
+    }
+
+    private void setAdapter() {
+        ListRecyclerAdapter adapter = new ListRecyclerAdapter(productsList, this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -71,20 +89,7 @@ public class ListActivity extends AppCompatActivity {
         setAdapter();
     }
 
-    private void setProductList(long categoryID) {
-        productsList.clear();
-        productsList = (ArrayList<IProduct>) listViewModel.getProductsList(categoryID);
-    }
-
-    private void setAdapter() {
-        ListRecyclerAdapter adapter = new ListRecyclerAdapter(productsList, this);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-    }
-
-    public void Back(View v){
+    public void goBack(View v){
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);

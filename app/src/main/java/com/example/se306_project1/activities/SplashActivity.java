@@ -1,6 +1,5 @@
 package com.example.se306_project1.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -10,22 +9,16 @@ import android.content.pm.ActivityInfo;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
 import com.example.se306_project1.R;
-import com.example.se306_project1.models.Category;
 import com.example.se306_project1.models.ICategory;
 import com.example.se306_project1.models.IProduct;
-import com.example.se306_project1.models.Product;
 import com.example.se306_project1.repository.CategoryRepository;
 import com.example.se306_project1.repository.FavouritesRepository;
 import com.example.se306_project1.repository.ICategoryRepository;
@@ -38,15 +31,15 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+/**
+ * Represents the screen the screen that displays while data is loaded in from firebase
+ */
 public class SplashActivity extends AppCompatActivity {
 
-
     SharedPreferences sharedPreferences;
-    static Long Clutch =(long) 0;
-    static Long CrossBody=(long) 2;
-    static Long Tote =(long) 1;
-
-
+    static Long clutchID =(long) 0;
+    static Long toteID =(long) 1;
+    static Long crossbodyID =(long) 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,24 +62,24 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        productRepository.getProductsByCategoryID(Clutch).observe(this, new Observer<List<IProduct>>() {
+        productRepository.getProductsByCategoryID(clutchID).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
                 setList("0", products);
             }
         });
 
-        productRepository.getProductsByCategoryID(CrossBody).observe(this, new Observer<List<IProduct>>() {
-            @Override
-            public void onChanged(List<IProduct> products) {
-                setList("2", products);
-            }
-        });
-
-        productRepository.getProductsByCategoryID(Tote).observe(this, new Observer<List<IProduct>>() {
+        productRepository.getProductsByCategoryID(toteID).observe(this, new Observer<List<IProduct>>() {
             @Override
             public void onChanged(List<IProduct> products) {
                 setList("1", products);
+            }
+        });
+
+        productRepository.getProductsByCategoryID(crossbodyID).observe(this, new Observer<List<IProduct>>() {
+            @Override
+            public void onChanged(List<IProduct> products) {
+                setList("2", products);
             }
         });
 
@@ -106,7 +99,6 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-
         ICategoryRepository categoryRepository = CategoryRepository.getInstance();
         categoryRepository.getCategories().observe(this, new Observer<List<ICategory>>() {
             @Override
@@ -115,7 +107,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        // splash screen wait for all onChanged
+        // display splash screen while waiting for data
         new Handler().postDelayed(new Runnable() {
 
             @Override

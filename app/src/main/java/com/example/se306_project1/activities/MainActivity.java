@@ -32,6 +32,9 @@ import com.example.se306_project1.viewmodel.MainViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Represents the main screen the user sees when they open the app
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<IProduct> popularList;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView popularRecyclerView;
     private RecyclerView favouritesRecyclerView;
     private RecyclerView categoryRecyclerView;
+
     private LinearLayout popularView;
     private LinearLayout favouritesView;
 
@@ -49,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ViewHolder vh;
 
+    /**
+     * Describes the view of items in MainActivity
+     */
     private class ViewHolder {
 
         public ViewHolder() {
