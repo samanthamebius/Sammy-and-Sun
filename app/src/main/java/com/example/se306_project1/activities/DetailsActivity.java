@@ -221,4 +221,10 @@ public class DetailsActivity extends AppCompatActivity {
         startActivity(searchIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
+    public void showSearchActivity(View view) {
+        Intent searchIntent = new Intent(this, SearchActivity.class);
+        startActivity(searchIntent);
+        overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 }
