@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.se306_project1.R;
-
 import java.util.ArrayList;
 
 public class SliderImagesAdapter extends RecyclerView.Adapter<SliderImagesAdapter.ViewHolder> {

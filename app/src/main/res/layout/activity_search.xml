@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,9 +10,7 @@
         android:id="@+id/activityToolBar"
         layout="@layout/appbar" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.SearchActivity"
@@ -25,19 +24,16 @@
 
 
         <AutoCompleteTextView
-            style="@style/MediumText"
-            android:textStyle="normal"
-            android:inputType="textPhonetic"
-            android:background="@drawable/rectangle"
             android:id="@+id/search_field"
+            style="@style/MediumText"
             android:layout_width="match_parent"
             android:layout_height="65dp"
+            android:background="@drawable/rectangle"
             android:completionThreshold="1"
             android:drawableLeft="@drawable/ic_baseline_search_24"
+            android:inputType="textShortMessage|textAutoComplete"
             android:padding="10dp"
-            android:text=""
-
-            />
+            android:text="" />
 
         <TextView
             android:id="@+id/no_results_text"

@@ -1,57 +1,122 @@
 package com.example.se306_project1.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
+import com.example.se306_project1.models.IProduct;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.common.reflect.TypeToken;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PopularRepository implements IPopularRepository{
 
-    public List<Product> popularDataSet = new ArrayList<>();
+    private static Context context;
+    public List<IProduct> popularDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference collectionRef = db.collection("popular");
 
+    public PopularRepository(Context context){
+        this.context = context;
+    }
     // singleton pattern
     private static PopularRepository instance;
     public static PopularRepository getInstance(){
         if(instance == null){
-            instance = new PopularRepository();
+            instance = new PopularRepository(context);
         }
         return instance;
     }
 
-    public LiveData<List<Product>> getPopular() {
+    public LiveData<List<IProduct>> getPopular() {
         popularDataSet.clear();
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchAllPopular(data);
         return data;
     }
 
+    @Override
+    public List<IProduct> getPopularCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+        return arrayItems;
+    }
 
-    public void fetchAllPopular(MutableLiveData<List<Product>> data){
+    public void addProductToPopular(IProduct p){
+        DocumentReference productRef = FirebaseFirestore.getInstance().document("products/"+p.getProductID());
+        Map<String, DocumentReference> popular = new LinkedHashMap<String, DocumentReference>();
+        popular.put("ProductRef", productRef);
+
+        db.collection("popular").document("" + p.getProductID()).set(popular).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.e("Popular Collection Add", "product " + p.getProductID() + " added.");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Log.e("Popular Collection Add", "product " + p.getProductID() + " NOT added.");
+            }
+        });
+    }
+
+    public void removeProductFromPopular(IProduct p){
+        FirebaseFirestore.getInstance().collection("popular").document("" + p.getProductID()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("Popular Collection ", "product " + p.getProductID() + " removed.");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("Popular Collection ", "product " + p.getProductID() + " NOT removed.");
+                }
+            });
+
+    }
+
+    @Override
+    public void updateCountVisit(IProduct p){
+        DocumentReference productRef = FirebaseFirestore.getInstance().collection("products").document(""+p.getProductID());
+        productRef.update("productCountVisit", FieldValue.increment(1));
+    }
+
+
+    public void fetchAllPopular(MutableLiveData<List<IProduct>> data){
 
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -60,14 +125,13 @@ public class PopularRepository implements IPopularRepository{
                     Log.d("firebase popular", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
 
+                    popularDataSet.clear();
                     for(DocumentSnapshot favouriteBagReference : snapshots){
-
                         // getting foreign key reference
                         DocumentReference docRef = (DocumentReference) favouriteBagReference.get("ProductRef");
                         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-
                                 if(value.exists()){
                                     long productID = (long) value.get("productID");
                                     long categoryID = (long) value.get("categoryID");
@@ -102,11 +166,11 @@ public class PopularRepository implements IPopularRepository{
     }
 
 
-    public Product determineCategory (long productID, long categoryID, double productPrice,
+    public IProduct determineCategory (long productID, long categoryID, double productPrice,
                                       String productLongName, String productShortName, Brand brandName,
                                       String productDescription, String productDetails, String productCare,
                                       ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
-        Product bag;
+        IProduct bag;
         if(categoryID == 0){
             // type is clutch
             bag = new Clutch(productID, categoryID, productPrice, productLongName, productShortName, brandName,

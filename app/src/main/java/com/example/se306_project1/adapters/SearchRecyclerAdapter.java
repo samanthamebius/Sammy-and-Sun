@@ -1,30 +1,33 @@
 package com.example.se306_project1.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.L;
 import com.example.se306_project1.R;
-import com.example.se306_project1.models.Product;
-
+import com.example.se306_project1.activities.DetailsActivity;
+import com.example.se306_project1.models.IProduct;
 import java.util.ArrayList;
 
 public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAdapter.MyViewHolder> {
 
-    private ArrayList<Product> resultsList;
+    private ArrayList<IProduct> resultsList;
     private static Context context;
-    private SearchRecyclerViewClickListener listener;
+    private Activity activity;
 
-    public SearchRecyclerAdapter(ArrayList<Product> resultsList, Context context, SearchRecyclerViewClickListener listener){
+
+    public SearchRecyclerAdapter(ArrayList<IProduct> resultsList, Activity activity){
         this.resultsList = resultsList;
-        this.context = context;
-        this.listener = listener;
+        this.activity = activity;
+
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -37,26 +40,33 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
 
         public MyViewHolder(final View view) {
             super(view);
+            view.setOnClickListener(this);
             nameText = view.findViewById(R.id.list1_name_text_view);
             brandText = view.findViewById(R.id.list1_brand_text_view);
             priceText = view.findViewById(R.id.list1_price_text_view);
             iconImage = (ImageView) view.findViewById(R.id.list1_image_view);
             favIcon = (ImageView) view.findViewById(R.id.list1_favourite_icon);
-            view.setOnClickListener(this);
         }
 
-        @Override
+
         public void onClick(View view) {
-            listener.onClick(view, getAbsoluteAdapterPosition());
+//            listener.onClick(view, getAbsoluteAdapterPosition());
+            IProduct clickedProduct = resultsList.get(getBindingAdapterPosition());
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("id", clickedProduct.getProductID());
+            context.startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
     @NonNull
     @Override
     public SearchRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view_item_style1, parent, false);
-
-        return new MyViewHolder(itemView);
+        context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View itemView = inflater.inflate(R.layout.list_view_item_style1, parent, false);
+        MyViewHolder holder = new MyViewHolder(itemView);
+        return holder;
     }
 
     @Override
@@ -90,7 +100,4 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
         return resultsList.size();
     }
 
-    public interface SearchRecyclerViewClickListener {
-        void onClick(View v, int position);
-    }
 }

@@ -1,47 +1,55 @@
 package com.example.se306_project1.repository;
 
-
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-
 import com.example.se306_project1.models.Brand;
 import com.example.se306_project1.models.Clutch;
 import com.example.se306_project1.models.ColourType;
 import com.example.se306_project1.models.CrossBody;
+import com.example.se306_project1.models.IProduct;
+//import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Product;
 import com.example.se306_project1.models.Tote;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
+import com.google.gson.Gson;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class ProductRepository implements IProductRepository{
 
 
-    public List<Product> productsDataSet = new ArrayList<>();
+    private static Context context;
+    public List<IProduct> productsDataSet = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference productColRef = db.collection("products");
     private long productID;
     private long categoryID;
+
+
+    public ProductRepository(Context context){
+        this.context = context;
+    }
 
     // singleton pattern
 
     private static ProductRepository instance;
     public static IProductRepository getInstance(){
         if(instance == null){
-            instance = new ProductRepository();
+            instance = new ProductRepository(context);
         }
         return instance;
     }
@@ -49,31 +57,90 @@ public class ProductRepository implements IProductRepository{
     // method to make database queries
     // using LiveData so that in activity class there are no public methods to update stored data
     // mutableLiveData exposes SetValue and PostValue that can modify LiveData, so expose mutableLIveData in viewModels
-    public LiveData<List<Product>> getProducts() {
+    public MutableLiveData<List<IProduct>> getProducts() {
         productsDataSet.clear();
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchAllProducts(data);
         return data;
     }
 
-    public LiveData<Product> getProductByID(long productID) {
+    public LiveData<IProduct> getProductByID(long productID) {
         productsDataSet.clear();
         this.productID = productID;
-        MutableLiveData<Product> data = new MutableLiveData<>();
+        MutableLiveData<IProduct> data = new MutableLiveData<>();
         fetchProductByID(data);
         return data;
     }
 
-    public LiveData<List<Product>> getProductsByCategoryID(long categoryID) {
+    public LiveData<List<IProduct>> getProductsByCategoryID(long categoryID) {
         productsDataSet.clear();
         this.categoryID = categoryID;
-        MutableLiveData<List<Product>> data = new MutableLiveData<>();
+        MutableLiveData<List<IProduct>> data = new MutableLiveData<>();
         fetchProductsByCategory(data);
         return data;
     }
 
+    @Override
+    public List<IProduct> getProductCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
 
-    public void fetchProductByID(MutableLiveData<Product> data){
+
+
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+        return arrayItems;
+    }
+
+    @Override
+    public List<IProduct> getCategoryCache(String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            if(key.equals("0")){
+                type = new TypeToken<List<Clutch>>(){}.getType();
+            }
+            else if(key.equals("1")){
+                type = new TypeToken<List<Tote>>(){}.getType();
+            }
+            else{
+                type = new TypeToken<List<CrossBody>>(){}.getType();
+            }
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+        return arrayItems;
+    }
+
+    @Override
+    public IProduct getProductByIDCache(String key, long productID) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+        List<IProduct> arrayItems = new ArrayList<>();
+        IProduct bagToReturn = null;
+        String serializedObject = sharedPreferences.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Product>>(){}.getType();
+            arrayItems = gson.fromJson(serializedObject, type);
+        }
+
+        for(IProduct bag: arrayItems){
+            if(bag.getProductID() == productID){
+                bagToReturn = bag;
+            }
+        }
+        return bagToReturn;
+   
+    }
+
+
+    public void fetchProductByID(MutableLiveData<IProduct> data){
         String idString = Long.toString(productID);
         DocumentReference documentReference = productColRef.document(idString);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -112,16 +179,16 @@ public class ProductRepository implements IProductRepository{
 
     }
 
-    public void fetchAllProducts(MutableLiveData<List<Product>> data){
+    public void fetchAllProducts(MutableLiveData<List<IProduct>> data){
 
         productColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Log.d("firebase fetch all products", String.valueOf(task.getResult()));
                     // getting snapshot of all the documents in the collection
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     // looping through the documents
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag : snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");
@@ -150,7 +217,7 @@ public class ProductRepository implements IProductRepository{
         });
     }
 
-    public void fetchProductsByCategory(MutableLiveData<List<Product>> data){
+    public void fetchProductsByCategory(MutableLiveData<List<IProduct>> data){
         String stringID = "category"+ Long.toString(categoryID);
         CollectionReference collectionRef = db.collection(stringID);
         collectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -159,6 +226,7 @@ public class ProductRepository implements IProductRepository{
                 if(task.isSuccessful()){
                     Log.d("firebase fetch product by category", String.valueOf(task.getResult()));
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    productsDataSet.clear();
                     for(DocumentSnapshot singleBag: snapshots){
                         long productID = (long) singleBag.get("productID");
                         long categoryID = (long) singleBag.get("categoryID");
@@ -188,11 +256,11 @@ public class ProductRepository implements IProductRepository{
     }
 
 
-    public Product determineCategory (long productID, long categoryID, double productPrice,
+    public IProduct determineCategory (long productID, long categoryID, double productPrice,
                                       String productLongName, String productShortName, Brand brandName,
                                       String productDescription, String productDetails, String productCare,
                                       ColourType productColourType, long productCountVisit, boolean isFavourite, ArrayList<String> productImages){
-        Product bag;
+        IProduct bag;
         if(categoryID == 0){
             // type is clutch
             bag = new Clutch(productID, categoryID, productPrice, productLongName, productShortName, brandName,

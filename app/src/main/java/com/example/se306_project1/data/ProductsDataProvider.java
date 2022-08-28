@@ -93,7 +93,7 @@ public class ProductsDataProvider {
             ColourType productColourType = ColourType.valueOf(colourTypes.get(key)) ;
 
 
-            Product c = new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName, productDescription, productDetails, productCare, productColourType, productCountVisit, isFavourite,productImages);
+            IProduct c = new Product(productID, categoryID, productPrice, productLongName, productShortName, brandName, productDescription, productDetails, productCare, productColourType, productCountVisit, isFavourite,productImages);
             bagsList.add(c);
         }
 

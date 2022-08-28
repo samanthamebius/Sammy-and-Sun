@@ -1,13 +1,10 @@
 package com.example.se306_project1.data;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.se306_project1.models.Category;
 import com.example.se306_project1.models.ICategory;
-import com.example.se306_project1.models.ICategory;
-import com.example.se306_project1.models.Product;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.annotations.NotNull;
@@ -51,7 +48,7 @@ public class CategoriesDataProvider {
             String categoryName = names.get(key);
             String categoryImage = "c"+key;
 
-            Category c = new Category(categoryID, categoryImage, categoryName);
+            ICategory c = new Category(categoryID, categoryImage, categoryName);
             categoriesList.add(c);
         }
 
