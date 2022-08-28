@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Represents the screen used to search through items
+ */
 public class SearchActivity extends AppCompatActivity{
 
     private AutoCompleteTextView searchField;
@@ -52,8 +55,11 @@ public class SearchActivity extends AppCompatActivity{
     Toolbar toolbar;
     ISearchViewModel searchViewModel;
     SharedPreferences sharedPreferences;
-    private IProduct bagClicked;
+    private IProduct product;
 
+    /**
+     * Describes the view of items in SearchActivity
+     */
     private class ViewHolder {
 
         public ViewHolder() {
@@ -86,7 +92,6 @@ public class SearchActivity extends AppCompatActivity{
         
         sharedPreferences = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
         searchViewModel= new ViewModelProvider(this).get(SearchViewModel.class);
-
 
         findViewById(R.id.search_field).requestFocus();
 
@@ -132,7 +137,10 @@ public class SearchActivity extends AppCompatActivity{
 
     }
 
-
+    /**
+     * Generate the search suggestions as the user types
+     * @param snapshot
+     */
     private void populateSearchSuggestions(QuerySnapshot snapshot) {
         ArrayList<String> products = new ArrayList<>();
         HashMap<String, Long> productDetails = new HashMap<>();
@@ -159,6 +167,7 @@ public class SearchActivity extends AppCompatActivity{
                     searchBag(productID);
                     InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+
                 }
             });
 
@@ -169,25 +178,32 @@ public class SearchActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * Show the list of items matching the search term when a bag is not selected from search suggestions
+     * @param searchWord
+     */
     private void incompleteSearch(String searchWord){
         resultsList.clear();
         resultsList = (ArrayList<IProduct>) searchViewModel.getIncompleteSearchList(searchWord, resultsList, allProducts, noResultsText);
         setAdapter(recyclerView, resultsList);
     }
 
-    // for item selected from suggestions
+    /**
+     * Show the item relating to the selected search suggestion
+     * @param productID
+     */
     private void searchBag(long productID) {
-        setBagClicked(productID);
+        setProduct(productID);
         noResultsText.setVisibility(View.GONE);
         resultsList.clear();
-        resultsList.add(bagClicked);
+        resultsList.add(product);
         setAdapter(recyclerView, resultsList);
 
     }
 
-    private void setBagClicked(long productID) {
-        bagClicked = null;
-        bagClicked = searchViewModel.getProductByID(productID);
+    private void setProduct(long productID) {
+        product = null;
+        product = searchViewModel.getProductByID(productID);
     }
 
     private void setAllProducts(){
@@ -203,8 +219,7 @@ public class SearchActivity extends AppCompatActivity{
         recyclerView.setAdapter(adapter);
     }
 
-
-    public void Back(View v){
+    public void goBack(View v){
         Intent searchIntent = new Intent(this, MainActivity.class);
 
         startActivity(searchIntent);

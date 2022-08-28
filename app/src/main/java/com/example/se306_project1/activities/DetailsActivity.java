@@ -26,16 +26,18 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator;
 
+/**
+ * Represents the screen that shows the details of a particular product
+ */
 public class DetailsActivity extends AppCompatActivity {
 
-
     private ArrayList<IProduct> popularList;
-    private ArrayList<Integer> intImages;
-    private Boolean favouriteStatus;
-    private int detailsCounter = 0;
-    private int productCareCounter = 0;
-    private int maxPopularSize = 10;
-    private int sizeOfCurrentPopular;
+    private ArrayList<Integer> imagesList;
+    private Boolean isFavourite;
+    private int detailsClicksCounter = 0;
+    private int productCareClicksCounter = 0;
+    private int POPULAR_MAX_SIZE = 10;
+    private int popularCurrentSize;
     private IProduct product;
     long productID = 0;
 
@@ -45,6 +47,9 @@ public class DetailsActivity extends AppCompatActivity {
     IDetailsViewModel detailsViewModel;
     SharedPreferences sharedPreferences;
 
+    /**
+     * Describes the view of items in DetailsActivity
+     */
     private class ViewHolder {
         TextView product_details, product_price, product_brand, product_long_name, product_description,
                 product_care;
@@ -84,20 +89,29 @@ public class DetailsActivity extends AppCompatActivity {
         setUpScreenElements();
     }
 
+    /**
+     * Determines how to display product attributes and updates other fields based on interaction
+     */
     private void setUpScreenElements() {
         vh = new ViewHolder();
         setSupportActionBar(toolbar);
         populateScreenElements();
 
+        // check if new view of product places the item in popular
+
         setPopular(product);
         detailsViewModel.updatePopularCount(product, sharedPreferences);
 
-        favouriteStatus = detailsViewModel.displayFavouritesStatus(product, vh.favouriteIcon);
+        // determine the status of the heart icon
+
+        isFavourite = detailsViewModel.displayFavouritesStatus(product, vh.favouriteIcon);
+
+        // display image slider
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(getBaseContext(), intImages);
+        SliderImagesAdapter sliderImagesAdapter = new SliderImagesAdapter(getBaseContext(), imagesList);
         recyclerView.setAdapter(sliderImagesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -111,7 +125,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void populateScreenElements() {
         setProduct(productID);
-        intImages = GetIntImageArray(product.getProductImages());
+        imagesList = getIntImageArray(product.getProductImages());
         vh.product_price.setText("$"+Double.toString(product.getProductPrice())+"0");
         vh.product_brand.setText(product.getBrandName().name().replaceAll("_"," "));
         vh.product_long_name.setText(product.getProductLongName());
@@ -128,30 +142,29 @@ public class DetailsActivity extends AppCompatActivity {
     public void setPopular(IProduct product){
         popularList.clear();
         popularList = (ArrayList<IProduct>) detailsViewModel.getPopular();
-        sizeOfCurrentPopular = popularList.size();
+        popularCurrentSize = popularList.size();
         popularList.sort(Comparator.comparing(IProduct::getProductCountVisit));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // only need to update when we leave activity
-        detailsViewModel.PopularLogic(sizeOfCurrentPopular, popularList, product, maxPopularSize, sharedPreferences);
+        detailsViewModel.PopularLogic(popularCurrentSize, popularList, product, POPULAR_MAX_SIZE, sharedPreferences);
     }
 
     // Helper method to set array of image strings to array of integers
-    private ArrayList<Integer> GetIntImageArray(ArrayList<String> images) {
+    private ArrayList<Integer> getIntImageArray(ArrayList<String> images) {
         ArrayList<Integer> intImages = new ArrayList<Integer>();
 
         for(int i = 0; i<images.size(); i++) {
-            int imageID = GetImageResource(this, images.get(i));
+            int imageID = getImageResource(this, images.get(i));
             intImages.add(imageID);
         }
         return intImages;
     }
 
     // Helper method set string to drawable int
-    private static int GetImageResource(Context c, String imageName) {
+    private static int getImageResource(Context c, String imageName) {
         int ResourceID = c.getResources().getIdentifier(imageName, "drawable", c.getPackageName());
         if (ResourceID == 0) {
             throw new IllegalArgumentException("No resource string found with name " + imageName);
@@ -161,15 +174,14 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    // OnClick method to update product favourite status
     public void updateFavourite(View v) {
         vh = new ViewHolder();
         vh.favouriteIcon = (ImageView) findViewById(R.id.favourite_icon);
 
-        favouriteStatus = product.getIsFavourite();
+        isFavourite = product.getIsFavourite();
         detailsViewModel.changeFavouriteStatus(sharedPreferences);
 
-        if(favouriteStatus){
+        if(isFavourite){
             vh.favouriteIcon.setImageResource(R.drawable.unselected_heart);
         } else {
             vh.favouriteIcon.setImageResource(R.drawable.selected_heart);
@@ -178,8 +190,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     // OnClick method to expand details drop down
     public void expandDetails(View v){
-        detailsCounter++;
-        if(detailsCounter%2 == 0){
+        detailsClicksCounter++;
+        if(detailsClicksCounter %2 == 0){
             vh.product_details.setVisibility(View.GONE);
             vh.details_icon.setImageResource(R.drawable.drop_down);
         } else {
@@ -190,8 +202,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     // OnClick method to expand product drop down
     public void expandProductCare(View v){
-        productCareCounter++;
-        if(productCareCounter%2 == 0){
+        productCareClicksCounter++;
+        if(productCareClicksCounter%2 == 0){
             vh.product_care.setVisibility(View.GONE);
             vh.product_care_icon.setImageResource(R.drawable.drop_down);
         } else {
@@ -201,7 +213,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     // OnClick method for back in appbar
-    public void Back(View v){
+    public void goBack(View v){
         Intent searchIntent = new Intent(this, MainActivity.class);
         startActivity(searchIntent);
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
