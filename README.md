@@ -19,3 +19,5 @@ Clone the repo, open the project in Android Studio, sync gradle files, run on em
 
 ### Note
 Please use keyboard enter button on search activity when using emulator.
+
+Minimum SDK is version 26. Please do not use this version as it is likely to cause UI crashes. For the best experience, use SDK version 32 and above.
