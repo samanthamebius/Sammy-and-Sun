@@ -15,9 +15,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is used to provide category data to firestore
+ */
 public class CategoriesDataProvider {
 
-    // Add number documents to Firestore
+    // Add documents to firestore
     public static void addCategoriesToFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         List<ICategory> categoriesList = getCategories();
