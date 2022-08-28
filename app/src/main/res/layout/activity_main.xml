@@ -24,35 +24,6 @@
             android:paddingHorizontal="25dp"
             android:paddingBottom="25dp">
 
-            <!-- Search -->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/search_bar_layout"-->
-<!--                android:onClick="showSearchActivity"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="65dp"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:padding="15dp"-->
-<!--                android:layout_marginBottom="10dp"-->
-<!--                android:clickable="true"-->
-<!--                android:gravity="center_vertical"-->
-<!--                android:background="@drawable/rectangle">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="25dp"-->
-<!--                    android:layout_height="25dp"-->
-<!--                    android:layout_gravity="center_vertical"-->
-<!--                    android:layout_marginRight="10dp"-->
-<!--                    android:src="@drawable/ic_baseline_search_24" />-->
-
-<!--                <TextView-->
-<!--                    style="@style/ButtonText"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="What are you looking for?" />-->
-
-<!--            </LinearLayout>-->
-
             <!-- Popular -->
 
             <LinearLayout
@@ -73,7 +44,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/popular_recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    />
 
             </LinearLayout>
 
@@ -102,26 +74,34 @@
             </LinearLayout>
 
             <!-- Categories -->
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <LinearLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:visibility="visible"
                     android:orientation="vertical">
 
-                <TextView
-                    style="@style/LargeHeaderText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Browse By Style" />
+                    <TextView
+                        style="@style/LargeHeaderText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Browse By Style" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/categories_recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/categories_recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"/>
 
-            </LinearLayout>
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+
 
         </LinearLayout>
 

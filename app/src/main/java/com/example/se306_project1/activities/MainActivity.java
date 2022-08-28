@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setCategoryAdapter(RecyclerView view, ArrayList<ICategory> list) {
         CategoryRecyclerAdapter adapter = new CategoryRecyclerAdapter(list, this);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         view.setLayoutManager((layoutManager));
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);
