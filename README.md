@@ -16,3 +16,6 @@ Data is provided to the application by a Firestore database.
 
 ### Project Setup
 Clone the repo, open the project in Android Studio, sync gradle files, run on emulator.
+
+### Note
+Please use keyboard enter button on search activity when using emulator.
