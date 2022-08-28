@@ -14,7 +14,6 @@ public class SliderImagesAdapter extends RecyclerView.Adapter<SliderImagesAdapte
 
     private Context context;
     private ArrayList<Integer> intImages;
-    ViewHolder vh;
 
     public SliderImagesAdapter(Context context, ArrayList<Integer> intImages) {
         this.context = context;
